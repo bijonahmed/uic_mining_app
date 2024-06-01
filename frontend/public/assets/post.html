@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<title>Crypto Mobile Template</title>
+
+	<!-- Google font file. If you want you can change. -->
+	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900" rel="stylesheet">
+
+	<!-- Fontawesome font file css -->
+	<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+
+	<!-- Animate css file for css3 animations. for more : https://daneden.github.io/animate.css -->
+	<!-- Only use animate action. If you dont use animation, you don't have to add.-->
+	<link rel="stylesheet" type="text/css" href="css/animate.css">
+	<link rel="stylesheet" type="text/css" href="css/cryptocoins.css">
+	<link rel="stylesheet" type="text/css" href="plugins/c3-chart/c3.css">
+
+	<!-- Template global css file. Requared all pages -->
+	<link rel="stylesheet" type="text/css" href="css/global.style.css">
+
+	<!-- Swiper slider css file -->
+	<link rel="stylesheet" href="css/swiper.min.css">
+
+	<!--turbo slider plugin css file -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="plugins/turbo-slider/turbo.css">
+	<style>
+		.post-sections {
+			width: 100%;
+			height: auto;
+			display: flex;
+			flex-wrap: wrap;
+			margin-bottom: 100px;
+			justify-content: center;
+		}
+
+		.post-card {
+			width: 95%;
+			height: auto;
+			background-color: white;
+			border: 1.5px solid #4e4e4e10;
+			border-radius: 8px;
+			padding: 6px;
+			box-shadow: 0px 2px 8px 2px #4e4e4e30;
+			margin-top: 15px;
+		}
+
+		.post-card .description {
+			width: 100%;
+			height: auto;
+			padding: 0px 5px;
+			overflow: hidden;
+			margin: 15px 0px;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			/* Limit the number of lines */
+			-webkit-box-orient: vertical;
+		}
+
+		.post-card img {
+			width: 100%;
+			border: none;
+			border-radius: 6px;
+		}
+
+		.post-buttons {
+			width: 100%;
+			margin-top: 15px;
+			margin-bottom: 5px;
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			padding-top: 15px;
+			border-top: 1.5px solid #d6d6d6;
+		}
+
+		.post-buttons button {
+			padding: 5px 15px;
+			color: rgb(29, 29, 29);
+			border: none;
+			outline: none;
+			border-radius: 25px;
+			background-color: #4e4e4e15;
+		}
+
+		.post-buttons button i {
+			margin-right: 10px;
+		}
+
+		.post-buttons button:active {
+			padding: 5px 15px;
+			color: white;
+			border: none;
+			outline: none;
+			border-radius: 25px;
+			background-color: #1a6ca9;
+		}
+
+		.popup {
+			width: 100%;
+			height: 100%;
+			display: none;
+			justify-content: center;
+			align-items: center;
+			position: fixed;
+			top: 0;
+			background-color: #10101020;
+			backdrop-filter: blur(10px);
+		}
+
+		.popup form {
+			width: 95%;
+			height: auto;
+			padding: 10px;
+			background-color: white;
+			border-radius: 10px;
+		}
+
+		.popup form .heading-cut {
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+
+		.popup form .text-box {
+			width: 100%;
+			height: auto;
+		}
+
+		.popup form .text-box label {
+			font-size: 13px;
+			color: #4e4e4e;
+			display: block;
+			width: 100%;
+		}
+
+		.popup form .text-box textarea {
+			width: 100%;
+			height: 100px;
+			border-radius: 10px;
+			padding: 10px;
+		}
+
+		.popup form .text-box .file-label {
+			width: 80%;
+			height: auto;
+			color: #1a6ca9;
+			padding: 15px;
+			margin: 0 auto;
+			display: block;
+			margin-top: 15px;
+			text-align: center;
+			border-radius: 10px;
+			background-color: #1a6ca910;
+			border: 1.5px dashed #1a6ca9;
+			cursor: pointer;
+		}
+
+		.popup form .text-box .file-label i {
+			font-size: 30px;
+			display: block;
+			width: 100%;
+			height: auto;
+			text-align: center;
+			margin-bottom: 15px;
+		}
+
+		input[type="file"] {
+			display: none;
+		}
+
+		.popup form .publish-button {
+			padding: 15px;
+			width: 90%;
+			display: block;
+			margin: 0 auto;
+			background-color: #1a6ca9;
+			color: white;
+			font-size: 17px;
+			border: none;
+			border-radius: 10px;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<div class="wrapper ">
+		<div class="nav-menu">
+			<nav class="menu">
+
+				<!-- Menu navigation start -->
+				<div class="nav-container">
+					<ul class="main-menu">
+						<li class="">
+							<a href='index.html'><img src="img/content/icons/1.png" alt=""><strong
+									class="special">Dashboard</strong> </a>
+						</li>
+						<li class="">
+							<a href='wallet.html'><img src="img/content/icons/2.png" alt=""><strong class="special">My
+									Wallet</strong> </a>
+						</li>
+						<li class="">
+							<a href='kyc.html'><img src="img/16.png" alt=""><strong class="special">KYC</strong> </a>
+						</li>
+						<li class="">
+							<a href='trading.html'><img src="img/content/icons/3.png" alt=""><strong
+									class="special">Crypto Trade</strong> </a>
+						</li>
+						<li class="">
+							<a href='buy-sell.html'><img src="img/content/icons/6.png" alt=""><strong
+									class="special">Send/Receive</strong> </a>
+						</li>
+						<li class="">
+							<a href='profile.html'><img src="img/content/icons/5.png" alt=""><strong
+									class="special">Trader Profile</strong> </a>
+						</li>
+						<li class="">
+							<a href='affiliate.html'><img src="img/content/icons/4.png" alt=""><strong
+									class="special">Affiliate System</strong> </a>
+						</li>
+						<li class="">
+							<a href='setting.html'><img src="img/content/icons/11.png" alt=""><strong>Community</strong>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);"><img src="img/content/icons/9.png" alt=""><strong
+									class="special">Login/Register</strong> <span class="fa fa-angle-down"></span></a>
+							<ul>
+								<li><a data-loader='show' href='login.html'>Login</a></li>
+								<li><a data-loader='show' href='signup.html'>Register</a></li>
+								<li><a data-loader='show' href='forgot-password.html'>My Wallet</a></li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="withdrawl.html"><img src="img/content/icons/8.png" alt=""> <strong
+									class="special">Withdrawl</strong></a>
+						</li>
+
+
+						<li>
+							<a href="post.html"><img src="img/content/icons/10.png" alt=""><strong
+									class="special">Post</strong></a>
+						</li>
+						<li class="">
+							<a href="#"><img src="img/content/icons/15.png" alt=""><strong class="special">
+									Pages</strong> <span class="fa fa-angle-down"></span></a>
+							<ul>
+								<li class=""><a data-loader='show' href='profile.html'>User Profile</a></li>
+								<li><a data-loader='show' href='search-result.html'>Search Results</a></li>
+								<li><a data-loader='show' href='contact.html'>Contact</a></li>
+								<li><a data-loader='show' href='blank.html'>Blank Page</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<!-- Menu navigation end -->
+			</nav>
+		</div>
+		<div class="wrapper-inline">
+			<!-- Header area start -->
+			<header class="no-background"> <!-- extra class no-background -->
+
+				<a class="go-back-link" href="javascript:history.back();"><i class="fa fa-arrow-left"></i></a>
+				<div class="search-button" data-search="open">
+					<img src="img/content/notification1.png" class="not-icon1" alt="">
+					<img src="img/content/notification2.png" class="not-icon2" alt="">
+				</div>
+
+				<div class="navi-menu-button">
+					<em></em>
+					<em></em>
+					<em></em>
+				</div>
+
+			</header>
+			<!-- Header area end -->
+
+			<!--NOTIFICATION BOX CONTENT START-->
+			<div class="search-form">
+				<span class="close-search-form" data-search="close"><i class="fa fa-times"></i> </span>
+				<form>
+					<div class="search-input">
+						<input type="text" name="q" class="form-element" placeholder="Search...">
+						<button type="submit" class="search-input-btn"><i class="fa fa-arrow-right"></i></button>
+					</div>
+				</form>
+				<ul class="notification-list list-unstyled">
+					<li>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<div class="">
+									<h5 class="coin-name">You have 3 notifications</h5>
+								</div>
+							</div>
+							<div>
+								<a href=""><small class="text-muted d-block">mark all as read</small></a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<div class="notice-icon available">
+									<i class="fa fa-check"></i>
+								</div>
+								<div class="ml-10">
+									<h4 class="coin-name">Successful transaction 0.01 BTC</h4>
+									<small class="text-muted">15 min ago</small>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<div class="notice-icon away">
+									<i class="fa fa-clock-o"></i>
+								</div>
+								<div class="ml-10">
+									<h4 class="coin-name">4 of Pending Transactions!</h4>
+									<small class="text-muted"> 12 hours ago</small>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<div class="notice-icon busy">
+									<i class="fa fa-times"></i>
+								</div>
+								<div class="ml-10">
+									<h4 class="coin-name">Cancelled Order of 200 ICO</h4>
+									<small class="text-muted">15 Feb - 08:34</small>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<div class="notice-icon available">
+									<i class="fa fa-check"></i>
+								</div>
+								<div class="ml-10">
+									<h4 class="coin-name">Great Speed Notify of 1.34 LTC</h4>
+									<small class="text-muted">24 jan - 20:43</small>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<a href="" class="text-muted">Read all notifications</a>
+							</div>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+			<!--NOTIFICATION BOX CONTENT END-->
+
+			<div class="bottom-menu-section">
+				<ul class="bottom-menu list-unstyled list-inline">
+					<li>
+						<a href='index.html'>
+							<i class="fa-duotone fa-home"
+								style="font-size: 25px; color: #1a6ca9; width: 100%;text-align: center;"></i>
+							<p>Home</p>
+						</a>
+					</li>
+					<li>
+						<a href='wallet.html'>
+							<i class="fa-duotone fa-wallet"
+								style="font-size: 25px; color: #1a6ca9; width: 100%;text-align: center;"></i>
+							<p>Wallet</p>
+						</a>
+					</li>
+					<li>
+						<a class="b-m-pluse" href="setting.html"><i class="fa fa-plus"></i></a>
+					</li>
+					<li>
+						<a href='ledger.html'>
+							<i class="fa-duotone fa-file"
+								style="font-size: 25px; color: #1a6ca9; width: 100%;text-align: center;"></i>
+							<p>Ledger</p>
+						</a>
+					</li>
+					<li>
+						<a href='profile.html'>
+							<i class="fa-duotone fa-user"
+								style="font-size: 25px; color: #1a6ca9; width: 100%;text-align: center;"></i>
+							<p>Profile</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+
+			<!-- Page content start -->
+			<main class="margin mt-0">
+
+				<div class="dash-balance">
+					<div class="dash-content relative">
+						<h3 class="w-text">All Posts</h3>
+						<div class="notification">
+							<i class="fa fa-plus" onclick="popup()"></i>
+						</div>
+					</div>
+				</div>
+
+				<section class="post-sections">
+
+					<div class="post-card">
+						<div class="d-flex align-items-normal">
+							<span class="member-img"><img src="img/content/avatar/user-4.png" alt=""></span>
+							<div class="ml-10">
+								<h4 class="coin-name">Hasanejaz123 <i class="fa fa-bronze"></i></h4>
+								<small class="text-muted"><i class="fa-regular fa-calendar"
+										style="margin-right: 6px;"></i>25/12/24</small><br>
+							</div>
+						</div>
+						<div class="description" id="description" onclick="toggleOverflow()">
+							I am Mohammad Hasan Ejaz and i was designed this movie cover poster, I have designed this
+							poster on photoshop and if you want to design posters or post like this so please contact me
+							on this number : +923112070793
+						</div>
+						<img src="https://techyar.netfy.org/Drago%20Kingdom.jpg" alt="Post Image">
+						<div class="post-buttons">
+							<button><i class="fa-regular fa-thumbs-up"></i>Like</button>
+							<button><i class="fa-regular fa-comments"></i>Comment</button>
+							<button><i class="fa-regular fa-share"></i>Share</button>
+						</div>
+					</div>
+
+				</section>
+
+				<div class="popup" id="popup">
+					<form action="">
+						<div class="heading-cut">
+							<h2 style="display: block;text-align: center;color: #4e4e4e;width: 90%; ">Post Anything</h2>
+							<i class="fa fa-" onclick="hidePopup()">×</i>
+						</div>
+						<div class="text-box">
+							<label for="post-description">Write Description</label>
+							<textarea name="Description" id="post-description"
+								placeholder="Please Write Post Description"></textarea>
+						</div>
+						<div class="text-box">
+							<label for="file" class="file-label">
+								<i class="fa-thin fa-upload"></i>
+								<small>Please Upload Image/Video or Any Docs.</small>
+							</label>
+							<input type="file" name="Post-File" id="file">
+						</div>
+						<button type="submit" class="publish-button">Publish</button>
+					</form>
+				</div>
+
+
+			</main>
+			<!-- Page content end -->
+		</div>
+	</div>
+
+	<!--Page loader DOM Elements. Requared all pages-->
+	<div class="sweet-loader">
+		<div class="box">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+		</div>
+	</div>
+
+	<!-- JQuery library file. requared all pages -->
+	<script src="js/jquery-3.2.1.min.js"></script>
+
+	<!-- Swiper JS -->
+	<script src="js/swiper.min.js"></script>
+
+	<!-- Template global script file. requared all pages -->
+	<script src="js/app-charts.js"></script>
+	<script src="js/global.script.js"></script>
+
+	<script>
+		var isExpanded = false;
+
+		function toggleOverflow() {
+			var description = document.getElementById("description");
+			if (isExpanded) {
+				description.style.webkitLineClamp = "2";
+				isExpanded = false;
+			} else {
+				description.style.webkitLineClamp = "unset";
+				isExpanded = true;
+			}
+		}
+
+		const form = document.getElementById('popup');
+
+		function popup() {
+			form.style.display = "flex";
+		}
+		function hidePopup() {
+			form.style.display = "none";
+		}
+
+	</script>
+
+
+</body>
+
+</html>
