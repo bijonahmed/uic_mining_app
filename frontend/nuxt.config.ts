@@ -42,6 +42,7 @@ export default defineNuxtConfig({
    // "~/plugins/google-analytics.js",
     "~/plugins/navMenu.js",
     "~/plugins/bootstrap.js",
+    "~/plugins/echo.client.js",
     // Add other plugins as needed
   ],
   modules: [

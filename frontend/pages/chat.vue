@@ -27,12 +27,14 @@ import { ref, onMounted } from 'vue';
 import Pusher from 'pusher-js';
 import axios from 'axios';
 
+
 const username = ref('username');
 const message = ref('');
 const messages = ref([]);
 
 
 onMounted(() => {
+
   Pusher.logToConsole = true;
   const pusher = new Pusher('300d162fd051675e56e4', {
     cluster: 'ap2',
@@ -66,6 +68,7 @@ const submit = async () => {
 };
 
 </script>
+
 <style scoped>
 /* Container styling */
 .container {

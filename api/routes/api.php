@@ -40,6 +40,7 @@ use App\Http\Middleware\CheckUserStatus;
 |
 */
 Route::post('messages', [ChatController::class, 'message']);
+Route::get('/messages/{community_slug}', [ChatController::class, 'getMessages']);
 
 Route::group([
    'middleware' => 'api',
@@ -103,6 +104,7 @@ Route::group([
     'prefix' => 'user'
 ], function () {
     //Route::post('me', [UserController::class, 'me']);
+    Route::get('getCommunity', [UserController::class, 'getCommunity']);
     Route::get('adujustmentrow/{id}', [UserController::class, 'adujustmentrow']);
     Route::get('checkminusAmount', [UserController::class, 'checkminusAmount']);
     Route::get('getFastLevel', [UserController::class, 'getFastLevel']);

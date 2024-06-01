@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Community;
 use App\Models\Deposit;
 use App\Models\ExpenseHistory;
 use App\Models\ManualAdjustment;
@@ -48,7 +49,18 @@ class UserController extends Controller
         $me = auth('api')->user();
         return response()->json($me);
     }
+    public function getCommunity(){
 
+        try {
+            $categories = Community::where('status', 1)->get();
+            return response()->json($categories);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+
+        
+    }
     public function adujustmentrow($id)
     {
         $row = ManualAdjustment::where('manual_adjustment.id', (int)$id)

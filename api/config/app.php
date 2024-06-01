@@ -71,7 +71,7 @@ return [
     */
 
    // 'timezone' => 'UTC',
-    'timezone' => 'Asia/Dubai',
+    'timezone' => 'Asia/Dhaka',
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

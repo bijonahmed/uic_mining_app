@@ -71,7 +71,7 @@
 							class="special">Affiliate System</strong> </nuxt-link>
 				</li>
 				<li v-if="isLoggedIn">
-					<nuxt-link to='/setting'><img src="/assets/img/content/icons/11.png"
+					<nuxt-link to='/community'><img src="/assets/img/content/icons/11.png"
 							alt=""><strong>Community</strong></nuxt-link>
 				</li>
 
