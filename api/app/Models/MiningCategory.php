@@ -18,6 +18,8 @@ class MiningCategory extends Authenticatable
         'minute',
         'second',
         'minining_amount_per_secnd',
+        'daily_mining_amount',
+        'mining_value_mention_at_hour',
         'offer_description',
         'status',
         'entry_by',

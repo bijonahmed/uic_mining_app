@@ -83,7 +83,7 @@
 
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Minute</label>
+                                                        class="col-sm-3 col-form-label required-label">Duration in Minute</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" v-model="insertdata.minute" disabled
                                                             class="form-control" @keypress="isNumber($event)" />
@@ -92,28 +92,48 @@
 
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Second</label>
+                                                        class="col-sm-3 col-form-label required-label">Duration in Second</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" v-model="insertdata.second" disabled
+                                                            class="form-control" @keypress="isNumber($event)"/>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="row mb-3 required">
+                                                    <label for="input-name-1"
+                                                        class="col-sm-3 col-form-label required-label">Daily mining amount</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" v-model="insertdata.daily_mining_amount" @keyup="calcuated"
                                                             class="form-control" @keypress="isNumber($event)" />
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Minining Amount
-                                                        per second</label>
+                                                        class="col-sm-3 col-form-label required-label">Minining Value per second</label>
                                                     <div class="col-sm-9">
                                                         <input type="text"
-                                                            v-model="insertdata.minining_amount_per_secnd"
-                                                            class="form-control" @keypress="isNumber($event)" />
+                                                            v-model="insertdata.minining_amount_per_secnd" class="form-control" @keypress="isNumber($event)" disabled />
                                                     </div>
                                                 </div>
 
 
+
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Offer Description</label>
+                                                        class="col-sm-3 col-form-label required-label">Mining value mention at Hour</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" v-model="insertdata.mining_value_mention_at_hour" class="form-control" @keypress="isNumber($event)" disabled />
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="row mb-3 required">
+                                                    <label for="input-name-1"
+                                                        class="col-sm-3 col-form-label required-label">Description</label>
                                                     <div class="col-sm-9">
                                                         <textarea
                                                             v-model="insertdata.offer_description"
@@ -149,16 +169,33 @@ const router = useRouter();
 window.Swal = swal;
 const errors = ref([]);
 const errorsName = ref("");
+
 const insertdata = reactive({
     name: "",
     minining_amount_per_secnd: "",
     offer_description: "",
+    daily_mining_amount: "",
+    mining_value_mention_at_hour: "",
     second: "",
     minute: "",
     duration_in_hour: "",
     status: 1,
 });
 
+const seconds = ref("86400"); //  86400 seconds = 24 hours. 
+
+const calcuated = () => {
+    const result   =  insertdata.daily_mining_amount / seconds.value;
+    console.log("results: ",result.toFixed(8));
+    insertdata.minining_amount_per_secnd = result.toFixed(8);
+
+
+    const result_1 = insertdata.second * result;
+    insertdata.mining_value_mention_at_hour = result_1.toFixed(8);
+    //mining_value_mention_at_hour
+
+
+}
 const getMinite = () => {
     const duration_hour = insertdata.duration_in_hour;
     const miniut_total = duration_hour * 60;
@@ -189,6 +226,11 @@ const saveData = () => {
     formData.append("minute", insertdata.minute);
     formData.append("duration_in_hour", insertdata.duration_in_hour);
     formData.append("offer_description", insertdata.offer_description);
+
+    formData.append("daily_mining_amount", insertdata.daily_mining_amount);
+    formData.append("mining_value_mention_at_hour", insertdata.mining_value_mention_at_hour);
+
+
     formData.append("status", insertdata.status);
 
     axios

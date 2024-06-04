@@ -56,14 +56,16 @@
                                         <table class="table w-100 table-wrapper">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
+                                                    <th class="text-left">Coumminity Name</th>
+                                                    <th class="text-left">Numbers of members</th>
                                                     <th class="text-center">Status</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="item in productdata" :key="item.id">
-                                                    <td>{{ item.name }}</td>
+                                                    <td class="text-left">{{ item.name }}</td>
+                                                    <td class="text-left"></td>
                                                     <td class="text-center">
                                                         <span v-if="(item.status == 1)"> Active </span>
                                                         <span v-else> Inactive </span>
@@ -77,7 +79,8 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Name</th>
+                                                    <th class="text-left">Coumminity Name</th>
+                                                    <th class="text-left">Numbers of members</th>
                                                     <th class="text-center">Status</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>

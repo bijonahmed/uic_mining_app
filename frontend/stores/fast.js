@@ -5,7 +5,8 @@ export const useStartStore = defineStore('fast', {
   state: () => ({
     mining_category_id:'',
     start_time: '',
-    end_time: ''
+    end_time: '',
+    server_time:''
   }),
   actions: {
     setData(mining_category_id) {
@@ -20,6 +21,7 @@ export const useStartStore = defineStore('fast', {
        })
         this.$state.start_time = res.data.start_time;
         this.$state.end_time = res.data.end_time;
+        this.$state.server_time = res.data.server_time;
       },
   }
 })

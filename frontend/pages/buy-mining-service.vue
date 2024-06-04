@@ -20,7 +20,6 @@
 
                 <center>
                     <h3>Buy Mining Machine...</h3>
-
                 </center>
 
                 <section class="services section-bg" id="services">
@@ -39,11 +38,14 @@
                                         {{ category.offer_description }}
                                     </p>
                                     <center>
-                                       <p v-if="category.enddate" class="alert alert-danger"> <small>Expire Date: {{ category.enddate }}</small></p>
-                                        <button class="btn btn-primary btn-lg" type="button" data-popup="standartPopup"
+                                       <p v-if="category.enddate" class="alert alert-danger"> <small>Expire Date: {{ category.enddate }}</small>  </p>
+
+
+                                        <button class="btn btn-primary btn-lg" type="button" data-popup="standartPopup"  v-if="!category.enddate"
                                             @click="fetchCategoriesDuration(category)">
                                             Buy Now
                                         </button>
+                                  
                                     </center>
                                 </div>
                             </div>
@@ -90,7 +92,7 @@
 
                                 </th>
                             </tr>
-                            <tr>
+                            <tr class="d-none">
                                 <input type="hidden" v-model="categoryId" />
                                 <th>Duration</th>
                                 <td>

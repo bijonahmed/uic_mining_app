@@ -52,8 +52,10 @@ class CategoryController extends Controller
             'minining_amount_per_secnd'  => 'required',
             'second'                     => 'required|integer|gt:0',
             'minute'                     => 'required|integer|gt:0',
-            'duration_in_hour'           => 'required|integer|gt:0',
-            'status'                     => 'required',
+           // 'duration_in_hour'           => 'required|integer|gt:0',
+            'duration_in_hour'              => 'required',
+            'mining_value_mention_at_hour'  => 'required',
+            'status'                        => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -74,6 +76,11 @@ class CategoryController extends Controller
             'minute'                     => $request->minute,
             'duration_in_hour'           => $request->duration_in_hour,
             'offer_description'          => $request->offer_description,
+
+            'daily_mining_amount'          => $request->daily_mining_amount,
+            'mining_value_mention_at_hour' => $request->mining_value_mention_at_hour,
+
+
             'status'                     => 1,
             'entry_by'                   => $this->userid
         );
@@ -89,6 +96,8 @@ class CategoryController extends Controller
             'second'                     => 'required|integer|gt:0',
             'minute'                     => 'required|integer|gt:0',
             'duration_in_hour'           => 'required|integer|gt:0',
+            'duration_in_hour'              => 'required',
+            'mining_value_mention_at_hour'  => 'required',
             'status'                     => 'required',
         ]);
         if ($validator->fails()) {
@@ -104,6 +113,8 @@ class CategoryController extends Controller
             'second'                     => $request->second,
             'minute'                     => $request->minute,
             'duration_in_hour'           => $request->duration_in_hour,
+            'daily_mining_amount'          => $request->daily_mining_amount,
+            'mining_value_mention_at_hour' => $request->mining_value_mention_at_hour,
             'status'                     => 1,
             'entry_by'                   => $this->userid
         );

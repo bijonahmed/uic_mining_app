@@ -57,8 +57,8 @@ class MiningController extends Controller
         $validator = Validator::make($request->all(), [
             'mining_category_id'         => 'required',
             'packages_name'              => 'required',
-            'duration'                   => 'required|integer|gt:0',
-            'prices'                     => 'required|integer|gt:0',
+            'duration'                   => 'required|integer',
+            'prices'                     => 'required|integer',
             'status'                     => 'required',
         ]);
         if ($validator->fails()) {
@@ -207,8 +207,8 @@ class MiningController extends Controller
                 ->where('mining_category_id', $v->id)->orderBy('created_at', 'desc')->first();
         
             $enddate = null; // Default value if no active matching is found
-        
-            if ($active_matching && $active_matching->end_date >= date("Y-m-d")) {
+            $today_date = date("Y-m-d");
+            if ($active_matching && $active_matching->end_date >= $today_date) {
                 $enddate = $active_matching->end_date;
             }
         
@@ -378,9 +378,17 @@ class MiningController extends Controller
     public function miningProcessState(Request $request)
     {
 
+        $customTimeZone = 'Asia/Dhaka';
+        $currentTime    = Carbon::now($customTimeZone);
+
         $mining_category_id = (int)$request->mining_category_id;
         $row                = MiningHistory::orderBy('id', 'DESC')->where('user_id', $this->userid)->where('mining_category_id', $mining_category_id)->first();
-        return response()->json($row);
+
+        $data['start_time']  = !empty($row->start_time) ? $row->start_time : "";
+        $data['end_time']    = !empty($row->end_time) ? $row->end_time : ""; 
+        $data['server_time'] = $currentTime->format('Y-m-d H:i:s');
+
+        return response()->json($data);
     }
 
     public function checkMiningProcess(Request $request)

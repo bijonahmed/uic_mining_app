@@ -24,23 +24,24 @@ const fetchData = async () => {
 }
 
 const startCountdown = () => {
-    const now = Date.now()
+    const serverNow = new Date(myStore.server_time).getTime()
     const endTime = new Date(myStore.end_time).getTime()
-
-    if (now < endTime) {
-        remainingTime.value = endTime - now
-
-        intervalId.value = setInterval(() => {
-            remainingTime.value -= 1000
-            if (remainingTime.value <= 0) {
-                clearInterval(intervalId.value)
-                remainingTime.value = 0
-            }
-        }, 1000)
+    const startTime = new Date(myStore.start_time).getTime()
+  
+    if (serverNow < endTime) {
+      remainingTime.value = endTime - serverNow
+  
+      intervalId.value = setInterval(() => {
+        remainingTime.value -= 1000
+        if (remainingTime.value <= 0) {
+          clearInterval(intervalId.value)
+          remainingTime.value = 0
+        }
+      }, 1000)
     } else {
-        remainingTime.value = 0
+      remainingTime.value = 0
     }
-}
+  }
 
 const formattedStartTime = computed(() => {
     return myStore.start_time ? new Date(myStore.start_time).toLocaleString() : 'N/A'

@@ -83,7 +83,7 @@
  
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Duration</label>
+                                                        class="col-sm-3 col-form-label required-label">Duration in days</label>
                                                     <div class="col-sm-9">
                                                         <input type="text" v-model="insertdata.duration" class="form-control" @keypress="isNumber($event)" />
                                                             <span class="text-danger" v-if="errors.duration">{{ errors.duration[0]}}</span>
