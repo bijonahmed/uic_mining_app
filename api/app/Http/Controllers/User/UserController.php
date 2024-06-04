@@ -49,7 +49,8 @@ class UserController extends Controller
         $me = auth('api')->user();
         return response()->json($me);
     }
-    public function getCommunity(){
+    public function getCommunity()
+    {
 
         try {
             $categories = Community::where('status', 1)->get();
@@ -57,9 +58,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
-
-        
     }
     public function adujustmentrow($id)
     {
@@ -1000,7 +998,7 @@ class UserController extends Controller
 
 
 
- public function deletewithdrawalAddress(Request $request)
+    public function deletewithdrawalAddress(Request $request)
     {
 
         $manualAdjustment = WalletAddress::find($request->id);
@@ -1792,7 +1790,8 @@ class UserController extends Controller
     }
 
 
-    public function changePasswordClient(Request $request){
+    public function changePasswordClient(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'id' => 'required',
@@ -1818,9 +1817,6 @@ class UserController extends Controller
 
         $response = "Password successfully changed!";
         return response()->json($response);
-
-
-
     }
 
     public function changePassword(Request $request)

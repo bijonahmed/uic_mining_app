@@ -21,9 +21,7 @@ Route::get('/clear-cache', function () {
 |
 */
 Route::get('showProfileData', [UserController::class, 'me']);
-Route::get('createOrderSchedule', [PublicController::class, 'createOrderSchedule']);
-Route::get('removeOrderSchedule', [PublicController::class, 'removeOrderSchedule']);
-Route::get('orderStatus', [PublicOrderStatusUpdate::class, 'updateOrderStatus']);
+Route::get('activate-account/{account}', [PublicController::class, 'activationAccount']);
 Route::get('/', function () {
     return view('welcome');
 });

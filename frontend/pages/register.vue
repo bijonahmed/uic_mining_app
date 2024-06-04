@@ -33,6 +33,8 @@
 
               <form class="mt-12" @submit.prevent="register()">
 
+                <div class="alert alert-success" v-if="showmessages" style="text-align: center; font-size: 12px;">{{ showmessages }}</div>
+
                 <div class="form-row-group with-icons">
                   <div class="form-row no-padding">
                     <i class="fa fa-envelope"></i>
@@ -66,7 +68,11 @@
                 <div class="form-row">
                   <!-- <a href="#" class="button circle block orange">Sign Up</a> -->
 
-                  <button type="submit" class="button circle block orange">Sign up</button>
+                  <button class="button circle block orange" type="submit" :disabled="loading">Sign up
+                                <span v-if="loading">Loading...</span>
+                            </button>
+ 
+                 
                 </div>
 
                 <div class="form-row txt-center mt-15">
@@ -106,9 +112,12 @@ import { ref, watch, onMounted } from "vue";
     let inviteCode = ref(null);
     let confirmPassword = ref(null);
     let otp = ref(null)
+    let messages = ref('');
     
+
     const passwordFieldType = ref('password');
     const confirmPasswordFieldType = ref('password');
+  
     
     const togglePassword = (id) => {
       const inputField = document.querySelector(id);
@@ -153,7 +162,7 @@ import { ref, watch, onMounted } from "vue";
         }
       }
     }
-    
+      let showmessages = ref('');
     const register = async () => {
       loading.value = true; 
       try {
@@ -165,7 +174,14 @@ import { ref, watch, onMounted } from "vue";
           password.value,
           confirmPassword.value
         )
-        router.push('/login')
+              // Access the response data
+        const messages = "Registration successful! A confirmation email has been sent to your email address. Please check your inbox or spam folder.";
+        console.log("messages:" + messages); // You can handle the messages here
+        showmessages.value = messages;
+
+       // router.push('/register')
+
+
       } catch (error) {
         //console.log(error)
         errors.value = error.response.data.errors

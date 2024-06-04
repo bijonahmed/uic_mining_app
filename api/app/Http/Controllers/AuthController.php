@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException; // Import the ValidationException class
 use DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -18,9 +19,8 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['me','login', 'register', 'showProfileData', 'updateprofile', 'updatePassword']]);
+        $this->middleware('auth:api', ['except' => ['me', 'login', 'register', 'showProfileData', 'updateprofile', 'updatePassword']]);
     }
-
 
     protected function validateLogin(Request $request)
     {
@@ -39,7 +39,7 @@ class AuthController extends Controller
             ]);
         }
     }
-   
+
     public function login(Request $request)
     {
         $this->validateLogin($request);
@@ -83,7 +83,6 @@ class AuthController extends Controller
     {
         $CountryName    = 'Pakistan'; //$ipdat->geoplugin_countryName;
         $location       = "$CountryName";
-      
     }
 
     public function generateUniqueRandomNumber()
@@ -120,14 +119,16 @@ class AuthController extends Controller
             'role_id'             => 2,
             'available_balance'   => !empty($setting->register_bonus) ? $setting->register_bonus : 0, // 3 UIC
             'ref_id'              => $user->id,
+            'status'              => 0,
             'register_ip'         => $request->ip(),
             'inviteCode'          => $this->generateUniqueRandomNumber(),
             'show_password'       => $request->password,
             'password'            => bcrypt($request->password),
         ]);
 
-        $inviteCode               = $user->id.$this->generateUniqueRandomNumber();
-        $uic                      = 'UIC'.sprintf('%09d', $user->id);
+        $inviteCode               = $user->id . $this->generateUniqueRandomNumber();
+        $uic                      = 'UIC' . sprintf('%09d', $user->id);
+
         //$user->update(['inviteCode' => $inviteCode]);
         $user->update([
             'inviteCode'    => $inviteCode,
@@ -135,13 +136,44 @@ class AuthController extends Controller
             'uic_address'   => md5($uic),
             // Add more fields as needed
         ]);
-        
+        $this->sendMail($email);
         // Get the token
         $token = auth('api')->login($user);
         return $this->respondWithToken($token);
     }
 
-    
+    public function sendMail($email)
+    {
+
+        $uniqueNumber = $email;//rand(100000, 999999); // Or any other unique identifier
+        $encryptedToken = Crypt::encryptString($uniqueNumber);
+        $activationLink = url('/activate-account?token=' . urlencode($encryptedToken));
+
+        $to      = $email;
+        // Email content
+        $subject = 'Activate Your UIC Account';
+        $htmlMessage = "Please click the link below to activate your UIC account: <a href=\"$activationLink\">$activationLink</a>";
+
+        // Remove HTML tags
+        $message = trim(strip_tags($htmlMessage));
+        //echo $message;exit; 
+        
+        // Set content-type header for HTML email
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= 'From: uic@gmail.com' . "\r\n" .
+            'Reply-To: uic@gmail.com' . "\r\n";
+        //dd($request->all());
+        $headers = 'From: uic@gmail.com'       . "\r\n" .
+            'Reply-To: uic@gmail.com' . "\r\n";
+        mail($to, $subject, $message, $headers);
+
+        $response = [
+            'message' => 'Sending Vertification Email'
+        ];
+        return response()->json($response, 200);
+    }
+
     public function me()
     {
         $user = auth('api')->user();
@@ -248,7 +280,7 @@ class AuthController extends Controller
         $validator          = Validator::make($request->all(), [
             'name'          => 'required',
             'phone_number'  => 'required',
-           
+
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -256,7 +288,7 @@ class AuthController extends Controller
         $data = array(
             'id'                => $authId,
             'name'              => !empty($request->name) ? $request->name : "",
-           // 'email'             => !empty($request->email) ? $request->email : "",
+            // 'email'             => !empty($request->email) ? $request->email : "",
             'phone_number'      => !empty($request->phone_number) ? $request->phone_number : "",
             'address'           => !empty($request->address) ? $request->address : "",
             'website'           => !empty($request->website) ? $request->website : "",
@@ -286,11 +318,11 @@ class AuthController extends Controller
     public function showProfileData(Request $request)
     {
         $data   = auth('api')->user();
-        $id     = (int)$data->id; 
+        $id     = (int)$data->id;
         $row    = User::where('id', $id)->first();
         $res['email']       =  is_string($row->email) ? $row->email : json_encode($row->email);
         $res['name']        =  is_string($row->name) ? $row->name : json_encode($row->name);
-        $res['phone_number']=  is_string($row->phone_number) ? $row->phone_number : json_encode($row->phone_number);
+        $res['phone_number'] =  is_string($row->phone_number) ? $row->phone_number : json_encode($row->phone_number);
         $res['twitter']     =  is_string($row->twitter) ? $row->twitter : json_encode($row->twitter);
         $res['facebook']    =  is_string($row->facebook) ? $row->facebook : json_encode($row->facebook);
         $res['whtsapp']     =  is_string($row->whtsapp) ? $row->whtsapp : json_encode($row->whtsapp);
