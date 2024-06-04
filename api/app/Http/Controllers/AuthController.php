@@ -127,7 +127,14 @@ class AuthController extends Controller
         ]);
 
         $inviteCode               = $user->id.$this->generateUniqueRandomNumber();
-        $user->update(['inviteCode' => $inviteCode]);
+        $uic                      = 'UIC'.sprintf('%09d', $user->id);
+        //$user->update(['inviteCode' => $inviteCode]);
+        $user->update([
+            'inviteCode'    => $inviteCode,
+            'uic_id'        => $uic, // Add other fields and their respective values here
+            'uic_address'   => md5($uic),
+            // Add more fields as needed
+        ]);
         
         // Get the token
         $token = auth('api')->login($user);

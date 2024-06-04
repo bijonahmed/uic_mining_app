@@ -13,7 +13,7 @@ use App\Models\Sliders;
 use App\Models\ProductCategory;
 use App\Models\Categorys;
 use App\Models\VerifyEmail;
-use App\Models\Mystore;
+use App\Models\Setting;
 use App\Models\ProductAdditionalImg;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
@@ -30,6 +30,16 @@ class UnauthenticatedController extends Controller
 
 
 
+    public function settingrowClient()
+    {
+
+        $data = Setting::find(1);
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
 
     public function productWiseSubcategory(Request $request)
     {

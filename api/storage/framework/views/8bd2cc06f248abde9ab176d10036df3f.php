@@ -138,4 +138,4 @@
         </div>
     </body>
 </html>
-<?php /**PATH F:\Server\htdocs\uic\api\resources\views/welcome.blade.php ENDPATH**/ ?>
+<?php /**PATH F:\Server\htdocs\uic_mining_app\api\resources\views/welcome.blade.php ENDPATH**/ ?>

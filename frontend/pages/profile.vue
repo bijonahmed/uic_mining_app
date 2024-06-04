@@ -18,12 +18,7 @@
         <!-- Page content start -->
         <!-- Page content start -->
 
-        <form
-          @submit.prevent="saveData()"
-          id="formrest"
-          class="forms-sample"
-          enctype="multipart/form-data"
-        >
+        <form @submit.prevent="saveData()" id="formrest" class="forms-sample" enctype="multipart/form-data">
           <main class="margin mt-0">
             <div class="dash-balance">
               <div class="dash-content relative">
@@ -36,16 +31,8 @@
             <section class="container bal-section">
               <div class="form-row txt-center d-none">
                 <div class="profile-image">
-                  <img
-                    class="avatar-img"
-                    alt="User Avatar"
-                    src="/assets/img/avatar.png"
-                    width="100"
-                    height="100"
-                  />
-                  <a href="javascript:void(0);" class="update-btn"
-                    ><i class="fa fa-camera"></i
-                  ></a>
+                  <img class="avatar-img" alt="User Avatar" src="/assets/img/avatar.png" width="100" height="100" />
+                  <a href="javascript:void(0);" class="update-btn"><i class="fa fa-camera"></i></a>
                 </div>
               </div>
               <br /><br />
@@ -79,37 +66,21 @@
                 <div class="form-row no-padding">
                   <i class="fa fa-user"></i>
 
-                  <input
-                    type="text"
-                    class="form-element"
-                    placeholder="name"
-                    v-model="name"
-                  />
-				  <span class="text-danger" v-if="errors.name">{{
-                errors.name[0]
-              }}</span>
+                  <input type="text" class="form-element" placeholder="name" v-model="name" />
+                  <span class="text-danger" v-if="errors.name">{{
+                    errors.name[0]
+                    }}</span>
                 </div>
                 <div class="form-row no-padding">
                   <i class="fa fa-envelope"></i>
-                  <input
-                    type="email"
-                    class="form-element"
-                    placeholder="Email"
-                    v-model="email"
-                    disabled
-                  />
+                  <input type="email" class="form-element" placeholder="Email" v-model="email" disabled />
                 </div>
-				<span class="text-danger" v-if="errors.email">{{
-                errors.email[0]
-              }}</span>
+                <span class="text-danger" v-if="errors.email">{{
+                  errors.email[0]
+                  }}</span>
                 <div class="form-row no-padding">
                   <i class="fa fa-phone"></i>
-                  <input
-                    type="tel"
-                    class="form-element"
-                    placeholder="Email"
-                    v-model="phone_number"
-                  />
+                  <input type="tel" class="form-element" placeholder="Email" v-model="phone_number" />
                 </div>
               </div>
             </section>
@@ -120,30 +91,16 @@
               <div class="form-row-group with-icons">
                 <div class="form-row no-padding">
                   <i class="fab fa-facebook"></i>
-                  <input
-                    type="text"
-                    class="form-element"
-                    placeholder="facebook.com/profile.php?id=100000000000000"
-                    v-model="facebook"
-                  />
+                  <input type="text" class="form-element" placeholder="facebook.com/profile.php?id=100000000000000"
+                    v-model="facebook" />
                 </div>
                 <div class="form-row no-padding">
                   <i class="fab fa-twitter"></i>
-                  <input
-                    type="text"
-                    class="form-element"
-                    placeholder="twitter.com/Sample-user"
-                    v-model="twitter"
-                  />
+                  <input type="text" class="form-element" placeholder="twitter.com/Sample-user" v-model="twitter" />
                 </div>
                 <div class="form-row no-padding">
                   <i class="fab fa-whatsapp"></i>
-                  <input
-                    type="text"
-                    class="form-element"
-                    placeholder="wa.me/0000000000"
-                    v-model="whtsapp"
-                  />
+                  <input type="text" class="form-element" placeholder="wa.me/0000000000" v-model="whtsapp" />
                 </div>
               </div>
 
@@ -167,30 +124,30 @@
             </div>
           </div>
         </center>
-        <form
-          @submit.prevent="changesPassword()"
-          id="formrest"
-          class="forms-sample"
-          enctype="multipart/form-data"
-        >
+        <form @submit.prevent="changesPassword()" id="formrest" class="forms-sample" enctype="multipart/form-data">
+
+
           <div class="row mb-3">
-            <label for="inputEnterYourName" class="col-sm-2 col-form-label"
-              >Password</label
-            >
+            <label for="inputEnterYourName" class="col-sm-2 col-form-label">Old Password</label>
+            
             <div class="col-sm-8">
-              <input
-                type="hidden"
-                class="form-control id"
-                v-model="insertdata.id"
-                id="id"
-              />
-              <input
-                type="password"
-                class="form-control password"
-                v-model="insertdata.password"
-                id="password"
-                placeholder="Password"
-              />
+              <input type="hidden" class="form-control id" v-model="insertdata.id" id="id" />
+              <input type="password" class="form-control password" v-model="insertdata.old_password" id="password"
+                placeholder="Old Password" />
+              <span class="text-danger" v-if="errors.old_password">{{
+                errors.old_password[0]
+              }}</span>
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label for="inputEnterYourName" class="col-sm-2 col-form-label">New Password</label>
+            
+            <div class="col-sm-8">
+              <input type="hidden" class="form-control id" v-model="insertdata.id" id="id" />
+              <input type="password" class="form-control password" v-model="insertdata.password" id="password"
+                placeholder="New Password" />
               <span class="text-danger" v-if="errors.password">{{
                 errors.password[0]
               }}</span>
@@ -198,31 +155,23 @@
           </div>
 
           <div class="row mb-3">
-            <label for="inputConfirmPassword2" class="col-sm-2 col-form-label"
-              >Confirm Password</label
-            >
+            <label for="inputConfirmPassword2" class="col-sm-2 col-form-label">Confirm Password</label>
             <div class="col-sm-8">
-              <input
-                type="password"
-                class="form-control password_confirmation"
-                v-model="insertdata.password_confirmation"
-                id="password_confirmation"
-                placeholder="Confirm Password"
-              />
+              <input type="password" class="form-control password_confirmation"
+                v-model="insertdata.password_confirmation" id="password_confirmation" placeholder="Confirm Password" />
               <span class="text-danger" v-if="errors.password_confirmation">{{
                 errors.password_confirmation[0]
               }}</span>
             </div>
           </div>
 
-          <div class="row">
-            <label class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-8">
-              <button type="submit" class="btn btn-success px-5 w-100">
-                <i class="bx bx-check-circle mr-1"></i> Submit
-              </button>
-            </div>
-          </div>
+         <div class="container">
+          <div class="form-row">
+                <button type="submit" class="button circle block orange">
+                  Update
+                </button>
+              </div>
+         </div>
         </form>
 
         <br /><br /><br /><br />
@@ -252,6 +201,7 @@ const id = ref("");
 
 const insertdata = reactive({
   id: "",
+  old_password: "",
   password: "",
   password_confirmation: "",
 });
@@ -266,7 +216,7 @@ const fetchData = async () => {
     whtsapp.value = response.data.whtsapp;
     facebook.value = response.data.facebook;
     twitter.value = response.data.twitter;
-	id.value = response.data.id;
+    id.value = response.data.id;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -276,13 +226,14 @@ const changesPassword = () => {
   const formData = new FormData();
   formData.append("id", id.value);
   formData.append("password", insertdata.password);
+  formData.append("old_password", insertdata.old_password);
   formData.append("password_confirmation", insertdata.password_confirmation);
 
   const headers = {
     "Content-Type": "multipart/form-data",
   };
   axios
-    .post("/user/changePassword", formData, { headers })
+    .post("/user/changePasswordClient", formData, { headers })
     .then((res) => {
       document.getElementById("formrest").reset();
       success_noti();

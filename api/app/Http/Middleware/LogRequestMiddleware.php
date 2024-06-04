@@ -22,17 +22,9 @@ class LogRequestMiddleware
             $user_id = null;
         }
         // Log request details
-        $requestData = [
-            'method'        => $request->method(),
-            'url'           => $request->fullUrl(),
-            'ip'            => $request->ip(),
-            'user_agent'    => $request->header('User-Agent'),
-            'user_id'       => $user_id,
-            'full_request'  => json_encode($request->all()),
-            // Add more fields as needed
-        ];
+       
         // Insert into the database
-        DB::table('logs')->insert($requestData);
+       // DB::table('logs')->insert($requestData);
 
         return $next($request);
     }

@@ -29,7 +29,10 @@ class User extends Authenticatable implements JWTSubject
     'with_password',
     'with_show_password',
     'real_name',
-    'available_balance'
+    'available_balance',
+    'uic_id',
+    'uic_address',
+
   ];
   protected $hidden = [
     'password',

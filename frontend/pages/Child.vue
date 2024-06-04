@@ -12,7 +12,6 @@
           <div class="d-flex flex-grow">
             <div class="mr-auto">
               <h1 class="b-val" v-if="isLoggedIn">$2,589.50</h1>
-              <h1 class="b-val" v-else>$0</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
                 <small style="color: white">{{ userStore.email }}</small>
               </p>
@@ -30,13 +29,10 @@
             <div class="flex-column flex-md-row">
               <img src="/assets/img/5001578.png" class="max50" alt="" />
               <h3 class="">Maximum Supply</h3>
-              <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
-                <i class="txt-green fa fa-arrow-up mr-10"></i
-                >{{ maximum_supply }} Billion
+              <p class="mb-0 font-weight-medium">
+                <i class="txt-green fa fa-arrow-up mr-10"></i>{{ maximum_supply }} Billion
               </p>
-              <p class="mb-0 font-weight-medium" v-else>
-                <i class="txt-green fa fa-arrow-up mr-10"></i>0 Billion
-              </p>
+
             </div>
           </div>
 
@@ -44,24 +40,17 @@
             <div class="flex-column flex-md-row">
               <img src="/assets/img/1027961.png" class="max50" alt="" />
               <h3 class="">Total Supply</h3>
-              <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
-                <i class="txt-red fa fa-arrow-down mr-10"></i
-                >{{ total_supply }} ETH
+              <p class="mb-0 font-weight-medium">
+                <i class="txt-red fa fa-arrow-down mr-10"></i>{{ total_supply }} ETH
               </p>
-              <p class="mb-0 font-weight-medium" v-else>
-                <i class="txt-red fa fa-arrow-down mr-10"></i>0 ETH
-              </p>
+
             </div>
           </div>
         </div>
         <div class="resources-card-wrapper mt-15">
           <div class="wallet-card mr-10">
             <div class="flex-column flex-md-row">
-              <img
-                src="/assets/img/return-on-investment.png"
-                class="max50"
-                alt=""
-              />
+              <img src="/assets/img/return-on-investment.png" class="max50" alt="" />
               <h3 class="">Circulating Supply</h3>
               <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
                 <i class="txt-red fa fa-arrow-down mr-10"></i>8,954.3 XRP
@@ -91,16 +80,11 @@
       <div class="container">
         <center class="d-none">
           <span v-if="isLoggedIn">
-            <nuxt-link
-              to="/buy-mining-service"
-              class="btn btn-link btn-lg button custom-btn"
-              >Buy Mining Machine</nuxt-link
-            >
+            <nuxt-link to="/buy-mining-service" class="btn btn-link btn-lg button custom-btn">Buy Mining
+              Machine</nuxt-link>
           </span>
           <span v-else>
-            <nuxt-link to="/login" class="btn btn-link btn-lg button custom-btn"
-              >Buy Mining Machine</nuxt-link
-            >
+            <nuxt-link to="/login" class="btn btn-link btn-lg button custom-btn">Buy Mining Machine</nuxt-link>
           </span>
         </center>
 
@@ -115,9 +99,10 @@
               <Start />
             </span>
             <span v-else class="text-center">
-              <nuxt-link to="/buy-mining-service" class="m_icon mx-auto  serv-icon mt-3"
-                ><img src="/assets/img/start.png" style="width: 40px" alt=""
-              /></nuxt-link>
+              <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
+                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+              <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img
+                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
               <p class="text mt-2">Start</p>
             </span>
           </div>
@@ -126,10 +111,11 @@
             <Fast />
           </div>
           <div v-else class="text-center col">
-            <nuxt-link to="/buy-mining-service" class="m_icon serv-icon mt-3"
-              ><img src="/assets/img/fast.png" style="width: 40px" alt=""
-            /></nuxt-link>
-              <p class="text mt-2">Fast</p>
+            <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
+                src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+            <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/platinum.png"
+                style="width: 40px" alt="" /></nuxt-link>
+            <p class="text mt-2">Fast</p>
           </div>
 
           <div class="col" v-if="category_3 === 3">
@@ -137,45 +123,42 @@
           </div>
 
           <div v-else class="text-center col serv-item">
-            <nuxt-link to="/buy-mining-service" class="m_icon serv-icon mt-3"
-              ><img src="/assets/img/super.png" style="width: 40px" alt=""
-            /></nuxt-link>
-              <p class="text mt-2">Super</p>
+            <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
+                src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+            <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/platinum.png"
+                style="width: 40px" alt="" /></nuxt-link>
+            <p class="text mt-2">Super</p>
           </div>
 
           <div class="col" v-if="category_4 === 4">
             <Platinum />
           </div>
-          <div v-else class="text-center col ">
+
+
+          <div v-else class="text-center col">
             <div class="serv-item">
-              <nuxt-link to="/buy-mining-service" class="m_icon serv-icon mt-3"
-              ><img src="/assets/img/platinum.png" style="width: 40px" alt=""
-            /></nuxt-link>
+              <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
+                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+              <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img
+                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+
               <p class="text mt-2">Platinum</p>
             </div>
           </div>
-          
+
         </div>
       </div>
 
-      <section class="bal-section container mt-30" v-if="isLoggedIn">
+      <section class="bal-section container mt-30">
         <h4 class="title-main mt-0">Cryptocoins Balance</h4>
         <div class="resources-card-wrapper">
           <div class="resources-card mr-10">
             <div class="d-flex flex-column flex-md-row">
-              <img
-                src="/assets/img/content/ex2.png"
-                class="max-w mb-10"
-                alt=""
-              />
+              <img src="/assets/img/content/ex2.png" class="max-w mb-10" alt="" />
               <div class="d-flex flex-column ml-md-2">
                 <p class="text-muted mb-10 font-weight-medium">Total Income</p>
                 <div class="progress">
-                  <div
-                    class="progress-bar bg-primary"
-                    role="progressbar"
-                    style="width: 57%"
-                  ></div>
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 57%"></div>
                 </div>
                 <h4 class="mt-10 mb-0">$2,748,98</h4>
               </div>
@@ -183,19 +166,11 @@
           </div>
           <div class="resources-card ml-10">
             <div class="d-flex flex-column flex-md-row">
-              <img
-                src="/assets/img/content/ex1.png"
-                class="max-w mb-10"
-                alt=""
-              />
+              <img src="/assets/img/content/ex1.png" class="max-w mb-10" alt="" />
               <div class="d-flex flex-column ml-md-2">
                 <p class="text-muted mb-10 font-weight-medium">Expenses</p>
                 <div class="progress">
-                  <div
-                    class="progress-bar bg-warning"
-                    role="progressbar"
-                    style="width: 67%"
-                  ></div>
+                  <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"></div>
                 </div>
                 <h4 class="mt-10 mb-0">$1,643.22</h4>
               </div>
@@ -225,7 +200,7 @@ const category_4 = ref(null);
 
 const fetchData = async () => {
   try {
-    const response = await axios.get("/setting/settingrow");
+    const response = await axios.get("/settingrowClient");
     console.log("Response data:", response.data.data.maximum_supply);
     // Assuming maximum_supply and total_supply are DOM elements or component state
     maximum_supply.value = response.data.data.maximum_supply;
@@ -285,11 +260,16 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .custom-btn {
-  background-color: #29529e; /* Custom background color */
-  color: white; /* Custom text color */
+  background-color: #29529e;
+  /* Custom background color */
+  color: white;
+  /* Custom text color */
 }
+
 .custom-btn:hover {
-  background-color: #29529e; /* Custom hover color */
+  background-color: #29529e;
+  /* Custom hover color */
 }
 </style>

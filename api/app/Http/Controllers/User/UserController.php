@@ -1791,6 +1791,38 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+
+    public function changePasswordClient(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'password' => 'required|min:2|confirmed', // Use 'confirmed' rule for password confirmation
+            'password_confirmation' => 'required|min:2',
+            'old_password' => 'required|min:2', // Add validation for old password
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::find($request->id);
+
+        // Validate old password before updating
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json(['errors' => ['old_password' => ['The old password does not match.']]], 422);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->show_password = $request->password; // Consider removing this line for security reasons
+        $user->save();
+
+        $response = "Password successfully changed!";
+        return response()->json($response);
+
+
+
+    }
+
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -41,6 +41,8 @@ use App\Http\Middleware\CheckUserStatus;
 */
 Route::post('messages', [ChatController::class, 'message']);
 Route::get('/messages/{community_slug}', [ChatController::class, 'getMessages']);
+Route::get('settingrowClient', [UnauthenticatedController::class, 'settingrowClient']);
+
 
 Route::group([
    'middleware' => 'api',
@@ -130,6 +132,7 @@ Route::group([
     Route::get('typeofdoucments', [UserController::class, 'typeofdoucments']);
     Route::post('saveDepartment', [UserController::class, 'saveDepartment']);
     Route::post('changePassword', [UserController::class, 'changePassword']);
+    Route::post('changePasswordClient', [UserController::class, 'changePasswordClient']);
     Route::post('changePasswordPartner', [UserController::class, 'changePasswordPartner']);
     Route::post('withdrawPasswordPartner', [UserController::class, 'withdrawPasswordPartner']);
     Route::post('withdrawPasswordByAdmin', [UserController::class, 'withdrawPasswordByAdmin']);
@@ -477,6 +480,7 @@ Route::group([
     Route::get('sliderrow/{id}', [SettingController::class, 'sliderrow']);
     //setting row
     Route::get('settingrow', [SettingController::class, 'settingrow']);
+  
 });
 Route::group([
     'middleware' => 'api',
