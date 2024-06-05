@@ -29,7 +29,6 @@
 
                        
                         <form id="settingsForm">
-
                             <div class="list-box" v-for="comm in communitys" :key="comm.id">
                                 <div class="list-item">
                                     <span class="list-item-title">
@@ -77,20 +76,37 @@ import axios from "axios";
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const communitys = ref([]);
-
-
+const username = ref();
+const onlyName = ref();
 
 const checkSlug = (slug) => {
-   
     router.push({
         path: '/chatbox/messages',
-        query: { slug }
+        query: { 
+            slug,
+            username: username.value,
+            name: onlyName.value,
+        }
     });
 };
 const fetchData = async () => {
     try {
         const response = await axios.get("/user/getCommunity");
         communitys.value = response.data;
+        getuserDetails();
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+};
+
+
+const getuserDetails = async () => {
+    try {
+        const response = await axios.post("/auth/me");
+        console.log("response:" + response.data.email);
+        username.value = response.data.email;
+        onlyName.value = response.data.name;
 
     } catch (error) {
         console.error("Error fetching data:", error);

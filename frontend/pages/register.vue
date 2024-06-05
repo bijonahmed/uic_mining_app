@@ -66,13 +66,10 @@
                 <div class="form-divider"></div>
 
                 <div class="form-row">
-                  <!-- <a href="#" class="button circle block orange">Sign Up</a> -->
-
-                  <button class="button circle block orange" type="submit" :disabled="loading">Sign up
+                  <!-- <a href="#" class="button circle block orange">Sign Up</a> :disabled="loading"-->
+                  <button class="button circle block orange" type="submit">Sign up
                                 <span v-if="loading">Loading...</span>
                             </button>
- 
-                 
                 </div>
 
                 <div class="form-row txt-center mt-15">

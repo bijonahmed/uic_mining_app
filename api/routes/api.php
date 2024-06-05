@@ -105,6 +105,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'user'
 ], function () {
+    Route::get('getBalance', [UserController::class, 'getBalance']);
     //Route::post('me', [UserController::class, 'me']);
     Route::get('getCommunity', [UserController::class, 'getCommunity']);
     Route::get('adujustmentrow/{id}', [UserController::class, 'adujustmentrow']);

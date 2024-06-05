@@ -14,6 +14,7 @@ class MyMessage extends Authenticatable
     protected $fillable = [
         'user_id',
         'community_slug',
+        'username',
         'message',
     ];
 }

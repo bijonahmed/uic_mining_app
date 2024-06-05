@@ -631,6 +631,12 @@ class SettingController extends Controller
             'register_bonus'    => 'required',
             'maximum_supply'    => 'required',
             'total_supply'      => 'required',
+
+            'level_1_bonus'      => 'required',
+            'level_2_bonus'      => 'required',
+            'level_3_bonus'      => 'required',
+
+
             
 
         ]);
@@ -648,6 +654,11 @@ class SettingController extends Controller
             'fblink'            => !empty($request->fblink) ? $request->fblink : "",
             'website'           => !empty($request->website) ? $request->website : "",
             'telegram'          => !empty($request->telegram) ? $request->telegram : "",
+
+            'level_1_bonus'          => !empty($request->level_1_bonus) ? $request->level_1_bonus : "",
+            'level_2_bonus'          => !empty($request->level_2_bonus) ? $request->level_2_bonus : "",
+            'level_3_bonus'          => !empty($request->level_3_bonus) ? $request->level_3_bonus : "",
+            
             'deposit_service_charge'      => !empty($request->deposit_service_charge) ? $request->deposit_service_charge : "",
             'withdraw_service_charge'     => !empty($request->withdraw_service_charge) ? $request->withdraw_service_charge : "",
             'crypto_wallet_address'       => !empty($request->crypto_wallet_address) ? $request->crypto_wallet_address : "",

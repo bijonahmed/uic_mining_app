@@ -326,9 +326,10 @@
                                                         errors.traansfer_fee_on_percentage[0] }}</span>
                                                 </div>
                                             </div>
+                                            <hr>
 
                                             <div class="row mb-3">
-                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Register
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">New Member Register
                                                     Bonus</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control address"
@@ -338,6 +339,41 @@
                                                         errors.register_bonus[0] }}</span>
                                                 </div>
                                             </div>
+
+                                            <div class="row mb-3">
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Level - 1 Bonus (UIC)</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control address"
+                                                        v-model="insertdata.level_1_bonus"
+                                                        @keypress="isNumber($event)" />
+                                                    <span class="text-danger" v-if="errors.level_1_bonus">{{
+                                                        errors.level_1_bonus[0] }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Level - 2 Bonus (UIC)</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control address"
+                                                        v-model="insertdata.level_2_bonus"
+                                                        @keypress="isNumber($event)" />
+                                                    <span class="text-danger" v-if="errors.level_2_bonus">{{
+                                                        errors.level_2_bonus[0] }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Level - 3 Bonus (UIC)</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control address"
+                                                        v-model="insertdata.level_3_bonus"
+                                                        @keypress="isNumber($event)" />
+                                                    <span class="text-danger" v-if="errors.level_3_bonus">{{
+                                                        errors.level_3_bonus[0] }}</span>
+                                                </div>
+                                            </div>
+
+                                            <hr/>
 
                                             <div class="row mb-3 d-none">
                                                 <label for="inputEnterYourName" class="col-sm-3 col-form-label">Deposit
@@ -440,6 +476,11 @@ const insertdata = reactive({
     maximum_supply: "",
     total_supply: "",
     register_bonus: "",
+
+    level_1_bonus: "",
+    level_2_bonus: "",
+    level_3_bonus: "",
+
     store_policy: "",
     description: "",
     website: "",
@@ -523,11 +564,11 @@ const saveData = () => {
     formData.append("transfer_fee_fixed_amount", insertdata.transfer_fee_fixed_amount);
     formData.append("traansfer_fee_on_percentage", insertdata.traansfer_fee_on_percentage);
 
+    formData.append("level_1_bonus", insertdata.level_1_bonus);
+    formData.append("level_2_bonus", insertdata.level_2_bonus);
+    formData.append("level_3_bonus", insertdata.level_3_bonus);
 
-    formData.append(
-        "withdraw_service_charge",
-        insertdata.withdraw_service_charge
-    );
+    formData.append("withdraw_service_charge",insertdata.withdraw_service_charge);
     formData.append("crypto_wallet_address", insertdata.crypto_wallet_address);
     formData.append("store_policy", insertdata.store_policy);
 
@@ -591,18 +632,18 @@ const loadingRow = () => {
         insertdata.fblink = response.data.data.fblink;
         insertdata.website = response.data.data.website;
         insertdata.telegram = response.data.data.telegram;
-        insertdata.deposit_service_charge =
-            response.data.data.deposit_service_charge;
+        insertdata.deposit_service_charge =response.data.data.deposit_service_charge;
         insertdata.register_bonus = response.data.data.register_bonus;
-        insertdata.withdraw_service_charge =
-            response.data.data.withdraw_service_charge;
+        insertdata.withdraw_service_charge =response.data.data.withdraw_service_charge;
         insertdata.crypto_wallet_address = response.data.data.crypto_wallet_address;
-        //insertdata.store_policy = response.data.data.store_policy;
-        insertdata.withdraw_minimum_amount =
-            response.data.data.withdraw_minimum_amount;
+ 
+        insertdata.withdraw_minimum_amount =response.data.data.withdraw_minimum_amount;
         insertdata.maximum_supply = response.data.data.maximum_supply;
         insertdata.total_supply = response.data.data.total_supply;
-        //previewUrl.value = response.data.images;
+        insertdata.level_1_bonus = response.data.data.level_1_bonus;
+        insertdata.level_2_bonus = response.data.data.level_2_bonus;
+        insertdata.level_3_bonus = response.data.data.level_3_bonus;
+       
         insertdata.mininmum_deposit_amount = response.data.data.mininmum_deposit_amount;
         insertdata.maximum_deposit_amount = response.data.data.maximum_deposit_amount;
         insertdata.minimum_withdrawal = response.data.data.minimum_withdrawal;

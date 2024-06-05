@@ -44,6 +44,18 @@ class UserController extends Controller
         }
     }
 
+    public function getBalance(){
+
+        try {
+            $data = User::find($this->userid);
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+
+    }
+
     public function me()
     {
         $me = auth('api')->user();
