@@ -10,10 +10,13 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\ProductCategory;
 use App\Models\User;
+use App\Jobs\ProcessExcelUpload;
+use App\Models\CustomerHistory;
 //use Darryldecode\Cart\Cart;
 use Illuminate\Support\Facades\Session;
 use Cart;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Redirect;
 
 class PublicController extends Controller
@@ -44,5 +47,27 @@ class PublicController extends Controller
         // Extract the last 6 digits
 
         return md5($microtimeStr); // Return the 6-digit unique value
+    }
+
+    public function upload(){
+        $uploads = CustomerHistory::paginate(10); // Fetch 10 uploads per page
+        return view('upload', compact('uploads'));
+
+    }
+
+
+    public function submit(Request $request)
+    {
+         // Validate the uploaded file
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        // Store the uploaded file
+        $filePath = $request->file('file')->store('excel_files');
+
+        // Dispatch the job to process the file
+        ProcessExcelUpload::dispatch($filePath);
+        return redirect()->back()->with('success', 'File uploaded successfully. Processing in background.');
     }
 }

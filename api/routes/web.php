@@ -21,7 +21,9 @@ Route::get('/clear-cache', function () {
 |
 */
 Route::get('showProfileData', [UserController::class, 'me']);
-Route::get('activate-account/{account}', [PublicController::class, 'activationAccount']);
+Route::get('activate-account', [PublicController::class, 'activationAccount']);
+Route::get('upload', [PublicController::class, 'upload']);
+Route::post('submit', [PublicController::class, 'submit']);
 Route::get('/', function () {
     return view('welcome');
 });
