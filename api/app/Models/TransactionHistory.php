@@ -10,20 +10,15 @@ use App\Models\AttributeValues;
 use AuthorizesRequests;
 use DB;
 
-class Deposit extends Authenticatable
+class TransactionHistory extends Authenticatable
 {
   use HasApiTokens, HasFactory, Notifiable;
-  public $table = "deposit";
+  public $table = "transaction_history";
 
   protected $fillable = [
-    'depositID',
-    'trxId',
-    'depscription',
     'user_id',
-    'deposit_amount',
-    'receivable_amount',
-    'payment_method',
-    'approved_by',
-    'status',
+    'type',
+    'description',
+    'amount',
   ];
 }

@@ -38,7 +38,7 @@
 
                                     <h4 class="title-main">Place Withdrawl Order</h4>
                                     <div class="wallet-address">
-                                        <h3 class="w-text mb-30 mt-0">Withdrawl Income</h3>
+                                        <h3 class="w-text mb-30 mt-0">Withdrawl</h3>
 
 
                                         <div class="txt-left">
@@ -99,7 +99,7 @@
                                             <img src="/assets/img/content/exchange.png" class="mt-15" alt="">
                                         </div>
                                         <div class="txt-left calc-crr">
-                                            <label class="g-text">BTC Amount</label>
+                                            <label class="g-text">UIC Amount</label>
                                             <div class="form-row-group with-icons">
                                                 <div class="form-row no-padding">
                                                     <img src="/assets/img/content/2.png" class="icon" alt="">

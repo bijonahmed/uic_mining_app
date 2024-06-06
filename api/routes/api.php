@@ -288,6 +288,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'deposit'
 ], function () {
+    Route::post('depositRequest', [DepositController::class, 'depositRequest']);
     Route::get('filterRechargeList', [DepositController::class, 'filterRechargeList']);
     Route::get('depositrow/{id}', [DepositController::class, 'depositrow']);
     Route::get('withdrawrow/{id}', [DepositController::class, 'withdrawrow']);

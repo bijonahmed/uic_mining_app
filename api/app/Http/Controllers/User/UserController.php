@@ -8,6 +8,7 @@ use App\Models\Deposit;
 use App\Models\ExpenseHistory;
 use App\Models\ManualAdjustment;
 use App\Models\ManualAdjustmentDelete;
+use App\Models\MiningServicesBuyHistory;
 use App\Models\MystoreHistory;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Helper;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\RuleModel;
+use App\Models\TransactionHistory;
 use App\Models\WalletAddress;
 use App\Models\Withdraw;
 use Illuminate\Support\Str;
@@ -46,9 +48,55 @@ class UserController extends Controller
 
     public function getBalance(){
 
-        try {
-            $data = User::find($this->userid);
+        $active_matching = MiningServicesBuyHistory ::where('user_id', $this->userid)->first();
+        $tranHistory     = TransactionHistory::where('user_id', $this->userid)->get();
+
+        $today_date = date("Y-m-d");
+        if ($active_matching && $active_matching->end_date >= $today_date) {
+            $enddate = $active_matching->end_date;
+            $service_price =  !empty($active_matching->service_price) ? $active_matching->service_price : 0;
+            $machinestatus = "Active";
+        } else {
+            $service_price = 0;
+            $machinestatus = "Not active";
+        }
+     
+       try {
+ 
+            $row            = User::find($this->userid);
+            $deposit        = Deposit::where('user_id',$this->userid)->where('status',1)->sum('deposit_amount');
+            $depositAmount  = abs($deposit - $service_price);
+
+            foreach ($tranHistory as $v) {
+                $depositrow = Deposit::where('id',$v->last_Id)->select('status')->first();
+
+                if($depositrow->status == 0){
+                    $dpstatus = 'Review';
+                }elseif($depositrow->status == 1){
+                    $dpstatus = 'Approved';
+                }elseif($depositrow->status == 2){
+                    $dpstatus = 'Reject';
+                }
+
+                $tran[] = [
+                    'id'             => $v->id,
+                    'user_id'        => $v->user_id,
+                    'type'           => $v->type,
+                    'depositStatus'  => $dpstatus,
+                    'dep_status'     => $depositrow->status,
+                    'machinestatus'  => $machinestatus,
+                    'description'    => $v->description,
+                    'amount'         => $v->amount,
+                    'created_at'     => date("d-m-Y H:i:s", strtotime($v->created_at)),
+                ];
+            }
+
+            $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
+            $data['deposit_amount']         =  number_format($depositAmount,2);
+            $data['transactionhistory']     = $tran;
+
             return response()->json($data);
+
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

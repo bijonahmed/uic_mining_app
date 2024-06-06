@@ -19,6 +19,9 @@ use App\Models\ProductAdditionalImg;
 use App\Models\ProductVarrient;
 use App\Models\AttributeValues;
 use App\Models\Deposit;
+use App\Models\MiningServicesBuyHistory;
+use App\Models\Setting;
+use App\Models\TransactionHistory;
 use App\Models\WalletAddress;
 use App\Models\Withdraw;
 use Illuminate\Support\Str;
@@ -179,22 +182,46 @@ class DepositController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'depsoitAmount'  => 'required|numeric',
+                'deposit_amount'  => 'required|numeric',
                 'payment_method' => 'required',
+                'trxId' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+
+            $setting= Setting::find(1);
+            $checkSetting = $setting->minimum_deposit_amount;
+ 
+
+            if ($request->deposit_amount <= $checkSetting) {
+              return response()->json(['errors' => ['deposit_amount' => ['Your deposit amount is low']]], 422);
+            }
+            
+            $uniqueID = 'D.' . $this->generateUnique4DigitNumber();
             $data = array(
-                'depositID'      => 'D.' . $this->generateUnique4DigitNumber(),
-                'depscription'   => 'Deposit created. Your ID: ' . $this->generateUnique4DigitNumber(),
-                'deposit_amount' => $request->depsoitAmount,
+                'depositID'      => $uniqueID,
+                'depscription'   => $uniqueID,
+                'deposit_amount' => $request->deposit_amount,
                 'payment_method' => $request->payment_method,
+                'trxId'          => $request->trxId,
                 'status'         => 0,
                 'user_id'        => $this->userid
             );
-            $resonse = Deposit::insertGetId($data);
-            return response()->json($resonse);
+            $last_Id = Deposit::insertGetId($data);
+
+
+
+            $tran['user_id']     = $this->userid;
+            $tran['type']        = 1; //Deposit 
+            $tran['last_Id']     = $last_Id;
+            $tran['amount']      = $request->deposit_amount;
+            $tran['description'] = 'Deposit';
+            TransactionHistory::insert($tran);
+
+
+
+            return response()->json($last_Id);
         } catch (QueryException $e) {
             // Log the error or handle it as needed
             return response()->json(['error' => 'Database error occurred.'], 500);
@@ -210,7 +237,7 @@ class DepositController extends Controller
             $uniqueNumber = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
         } while (in_array($uniqueNumber, $existingNumbers));
 
-        return $uniqueNumber;
+        return md5($uniqueNumber);
     }
 
 

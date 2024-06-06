@@ -12,7 +12,7 @@
 						<nuxt-link to='/login'><i class="fa-duotone fa-wallet menuli"></i><p>Wallet</p></nuxt-link>
 					</li>
 					<li v-if="isLoggedIn">
-						<nuxt-link class="b-m-pluse" to="/setting"><i class="fa fa-plus"></i></nuxt-link>
+						<nuxt-link class="b-m-pluse" to="/community"><i class="fa fa-plus"></i></nuxt-link>
 					</li>
 					<li v-else>
 						<nuxt-link class="b-m-pluse" to="/login"><i class="fa fa-plus"></i></nuxt-link>

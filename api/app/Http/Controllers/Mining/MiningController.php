@@ -23,6 +23,7 @@ use App\Models\SubAttribute;
 use App\Models\ProductAttributes;
 use App\Models\ProductAttributeValue;
 use App\Models\Product;
+use App\Models\TransactionHistory;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
 use Carbon\Carbon;
@@ -44,9 +45,10 @@ class MiningController extends Controller
         }
     }
 
-    public function minningDurationrow($id){
+    public function minningDurationrow($id)
+    {
         $responseData['data']  = MiningCategoryDuration::join('mining_categogy', 'mining_categogy_duration.mining_category_id', '=', 'mining_categogy.id')->orderBy('id', 'desc')
-                                ->select('mining_categogy_duration.*','mining_categogy.name')->where('mining_categogy_duration.id', $id)->first();
+            ->select('mining_categogy_duration.*', 'mining_categogy.name')->where('mining_categogy_duration.id', $id)->first();
         return response()->json($responseData);
     }
 
@@ -66,7 +68,7 @@ class MiningController extends Controller
         }
 
         // Check if a category with the same name already exists
-        if(empty($request->id)){
+        if (empty($request->id)) {
             $existingCategory = MiningCategoryDuration::where('packages_name', $request->input('packages_name'))->first();
             if ($existingCategory) {
                 return response()->json(['errors_name' => 'Packages name already exists'], 422);
@@ -80,19 +82,20 @@ class MiningController extends Controller
             'prices'                       => $request->prices,
             'status'                       => 1,
         );
-        if(empty($request->id)){
+        if (empty($request->id)) {
             $resdata['id']                  = MiningCategoryDuration::insertGetId($data);
-        }else{
+        } else {
             //update 
             $post = MiningCategoryDuration::find($request->id);
             $post->update($data);
             $resdata['id']                  = $request->id;
         }
-       
+
         return response()->json($resdata);
     }
 
-    public function allMiningDuration(Request $request){
+    public function allMiningDuration(Request $request)
+    {
 
         $page     = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
@@ -102,7 +105,7 @@ class MiningController extends Controller
         $status         = (int)$request->selectedFilter;
         //dd($status);
         $query = MiningCategoryDuration::join('mining_categogy', 'mining_categogy_duration.mining_category_id', '=', 'mining_categogy.id')->orderBy('id', 'desc')
-            ->select('mining_categogy_duration.*','mining_categogy.name');
+            ->select('mining_categogy_duration.*', 'mining_categogy.name');
 
         if ($searchQuery !== null) {
             $query->where('mining_categogy_duration.packages_name', 'like', '%' . $searchQuery . '%');
@@ -136,7 +139,6 @@ class MiningController extends Controller
             'total_pages' => $paginator->lastPage(),
             'total_records' => $paginator->total(),
         ], 200);
-
     }
 
     public function checkMiningInfo()
@@ -201,17 +203,17 @@ class MiningController extends Controller
         $data = [];
 
         $categoryData = MiningCategory::where('status', 1)->get();
-        
+
         foreach ($categoryData as $v) {
-                 $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)
+            $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)
                 ->where('mining_category_id', $v->id)->orderBy('created_at', 'desc')->first();
-        
+
             $enddate = null; // Default value if no active matching is found
             $today_date = date("Y-m-d");
             if ($active_matching && $active_matching->end_date >= $today_date) {
                 $enddate = $active_matching->end_date;
             }
-        
+
             $data[] = [
                 'id'                        => $v->id,
                 'name'                      => $v->name,
@@ -285,7 +287,25 @@ class MiningController extends Controller
             $data['service_price']                  = $request->selectedPrice;
             $data['start_date']                     = $startDate->format('Y-m-d');
             $data['end_date']                       = $endDate->format('Y-m-d');
-            MiningServicesBuyHistory::create($data);
+            
+            $duration  = $request->selectedDuration;
+            $last_Id   = MiningServicesBuyHistory::insertGetId($data);
+
+            //MiningServicesBuyHistory::create($data);
+            $miningCategoryRow   = MiningCategory::where('id',$request->mining_category_id)->first();
+            $m_cate_row          = !empty($miningCategoryRow->name) ? $miningCategoryRow->name : ""; 
+
+            $tran['user_id']     = $this->userid;
+            $tran['type']        = 3; //Mining Machine purchage 
+            $tran['last_Id']     = $last_Id;
+            $tran['amount']      = $request->selectedPrice;
+            $tran['description'] = "Mining Machine : [$m_cate_row], Duration : {$duration}";
+            TransactionHistory::insert($tran);
+           
+
+
+
+
             $res['status']     = 1;
             $res['msg']        = "Mining machine successfully purchased";
             $res['notify']     = "Start Date : {$startDate}--End Date: {$endDate}--Days: {$days}";
@@ -385,7 +405,7 @@ class MiningController extends Controller
         $row                = MiningHistory::orderBy('id', 'DESC')->where('user_id', $this->userid)->where('mining_category_id', $mining_category_id)->first();
 
         $data['start_time']  = !empty($row->start_time) ? $row->start_time : "";
-        $data['end_time']    = !empty($row->end_time) ? $row->end_time : ""; 
+        $data['end_time']    = !empty($row->end_time) ? $row->end_time : "";
         $data['server_time'] = $currentTime->format('Y-m-d H:i:s');
 
         return response()->json($data);
@@ -437,5 +457,4 @@ class MiningController extends Controller
             return response()->json($data, 200);
         }
     }
- 
 }

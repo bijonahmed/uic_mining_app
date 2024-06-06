@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2024 at 10:01 AM
+-- Generation Time: Jun 06, 2024 at 11:33 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -455,7 +455,6 @@ CREATE TABLE `customer_history` (
 
 CREATE TABLE `deposit` (
   `id` int(11) NOT NULL,
-  `order_no` varchar(255) DEFAULT NULL,
   `depositID` varchar(255) DEFAULT NULL,
   `trxId` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -469,6 +468,14 @@ CREATE TABLE `deposit` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `deposit`
+--
+
+INSERT INTO `deposit` (`id`, `depositID`, `trxId`, `user_id`, `deposit_amount`, `receivable_amount`, `payment_method`, `depscription`, `wallet_address`, `status`, `approved_by`, `created_at`, `updated_at`) VALUES
+(1, 'D.22cf8d98dca2b9de5052ae9253bddef3', 'D.46dce5f2f0e61edb70931a00d00a464e', 3, 50.00, NULL, 'USDT (TRC20)', 'D.22cf8d98dca2b9de5052ae9253bddef3', NULL, 1, NULL, '2024-06-07 01:37:24', '2024-06-07 01:37:24'),
+(2, 'D.31a6b5568bbb9c350c1b296d9086acf0', 'D.22cf8d98dca2b9de5052ae9253bddef3', 3, 60.00, NULL, 'USDT (TRC20)', 'D.31a6b5568bbb9c350c1b296d9086acf0', NULL, 0, NULL, '2024-06-07 02:00:03', '2024-06-07 02:00:03');
 
 -- --------------------------------------------------------
 
@@ -1345,7 +1352,8 @@ INSERT INTO `mining_process_history` (`id`, `user_id`, `start_time`, `end_time`,
 (1, 2, '2024-06-02 20:43:42', '2024-06-02 21:43:42', 1, 1, '127.0.0.1', '2024-06-02 20:43:42', '2024-06-02 20:43:42'),
 (2, 2, '2024-06-02 21:17:34', '2024-06-02 22:17:34', 1, 2, '127.0.0.1', '2024-06-02 21:17:34', '2024-06-02 21:17:34'),
 (3, 2, '2024-06-02 21:20:29', '2024-06-02 22:20:29', 1, 3, '127.0.0.1', '2024-06-02 21:20:29', '2024-06-02 21:20:29'),
-(4, 2, '2024-06-02 21:21:12', '2024-06-02 22:21:12', 1, 4, '127.0.0.1', '2024-06-02 21:21:12', '2024-06-02 21:21:12');
+(4, 2, '2024-06-02 21:21:12', '2024-06-02 22:21:12', 1, 4, '127.0.0.1', '2024-06-02 21:21:12', '2024-06-02 21:21:12'),
+(5, 3, '2024-06-06 19:13:40', '2024-06-06 20:13:40', 1, 2, '127.0.0.1', '2024-06-06 19:13:40', '2024-06-06 19:13:40');
 
 -- --------------------------------------------------------
 
@@ -1372,13 +1380,7 @@ CREATE TABLE `mining_service_buy_history` (
 --
 
 INSERT INTO `mining_service_buy_history` (`id`, `user_id`, `mining_category_id`, `mining_category_duration_id`, `duration`, `service_price`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, 1, '30', 10, '2024-05-31', '2024-06-30', NULL, '2024-05-31 15:43:31', '2024-05-31 15:43:31'),
-(2, 3, 3, 7, '30', 10, '2024-05-31', '2024-06-30', NULL, '2024-05-31 15:45:00', '2024-05-31 15:45:00'),
-(3, 2, 1, 1, '30', 10, '2024-06-03', '2024-07-03', NULL, '2024-06-02 18:43:38', '2024-06-02 18:43:38'),
-(4, 2, 2, 4, '30', 10, '2024-06-03', '2024-07-03', NULL, '2024-06-02 19:17:27', '2024-06-02 19:17:27'),
-(5, 2, 3, 7, '30', 10, '2024-06-03', '2024-07-03', NULL, '2024-06-02 19:20:24', '2024-06-02 19:20:24'),
-(6, 2, 4, 10, '30', 10, '2024-06-03', '2024-07-03', NULL, '2024-06-02 19:21:05', '2024-06-02 19:21:05'),
-(7, 3, 2, 4, '30', 10, '2024-06-03', '2024-07-03', NULL, '2024-06-03 12:16:22', '2024-06-03 12:16:22');
+(1, 3, 1, 1, '30', 10, '2024-06-07', '2024-07-07', NULL, '2024-06-06 19:46:08', '2024-06-06 19:46:08');
 
 -- --------------------------------------------------------
 
@@ -1784,6 +1786,32 @@ CREATE TABLE `states` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `transaction_history`
+--
+
+CREATE TABLE `transaction_history` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL COMMENT '1=deposit,2=withdraw,3=machine purchase ',
+  `last_Id` int(11) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `amount` double(10,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transaction_history`
+--
+
+INSERT INTO `transaction_history` (`id`, `user_id`, `type`, `last_Id`, `description`, `amount`, `created_at`, `updated_at`) VALUES
+(1, 3, 1, 1, 'Deposit', 50.00, '2024-06-06 19:37:24', '2024-06-06 19:37:24'),
+(2, 3, 3, 1, 'Mining Machine : [Start], Duration : 30', 10.00, '2024-06-06 19:46:08', '2024-06-06 19:46:08'),
+(3, 3, 1, 2, 'Deposit', 60.00, '2024-06-06 20:00:03', '2024-06-06 20:00:03');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `transfer`
 --
 
@@ -1859,7 +1887,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
 (1, NULL, NULL, '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, 1, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-06-06 00:10:10', '2023-06-22 03:20:43', '2024-06-06 06:06:41', 1, NULL),
 (2, NULL, NULL, '5726413', 1, NULL, 2, 'r@gmail.com', 1.00000000, 1, 'r@gmail.com', 'Rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$pvmqv7CHQ0Vn.oP8SNl0I.SOIxaI7eyuMTRuhb05bIsye7R35ZUwi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 02:03:10', '2024-05-25 12:16:12', '2024-06-06 06:10:32', 1, NULL),
-(3, NULL, NULL, '9696955', 2, NULL, 2, 'b@gmail.com', 2.00000000, 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 12:11:05', '2024-05-26 21:26:09', '2024-06-06 06:11:05', 1, NULL),
+(3, NULL, NULL, '9696955', 2, NULL, 2, 'b@gmail.com', 2.00000000, 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-07 00:17:12', '2024-05-26 21:26:09', '2024-06-06 18:17:12', 1, NULL),
 (4, NULL, NULL, '8454078', 3, NULL, 2, 'c@gmail.com', 3.00000000, NULL, 'c@gmail.com', 'c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$fprDcwCveao7NImy8/p2JekUoTpZldCA7yGV4IgdnlNdtqqbbcVd6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:07:34', '2024-05-30 01:07:34', 1, NULL),
 (5, NULL, NULL, '55493952', 3, NULL, 2, 'cc@gmail.com', 3.00000000, NULL, 'cc@gmail.com', 'cc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Km6RIjTkfRnTawxKuhswveA0d9HEivpgvXbnVwHrcadB2YcXtuD1S', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:09', '2024-05-30 01:09:09', 1, NULL),
 (6, NULL, NULL, '65711692', 5, NULL, 2, 'dd@gmail.com', 3.00000000, NULL, 'dd@gmail.com', 'dd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$zrvWR2mgseg/CFgIAvx2G.nhGDA/2sjCU/KMhss9REYf23UFNBhFa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:31', '2024-06-01 01:34:42', 0, NULL),
@@ -2168,6 +2196,12 @@ ALTER TABLE `states`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `transaction_history`
+--
+ALTER TABLE `transaction_history`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transfer`
 --
 ALTER TABLE `transfer`
@@ -2255,7 +2289,7 @@ ALTER TABLE `customer_history`
 -- AUTO_INCREMENT for table `deposit`
 --
 ALTER TABLE `deposit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `expense_history`
@@ -2315,13 +2349,13 @@ ALTER TABLE `mining_categogy_duration`
 -- AUTO_INCREMENT for table `mining_process_history`
 --
 ALTER TABLE `mining_process_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `mining_service_buy_history`
 --
 ALTER TABLE `mining_service_buy_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -2400,6 +2434,12 @@ ALTER TABLE `sliders`
 --
 ALTER TABLE `states`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `transaction_history`
+--
+ALTER TABLE `transaction_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transfer`
