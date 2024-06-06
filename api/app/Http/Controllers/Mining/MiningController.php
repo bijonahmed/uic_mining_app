@@ -58,7 +58,7 @@ class MiningController extends Controller
             'mining_category_id'         => 'required',
             'packages_name'              => 'required',
             'duration'                   => 'required|integer',
-            'prices'                     => 'required|integer',
+            'prices'                     => 'required',
             'status'                     => 'required',
         ]);
         if ($validator->fails()) {

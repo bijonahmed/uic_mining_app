@@ -26,7 +26,9 @@
                         </div>
                     </div>
                     <div class="container">
-
+                        <div class="loading-indicator" v-if="loading" style="text-align: center">
+        <Loader />
+      </div>
                        
                         <form id="settingsForm">
                             <div class="list-box" v-for="comm in communitys" :key="comm.id">
@@ -78,7 +80,7 @@ const router = useRouter();
 const communitys = ref([]);
 const username = ref();
 const onlyName = ref();
-
+const loading = ref(true);
 const checkSlug = (slug) => {
     router.push({
         path: '/chatbox/messages',
@@ -97,7 +99,9 @@ const fetchData = async () => {
 
     } catch (error) {
         console.error("Error fetching data:", error);
-    }
+    } finally {
+    loading.value = false; // Hide the loading indicator after all operations are complete
+  }
 };
 
 

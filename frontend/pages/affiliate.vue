@@ -72,19 +72,20 @@
                                     <h4 class="mt-0">Your Referal Link</h4>
                                     <div class="form-row-group relative">
                                         <div class="form-row no-padding">
-                                            <input type="text" readonly name="aaa" class="form-element"
-                                                value="https://www.examplecom/ref=?6823">
-                                            <a href="" class="ref-copy"><i class="fa fa-copy"></i></a>
+                                            <!-- <input type="text" readonly class="form-element" id="invite_link" v-model="intielink"> -->
+                                            <strong id="invite_link" class="textToCopy"> {{ intielink }}</strong>
+                                            <!-- <button type="button" @click="copyAddressToClipboard()"
+                                                        class="btn_copy copyButton"><i
+                                                            class="fa-solid fa-copy"></i></button> -->
+
+                                            <a href="#" class="ref-copy" @click="copyAddressToClipboard()"><i class="fa fa-copy"></i></a>
                                         </div>
                                     </div>
                                     <h4>Share Referal Link</h4>
-                                    <a href="#" class="button circle block orange"><i class="fab fa-facebook mr-10"></i>
+                                    <a href="https://www.facebook.com/" target="_blank" class="button circle block orange"><i class="fab fa-facebook mr-10"></i>
                                         Facebook</a>
-                                    <a href="#" class="button circle block blue"><i class="fab fa-twitter mr-10"></i>
+                                    <a href="https://x.com/" target="_blank" class="button circle block blue"><i class="fab fa-twitter mr-10"></i>
                                         Twitter</a>
-                                    <a href="#" class="button circle block red"><i
-                                            class="fab fa-pinterest-plus mr-10"></i>
-                                        Google Plus</a>
                                 </div>
                             </div>
                         </div>
@@ -95,13 +96,13 @@
                             <div class="ref-statistics mr-10">
                                 <h2 style="color: #0a95ff;font-weight: 800;font-family: poppins;">Team 1</h2>
                                 <div class="d-flex flex-column ml-md-2">
-                                    <h4 class="mt-10 mb-5 ">578 Members</h4>
+                                    <h4 class="mt-10 mb-5 ">{{ level_1 }} Members</h4>
                                 </div>
                             </div>
                             <div class="ref-statistics ml-10">
                                 <h2 class="txt-green" style="font-weight: 800;font-family: poppins;">Team 2</h2>
                                 <div class="d-flex flex-column ml-md-2">
-                                    <h4 class="mt-10 mb-5 ">378 Members</h4>
+                                    <h4 class="mt-10 mb-5 ">{{ level_2 }} Members</h4>
                                 </div>
                             </div>
                         </div>
@@ -109,13 +110,13 @@
                             <div class="ref-statistics mr-10">
                                 <h2 class="txt-yellow" style="font-weight: 800;font-family: poppins;">Team 3</h2>
                                 <div class="d-flex flex-column ml-md-2">
-                                    <h4 class="mt-10 mb-5 ">200 Members</h4>
+                                    <h4 class="mt-10 mb-5 ">{{ level_3 }} Members</h4>
                                 </div>
                             </div>
                             <div class="ref-statistics ml-10">
                                 <i class="fa fa-calculator txt-red" style="font-size: 40px;padding: 13px;"></i>
                                 <div class="d-flex flex-column ml-md-2">
-                                    <h4 class="mt-10 mb-5 ">800 Members</h4>
+                                    <h4 class="mt-10 mb-5 ">{{ total }} Members</h4>
                                     <p class="text-muted font-weight-medium">Total Members</p>
                                 </div>
                             </div>
@@ -208,8 +209,7 @@
                             </li>
                         </ul>
                     </section>
-
-                    <SocialFooter />
+                    <!-- <SocialFooter /> -->
                 </main>
                 <!-- Page content end -->
             </div>
@@ -219,9 +219,127 @@
 
 
 <script setup>
+import { ref, reactive, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import Swal from "sweetalert2";
+const router = useRouter();
+const loading = ref(false);
+definePageMeta({
+    middleware: 'is-logged-out',
+})
 import Sidebar from "~/layouts/Sidebar.vue";
 import HeaderSecond from "~/layouts/HeaderSecond.vue";
 import SocialFooter from "~/components/SocialFooter.vue";
+
+const inviteCode = ref('');
+const intielink = ref('');
+const level_1 = ref('');
+const level_2 = ref('');
+const level_3 = ref('');
+const total = ref('');
+
+const getInviteCode = async () => {
+    try {
+        const response = await axios.get(`/user/getInviteCode`);
+        const setIntielink = window.location.origin + '/invite-code/?code=' + response.data.inviteCode;
+        console.log("link : " + setIntielink);
+        console.log("code : " + response.data.inviteCode);
+        inviteCode.value = response.data.inviteCode;
+        intielink.value = setIntielink;
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const copycode = () => {
+    // Get the text to copy
+    const walletAddress = document.getElementById('invite_code').innerText;
+    // Create a textarea element to temporarily hold the text
+    const textarea = document.createElement('textarea');
+    textarea.value = walletAddress;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px'; // Move the textarea off-screen
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    Toast.fire({
+        icon: "success",
+        title: "Successfully copy"
+    });
+}
+
+const copyAddressToClipboard = () => {
+    // Get the text to copy
+    const walletAddress = document.getElementById('invite_link').innerText;
+    const textarea = document.createElement('textarea');
+    textarea.value = walletAddress;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px'; // Move the textarea off-screen
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    Toast.fire({
+        icon: "success",
+        title: "Successfully copy"
+    });
+}
+
+
+
+
+const fetchLevelData = async () => {
+  try {
+    const response = await axios.get("/user/getLevelDetails");
+    console.log("Response data:", response.data.level_1);
+    // Assuming maximum_supply and total_supply are DOM elements or component state
+    level_1.value = response.data.level_1;
+    level_2.value   = response.data.level_2;
+    level_3.value   = response.data.level_3;
+    total.value   = response.data.total;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+
+onMounted(async () => {
+    getInviteCode();
+    fetchLevelData();
+
+});
+
+
+
 
 </script>
 

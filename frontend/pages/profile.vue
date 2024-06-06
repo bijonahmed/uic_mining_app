@@ -80,7 +80,7 @@
                   }}</span>
                 <div class="form-row no-padding">
                   <i class="fa fa-phone"></i>
-                  <input type="tel" class="form-element" placeholder="Email" v-model="phone_number" />
+                  <input type="tel" class="form-element" placeholder="Phone" v-model="phone_number" />
                 </div>
               </div>
             </section>
@@ -117,6 +117,9 @@
             <!-- <SocialFooter /> -->
           </main>
         </form>
+
+
+
         <center>
           <div v-for="(errorArray, idx) in notifmsg" :key="idx">
             <div v-for="(allErrors, idx) in errorArray" :key="idx">
@@ -124,55 +127,65 @@
             </div>
           </div>
         </center>
-        <form @submit.prevent="changesPassword()" id="formrest" class="forms-sample" enctype="multipart/form-data">
 
 
-          <div class="row mb-3">
-            <label for="inputEnterYourName" class="col-sm-2 col-form-label">Old Password</label>
-            
-            <div class="col-sm-8">
+
+ <section class="container">
+  <form @submit.prevent="changesPassword()" id="formrest" class="forms-sample" enctype="multipart/form-data">
+              <h4 class="title-main">Change Password</h4>
               <input type="hidden" class="form-control id" v-model="insertdata.id" id="id" />
-              <input type="password" class="form-control password" v-model="insertdata.old_password" id="password"
+              <div class="form-row-group with-icons">
+                <div class="form-row no-padding">
+                 
+                  <input type="password" class="form-control password" v-model="insertdata.old_password" id="password"
                 placeholder="Old Password" />
               <span class="text-danger" v-if="errors.old_password">{{
                 errors.old_password[0]
               }}</span>
-            </div>
-          </div>
 
 
-          <div class="row mb-3">
-            <label for="inputEnterYourName" class="col-sm-2 col-form-label">New Password</label>
-            
-            <div class="col-sm-8">
-              <input type="hidden" class="form-control id" v-model="insertdata.id" id="id" />
-              <input type="password" class="form-control password" v-model="insertdata.password" id="password"
+                </div>
+                <div class="form-row no-padding">
+                   
+                  <input type="password" class="form-control password" v-model="insertdata.password" id="password"
                 placeholder="New Password" />
               <span class="text-danger" v-if="errors.password">{{
                 errors.password[0]
               }}</span>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label for="inputConfirmPassword2" class="col-sm-2 col-form-label">Confirm Password</label>
-            <div class="col-sm-8">
-              <input type="password" class="form-control password_confirmation"
+                </div>
+                <div class="form-row no-padding">
+                  
+                  <input type="password" class="form-control password_confirmation"
                 v-model="insertdata.password_confirmation" id="password_confirmation" placeholder="Confirm Password" />
               <span class="text-danger" v-if="errors.password_confirmation">{{
                 errors.password_confirmation[0]
               }}</span>
-            </div>
-          </div>
+                </div>
+              </div>
 
-         <div class="container">
-          <div class="form-row">
+              <div class="form-divider"></div>
+
+              <div class="form-row">
                 <button type="submit" class="button circle block orange">
                   Update
                 </button>
               </div>
-         </div>
-        </form>
+
+              <div class="form-divider"></div>
+
+    </form>
+            </section>
+
+
+
+
+
+
+
+
+
+
+         
 
         <br /><br /><br /><br />
 
