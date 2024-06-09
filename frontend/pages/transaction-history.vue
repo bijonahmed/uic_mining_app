@@ -27,9 +27,11 @@
 
                     <div class="container">
 
-                        <center><div class="loading-indicator" v-if="loading" style="text-align: center">
-                            <BulkLoader />
-                        </div></center>
+                        <center>
+                            <div class="loading-indicator" v-if="loading" style="text-align: center">
+                                <BulkLoader />
+                            </div>
+                        </center>
 
                         <table class="table table-bordered table-striped table-hover">
                             <thead>
@@ -42,30 +44,36 @@
                             </thead>
                             <tbody>
                                 <tr v-for="transaction in tranhistory" :key="transaction.id">
-                                        <td>{{ transaction.created_at }}</td>
-                                        <td>{{ transaction.description }}</td>
-                                        <td>
-                                            <span v-if="transaction.type == 1" style="color:green; font-weight: bold;;">${{ transaction.amount.toFixed(2) }}</span>
-                                            <span v-if="transaction.type == 2" style="color:red; font-weight: bold;;">${{ transaction.amount.toFixed(2) }}</span>
-                                            <span v-if="transaction.type == 3" style="color:red; font-weight: bold;;">${{ transaction.amount.toFixed(2) }}</span>
-                                        </td>
+                                    <td>{{ transaction.created_at }}</td>
+                                    <td>{{ transaction.description }}</td>
+                                    <td>
+                                        <span v-if="transaction.type == 1" style="color:green; font-weight: bold;;">${{
+                                            transaction.amount.toFixed(2) }}</span>
+                                        <span v-if="transaction.type == 2" style="color:red; font-weight: bold;;">${{
+                                            transaction.amount.toFixed(2) }}</span>
+                                        <span v-if="transaction.type == 3" style="color:red; font-weight: bold;;">${{
+                                            transaction.amount.toFixed(2) }}</span>
+                                    </td>
 
-                                        
-                                        <td> 
+
+                                    <td>
                                         <span v-if="transaction.type == 1">
 
                                             <div v-if="transaction.dep_status == 0">
-                                                <p style="color: blue; font-weight: bold;">{{ transaction.depositStatus }}</p>
+                                                <p style="color: blue; font-weight: bold;">{{ transaction.depositStatus
+                                                    }}</p>
                                             </div>
-                                            <div v-if="transaction.dep_status == 1" style="color:green; font-weight: bold;">
+                                            <div v-if="transaction.dep_status == 1"
+                                                style="color:green; font-weight: bold;">
                                                 {{ transaction.depositStatus }}
                                             </div>
 
 
-                                            <div v-if="transaction.dep_status == 2" style="color:red; font-weight: bold;">
+                                            <div v-if="transaction.dep_status == 2"
+                                                style="color:red; font-weight: bold;">
                                                 {{ transaction.depositStatus }}
                                             </div>
-                                           
+
 
 
                                         </span>
@@ -75,12 +83,12 @@
                                         </span>
 
                                         <span v-else-if="transaction.type == 3">
-                                            {{ transaction.machinestatus }} 
+                                            {{ transaction.machinestatus }}
                                         </span>
 
 
-                                        </td>
-                                    </tr>
+                                    </td>
+                                </tr>
                                 <!-- Add more rows as needed -->
                             </tbody>
                         </table>
@@ -116,7 +124,7 @@ const fetchData = async () => {
         tranhistory.value = response.data.transactionhistory;
     } catch (error) {
         console.error("Error fetching data:", error);
-    } finally{
+    } finally {
         loading.value = false;
     }
 };

@@ -10,26 +10,18 @@ use App\Models\AttributeValues;
 use AuthorizesRequests;
 use DB;
 
-class Withdraw extends Authenticatable
+class SendReceived extends Authenticatable
 {
   use HasApiTokens, HasFactory, Notifiable;
-  public $table = "withdraw";
+  public $table = "send_received";
   
   protected $fillable = [
-    'withdrawID',
-    'depscription',
-    'transection_fee',
-    'account_number',
-    'usd_amount',
-    'uic_amount',
-    'withdrawal_method_id',
-    'user_id',
-    'withdraw_amount',
-    'payable_amount',
-    'remarks',
+    'receiver_uic_address',
+    'receiver_name',
     'password',
-    'approved_by',
-    'status',
+    'wallet_type',
+    'amount',
+    'user_id',
   ];
  
 }

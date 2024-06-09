@@ -70,9 +70,10 @@ class StartCommand extends Command
             foreach ($userAssets as $userId => $totalAssets) {
                 $user = User::find($userId);
                 if ($user) {
-                    $user->available_balance += number_format($totalAssets, 8);
+                    //$user->available_balance += number_format($totalAssets, 8);
+                    $user->mining_amount += number_format($totalAssets, 8);
                     $user->save(); // Save the changes to the database
-                    echo "Updated User ID: $userId with new balance: {$user->available_balance}<br>";
+                    echo "Updated User ID: $userId with new balance: {$user->mining_amount}<br>";
                 } else {
                     echo "User not found for ID: $userId<br>";
                 }

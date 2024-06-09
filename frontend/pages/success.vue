@@ -31,7 +31,7 @@
                         <div class="loading-indicator" v-if="loading" style="text-align: center">
                     <BulkLoader />
                 </div>
-                                <center><h3 class="text-center">Your deposit has been successfull.</h3></center>
+                                <center><h3 class="text-center">Your request has been successfull.</h3></center>
 
                     </div>
                    
@@ -53,7 +53,7 @@ const showLoaderForTenSeconds = () => {
     loading.value = true; // Show loader
     setTimeout(() => {
         loading.value = false; // Hide loader after 10 seconds
-    }, 10000); // 10000 milliseconds = 10 seconds
+    }, 1000); // 10000 milliseconds = 10 seconds
 };
 
 // Call the function to show loader initially

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2024 at 11:33 PM
+-- Generation Time: Jun 09, 2024 at 09:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -475,7 +475,7 @@ CREATE TABLE `deposit` (
 
 INSERT INTO `deposit` (`id`, `depositID`, `trxId`, `user_id`, `deposit_amount`, `receivable_amount`, `payment_method`, `depscription`, `wallet_address`, `status`, `approved_by`, `created_at`, `updated_at`) VALUES
 (1, 'D.22cf8d98dca2b9de5052ae9253bddef3', 'D.46dce5f2f0e61edb70931a00d00a464e', 3, 50.00, NULL, 'USDT (TRC20)', 'D.22cf8d98dca2b9de5052ae9253bddef3', NULL, 1, NULL, '2024-06-07 01:37:24', '2024-06-07 01:37:24'),
-(2, 'D.31a6b5568bbb9c350c1b296d9086acf0', 'D.22cf8d98dca2b9de5052ae9253bddef3', 3, 60.00, NULL, 'USDT (TRC20)', 'D.31a6b5568bbb9c350c1b296d9086acf0', NULL, 0, NULL, '2024-06-07 02:00:03', '2024-06-07 02:00:03');
+(2, 'D.31a6b5568bbb9c350c1b296d9086acf0', 'D.22cf8d98dca2b9de5052ae9253bddef3', 3, 60.00, NULL, 'USDT (TRC20)', 'D.31a6b5568bbb9c350c1b296d9086acf0', NULL, 1, NULL, '2024-06-07 02:00:03', '2024-06-07 02:00:03');
 
 -- --------------------------------------------------------
 
@@ -557,7 +557,10 @@ INSERT INTO `jobs` (`id`, `queue`, `payload`, `attempts`, `reserved_at`, `availa
 (34, 'default', '{\"uuid\":\"8e899eb5-76ba-4113-90c4-e32980ccb167\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:17:\\\"community-english\\\";s:7:\\\"message\\\";s:9:\\\"Bijon-123\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-06 02:19:48\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (35, 'default', '{\"uuid\":\"41a3f48f-46d2-44a2-bd48-8319babe8870\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:17:\\\"community-english\\\";s:7:\\\"message\\\";s:10:\\\"replay 123\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-06 02:20:06\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (36, 'default', '{\"uuid\":\"45794401-b15b-4509-974c-44e45d30015e\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:17:\\\"community-english\\\";s:7:\\\"message\\\";s:2:\\\"ee\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-06 02:31:18\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(37, 'default', '{\"uuid\":\"3d005c50-d22f-4658-ada6-fde2a7427116\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:11:\\\"b@gmail.com\\\";s:7:\\\"message\\\";s:23:\\\"yes sir i\'m okay please\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-06 03:02:01\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(37, 'default', '{\"uuid\":\"3d005c50-d22f-4658-ada6-fde2a7427116\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:11:\\\"b@gmail.com\\\";s:7:\\\"message\\\";s:23:\\\"yes sir i\'m okay please\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-06 03:02:01\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(38, 'default', '{\"uuid\":\"ab9ef50a-53b3-49ef-a9fa-4d4ba00371f8\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:11:\\\"b@gmail.com\\\";s:7:\\\"message\\\";s:2:\\\"HI\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-09 19:06:11\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(39, 'default', '{\"uuid\":\"27f85701-f27d-4470-baee-8c82467f364f\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:11:\\\"b@gmail.com\\\";s:7:\\\"message\\\";s:5:\\\"hello\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-09 21:45:48\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(40, 'default', '{\"uuid\":\"096c54dd-97e8-4856-a866-756c99e5a5bc\",\"displayName\":\"App\\\\Events\\\\Message\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\",\"command\":\"O:38:\\\"Illuminate\\\\Broadcasting\\\\BroadcastEvent\\\":14:{s:5:\\\"event\\\";O:18:\\\"App\\\\Events\\\\Message\\\":4:{s:8:\\\"username\\\";s:11:\\\"b@gmail.com\\\";s:7:\\\"message\\\";s:17:\\\"bijon how are you\\\";s:14:\\\"community_slug\\\";s:17:\\\"community-english\\\";s:10:\\\"created_at\\\";s:19:\\\"2024-06-09 21:45:55\\\";}s:5:\\\"tries\\\";N;s:7:\\\"timeout\\\";N;s:7:\\\"backoff\\\";N;s:13:\\\"maxExceptions\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1235,7 +1238,10 @@ INSERT INTO `messages` (`id`, `user_id`, `username`, `community_slug`, `message`
 (1, 3, 'b@gmail.com', 'community-english', 'Bijon-123', '2024-06-05 20:19:48', '2024-06-05 20:19:48'),
 (2, 2, 'r@gmail.com', 'community-english', 'replay 123', '2024-06-05 20:20:06', '2024-06-05 20:20:06'),
 (3, 3, 'r@gmail.com', 'community-english', 'ee', '2024-06-05 20:31:18', '2024-06-05 20:31:18'),
-(4, 3, 'b@gmail.com', 'community-english', 'yes sir i\'m okay please', '2024-06-05 21:02:01', '2024-06-05 21:02:01');
+(4, 3, 'b@gmail.com', 'community-english', 'yes sir i\'m okay please', '2024-06-05 21:02:01', '2024-06-05 21:02:01'),
+(5, 3, 'b@gmail.com', 'community-english', 'HI', '2024-06-09 13:06:11', '2024-06-09 13:06:11'),
+(6, 3, 'b@gmail.com', 'community-english', 'hello', '2024-06-09 15:45:48', '2024-06-09 15:45:48'),
+(7, 3, 'b@gmail.com', 'community-english', 'bijon how are you', '2024-06-09 15:45:55', '2024-06-09 15:45:55');
 
 -- --------------------------------------------------------
 
@@ -1353,7 +1359,8 @@ INSERT INTO `mining_process_history` (`id`, `user_id`, `start_time`, `end_time`,
 (2, 2, '2024-06-02 21:17:34', '2024-06-02 22:17:34', 1, 2, '127.0.0.1', '2024-06-02 21:17:34', '2024-06-02 21:17:34'),
 (3, 2, '2024-06-02 21:20:29', '2024-06-02 22:20:29', 1, 3, '127.0.0.1', '2024-06-02 21:20:29', '2024-06-02 21:20:29'),
 (4, 2, '2024-06-02 21:21:12', '2024-06-02 22:21:12', 1, 4, '127.0.0.1', '2024-06-02 21:21:12', '2024-06-02 21:21:12'),
-(5, 3, '2024-06-06 19:13:40', '2024-06-06 20:13:40', 1, 2, '127.0.0.1', '2024-06-06 19:13:40', '2024-06-06 19:13:40');
+(5, 3, '2024-06-06 19:13:40', '2024-06-06 20:13:40', 1, 2, '127.0.0.1', '2024-06-06 19:13:40', '2024-06-06 19:13:40'),
+(6, 3, '2024-06-09 11:11:25', '2024-06-09 12:11:25', 1, 1, '127.0.0.1', '2024-06-09 11:11:25', '2024-06-09 11:11:25');
 
 -- --------------------------------------------------------
 
@@ -1658,6 +1665,33 @@ INSERT INTO `rule` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `send_received`
+--
+
+CREATE TABLE `send_received` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `receiver_uic_address` varchar(255) DEFAULT NULL,
+  `receiver_name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `wallet_type` varchar(255) DEFAULT NULL COMMENT '1=UIC\r\n2= USDT',
+  `amount` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `send_received`
+--
+
+INSERT INTO `send_received` (`id`, `user_id`, `receiver_uic_address`, `receiver_name`, `password`, `wallet_type`, `amount`, `created_at`, `updated_at`) VALUES
+(1, 3, '6f21357f863ce24ce21c1a82f49a7d5d13', 'Bijon', 'b@gmail.com', '2', '30', '2024-06-09 19:00:11', '2024-06-09 19:00:11'),
+(2, 3, '6f21357f863ce24ce21c1a82f49a7d5d13', 'Bijon', 'b@gmail.com', '2', '2', '2024-06-09 19:01:00', '2024-06-09 19:01:00'),
+(3, 3, '6f21357f863ce24ce21c1a82f49a7d5d13', 'Bijon', 'b@gmail.com', '2', '5', '2024-06-09 19:01:17', '2024-06-09 19:01:17');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `service`
 --
 
@@ -1792,7 +1826,7 @@ CREATE TABLE `states` (
 CREATE TABLE `transaction_history` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `type` int(11) DEFAULT NULL COMMENT '1=deposit,2=withdraw,3=machine purchase ',
+  `type` int(11) DEFAULT NULL COMMENT '1=deposit,2=withdraw,3=machine purchase,4=Send/Receive',
   `last_Id` int(11) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `amount` double(10,2) DEFAULT NULL,
@@ -1807,7 +1841,10 @@ CREATE TABLE `transaction_history` (
 INSERT INTO `transaction_history` (`id`, `user_id`, `type`, `last_Id`, `description`, `amount`, `created_at`, `updated_at`) VALUES
 (1, 3, 1, 1, 'Deposit', 50.00, '2024-06-06 19:37:24', '2024-06-06 19:37:24'),
 (2, 3, 3, 1, 'Mining Machine : [Start], Duration : 30', 10.00, '2024-06-06 19:46:08', '2024-06-06 19:46:08'),
-(3, 3, 1, 2, 'Deposit', 60.00, '2024-06-06 20:00:03', '2024-06-06 20:00:03');
+(3, 3, 1, 2, 'Deposit', 60.00, '2024-06-06 20:00:03', '2024-06-06 20:00:03'),
+(5, 3, 4, 1, 'Send/Receive', 30.00, '2024-06-09 19:00:11', '2024-06-09 19:00:11'),
+(6, 3, 4, 2, 'Send/Receive', 2.00, '2024-06-09 19:01:00', '2024-06-09 19:01:00'),
+(7, 3, 4, 3, 'Send/Receive', 5.00, '2024-06-09 19:01:17', '2024-06-09 19:01:17');
 
 -- --------------------------------------------------------
 
@@ -1840,6 +1877,7 @@ CREATE TABLE `users` (
   `role_id` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `available_balance` double(10,8) DEFAULT NULL,
+  `mining_amount` double(10,8) DEFAULT NULL,
   `level_commission` int(11) DEFAULT NULL,
   `show_password` varchar(225) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
@@ -1884,30 +1922,30 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
-(1, NULL, NULL, '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, 1, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-06-06 00:10:10', '2023-06-22 03:20:43', '2024-06-06 06:06:41', 1, NULL),
-(2, NULL, NULL, '5726413', 1, NULL, 2, 'r@gmail.com', 1.00000000, 1, 'r@gmail.com', 'Rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$pvmqv7CHQ0Vn.oP8SNl0I.SOIxaI7eyuMTRuhb05bIsye7R35ZUwi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 02:03:10', '2024-05-25 12:16:12', '2024-06-06 06:10:32', 1, NULL),
-(3, NULL, NULL, '9696955', 2, NULL, 2, 'b@gmail.com', 2.00000000, 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-07 00:17:12', '2024-05-26 21:26:09', '2024-06-06 18:17:12', 1, NULL),
-(4, NULL, NULL, '8454078', 3, NULL, 2, 'c@gmail.com', 3.00000000, NULL, 'c@gmail.com', 'c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$fprDcwCveao7NImy8/p2JekUoTpZldCA7yGV4IgdnlNdtqqbbcVd6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:07:34', '2024-05-30 01:07:34', 1, NULL),
-(5, NULL, NULL, '55493952', 3, NULL, 2, 'cc@gmail.com', 3.00000000, NULL, 'cc@gmail.com', 'cc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Km6RIjTkfRnTawxKuhswveA0d9HEivpgvXbnVwHrcadB2YcXtuD1S', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:09', '2024-05-30 01:09:09', 1, NULL),
-(6, NULL, NULL, '65711692', 5, NULL, 2, 'dd@gmail.com', 3.00000000, NULL, 'dd@gmail.com', 'dd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$zrvWR2mgseg/CFgIAvx2G.nhGDA/2sjCU/KMhss9REYf23UFNBhFa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:31', '2024-06-01 01:34:42', 0, NULL),
-(7, NULL, NULL, NULL, NULL, NULL, 1, 'dev2@mail.com', NULL, NULL, 'dev2@mail.com', 'Dev2', NULL, '0123456789', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$xBDoWf0Gn2pdlbKRVC10/Oqs6olgeJgxynlKrPIJgwMNs6C6cXhi.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
-(8, NULL, NULL, NULL, NULL, NULL, 1, 'admin001@mail.com', NULL, NULL, 'Azp3xU2a', 'Admin001', NULL, '0123456789', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$O90eHgvR08FK.hBVk1neTuZ9U2IWoagxsG8C2p/1UO5hrUQPFyFeG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
-(9, NULL, NULL, '97438377', 6, NULL, 2, 'abc@gmail.com', 5.00000000, NULL, 'abc@gmail.com', 'abc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$hFe7ERazIFNLtfcJQinO7eETIOFQEI00o489S8RzhKZXvP.CE8zJy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:29:03', '2024-06-04 08:29:03', 1, NULL),
-(10, 'UIC000000010', '1f8c311e54a4c440f488d99715421ad4', '108189888', 9, NULL, 2, 'a11@gmail.com', 5.00000000, NULL, 'a11@gmail.com', 'a11', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$6XK8PJYrE72s.Yts5uzFTuEpjY2pPewP2sYQgfX9dzODOOAKGz/Xy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:30:18', '2024-06-04 08:30:18', 1, NULL),
-(11, 'UIC000000011', 'e8455e425f290c5af7d56dee19a919fd', '118877868', 10, NULL, 2, 'k@gmail.com', 5.00000000, NULL, 'k@gmail.com', 'k', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$sxdOn18P9XMLzACPV3.yKuOLrk2BDBs48s9/yYKk9DoVgtrMvk0uC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:31:27', '2024-06-04 08:31:27', 1, NULL),
-(12, 'UIC000000012', 'd650a9e891be0bf75e1154c9bcdb907b', '127540561', 11, NULL, 2, 'cdd@gmail.com', 1.00000000, 1, 'cdd@gmail.com', 'cdd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$IdG5IqIqc4fODcziBk80/eN4e9Ekx/Rfy2TBJJFSKGBbzZgsvej02', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:39:14', '2024-06-05 19:49:58', 1, NULL),
-(13, 'UIC000000013', '480cedd0d996b9df05d2a99082b0d07f', '138322299', 12, NULL, 2, 'lakasdf@gmail.com', 5.00000000, NULL, '127540561', 'lakasdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$UhVQ716WMIJAxKqf7e6ScenQBpuMEYnIwDaJxH3kS/H3HZoqIqW5y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:40:32', '2024-06-04 12:40:32', 1, NULL),
-(14, 'UIC000000014', '871e97b1e71e0046ba008723b46b4642', '149450924', 12, NULL, 2, 'kamrulhas@gmail.com', 5.00000000, NULL, '127540561', 'kamrulhas', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Z/CVLhROKbza5zGWLbzrGelbVxC907oQCeo4Rb5S9EqLXLf3jDXoG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:42:25', '2024-06-04 12:42:25', 1, NULL),
-(15, 'UIC000000015', '6f21357f863ce24ce21c1a82f49a7d5d', '150939929', 9, NULL, 2, 'rana@gmail.com', 5.00000000, NULL, 'rana@gmail.com', 'rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Scds8xUIhaHfCgkfZDO0TuMZRW.scsxIFbOLXLVDzKikbk4QNDCxW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:44:53', '2024-06-04 12:44:53', 1, NULL),
-(16, 'UIC000000016', '6b29ecaf275b8ca943e3b88c16d32656', '160496114', 9, NULL, 2, 'jant@gmail.com', 5.00000000, NULL, '97438377', 'jant', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$ZWEzi59kf5H0SEqI24ronejITe5KSxtQ1AqYydPVYV.9N0z.p.Pom', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:00:49', '2024-06-04 13:00:49', 1, NULL),
-(17, 'UIC000000017', 'cefa5941b89f26355f93a8b788b1ede1', '171493823', 12, NULL, 2, 'jasns@gmail.com', 2.00000000, 2, '127540561', 'jasns', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$m0Z2IxZ8m7ZvslzTUFBlJ.jpVt73ZaC1FiH/CydPvtSDRI8jrlAdG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:19:09', '2024-06-05 19:49:58', 1, NULL),
-(20, 'UIC000000020', '308a33ceb3b8af86a052fcead0f00393', '204936183', 17, NULL, 2, 'mdbijon@gmail.com', 3.00000000, 3, 'mdbijon@gmail.com', 'mdbijon', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$lFZIJTMzo2l6WKe.luRtM.1DJBJPyQbo1IG9O0N/ebtRtifPlU89C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:41:33', '2024-06-05 19:49:58', 1, NULL),
-(21, 'UIC000000021', 'ecf7690e0d7d0a62ac7c4d8b87ed9656', '216998113', 20, NULL, 2, 'test@gmail.com', 5.00000000, NULL, 'test@gmail.com', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$17hPBRBT7Mk6SqX7v6p1S.y51UQhJHSwYsWiN6.q60GhKcZmpy9Ha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-05 19:49:58', '2024-06-05 19:49:58', 0, NULL),
-(22, 'UIC000000022', 'bbaa200546e0f709cc3057d658eea32b', '223742843', 3, NULL, 2, 'ahmed@gmail.com', 5.00000000, NULL, 'ahmed@gmail.com', 'ahmed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$4Y.L80A6L59jCSM74VrjnOq7RrGoYX5XU45JzVh7toeHIbUZabERm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:02:22', '2024-06-06 06:02:22', 1, NULL),
-(23, 'UIC000000023', '83ee59fa5c84fcb505c0f08a510554e3', '230020229', 3, NULL, 2, 'ayesha@gmail.com', 3.00000000, 3, 'ayesha@gmail.com', 'ayesha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$i2vvydDWzaPO0LxAHItfiO77GHplvucOEam1KLAlh3elLwlKHQQqC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 12:09:42', '2024-06-06 06:06:42', '2024-06-06 06:10:32', 1, NULL),
-(24, 'UIC000000024', 'd1facb1fea58c28f7791d486baee8085', '242115953', 23, NULL, 2, 'fahim@gmail.com', 5.00000000, NULL, 'fahim@gmail.com', 'fahim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$mvX7Hm3963zjpvzS8IV/8uFdQLOY38WhDMJK5hA2uKegr/WvKAM4i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:10:11', '2024-06-06 06:10:11', 0, NULL),
-(25, 'UIC000000025', '36d1bfa4f4bc2b3f6d786aa676a9476a', '252327294', 23, NULL, 2, 'anim@gmail.com', 5.00000000, NULL, 'anim@gmail.com', 'anim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$sJ/uM0kU4Bvq6eUFw3c3e.IH1an.qW0A1ZuklCN.hUeY9OJsACmkO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:10:32', '2024-06-06 06:10:32', 0, NULL);
+INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `mining_amount`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
+(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, 1, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-06-06 00:10:10', '2023-06-22 03:20:43', '2024-06-06 06:06:41', 1, NULL),
+(2, NULL, '6f21357f86df3ce24ce21c1a82f49a7d5d13', '5726413', 1, NULL, 2, 'r@gmail.com', 1.00000000, NULL, 1, 'r@gmail.com', 'Rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$pvmqv7CHQ0Vn.oP8SNl0I.SOIxaI7eyuMTRuhb05bIsye7R35ZUwi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 02:03:10', '2024-05-25 12:16:12', '2024-06-06 06:10:32', 1, NULL),
+(3, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13', '9696955', 2, NULL, 2, 'b@gmail.com', 2.00000000, 0.00023610, 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-09 17:03:46', '2024-05-26 21:26:09', '2024-06-09 11:12:59', 1, NULL),
+(4, NULL, '6f21357f86df3ce24dfdfdfce21c1a82f49a7d5d13', '8454078', 3, NULL, 2, 'c@gmail.com', 3.00000000, NULL, NULL, 'c@gmail.com', 'test-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$fprDcwCveao7NImy8/p2JekUoTpZldCA7yGV4IgdnlNdtqqbbcVd6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:07:34', '2024-05-30 01:07:34', 1, NULL),
+(5, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13fff', '55493952', 3, NULL, 2, 'cc@gmail.com', 3.00000000, NULL, NULL, 'cc@gmail.com', 'test-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Km6RIjTkfRnTawxKuhswveA0d9HEivpgvXbnVwHrcadB2YcXtuD1S', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:09', '2024-05-30 01:09:09', 1, NULL),
+(6, NULL, '6f21ddd357f863ce24ce21c1a82f49a7d5d13', '65711692', 5, NULL, 2, 'dd@gmail.com', 3.00000000, NULL, NULL, 'dd@gmail.com', 'dd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$zrvWR2mgseg/CFgIAvx2G.nhGDA/2sjCU/KMhss9REYf23UFNBhFa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:31', '2024-06-01 01:34:42', 0, NULL),
+(7, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13dfdf', NULL, NULL, NULL, 1, 'dev2@mail.com', NULL, NULL, NULL, 'dev2@mail.com', 'Dev2', NULL, '0123456789', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$xBDoWf0Gn2pdlbKRVC10/Oqs6olgeJgxynlKrPIJgwMNs6C6cXhi.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
+(8, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13dfdfdf', NULL, NULL, NULL, 1, 'admin001@mail.com', NULL, NULL, NULL, 'Azp3xU2a', 'Admin001', NULL, '0123456789', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$O90eHgvR08FK.hBVk1neTuZ9U2IWoagxsG8C2p/1UO5hrUQPFyFeG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
+(9, NULL, '6f213ffffff57f863ce24ce21c1a82f49a7d5d13', '97438377', 6, NULL, 2, 'abc@gmail.com', 5.00000000, NULL, NULL, 'abc@gmail.com', 'abc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$hFe7ERazIFNLtfcJQinO7eETIOFQEI00o489S8RzhKZXvP.CE8zJy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:29:03', '2024-06-04 08:29:03', 1, NULL),
+(10, 'UIC000000010', '1f8c311e54a4c440f488d99715421ad4', '108189888', 9, NULL, 2, 'a11@gmail.com', 5.00000000, NULL, NULL, 'a11@gmail.com', 'a11', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$6XK8PJYrE72s.Yts5uzFTuEpjY2pPewP2sYQgfX9dzODOOAKGz/Xy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:30:18', '2024-06-04 08:30:18', 1, NULL),
+(11, 'UIC000000011', 'e8455e425f290c5af7d56dee19a919fd', '118877868', 10, NULL, 2, 'k@gmail.com', 5.00000000, NULL, NULL, 'k@gmail.com', 'k', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$sxdOn18P9XMLzACPV3.yKuOLrk2BDBs48s9/yYKk9DoVgtrMvk0uC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:31:27', '2024-06-04 08:31:27', 1, NULL),
+(12, 'UIC000000012', 'd650a9e891be0bf75e1154c9bcdb907b', '127540561', 11, NULL, 2, 'cdd@gmail.com', 1.00000000, NULL, 1, 'cdd@gmail.com', 'cdd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$IdG5IqIqc4fODcziBk80/eN4e9Ekx/Rfy2TBJJFSKGBbzZgsvej02', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:39:14', '2024-06-05 19:49:58', 1, NULL),
+(13, 'UIC000000013', '480cedd0d996b9df05d2a99082b0d07f', '138322299', 12, NULL, 2, 'lakasdf@gmail.com', 5.00000000, NULL, NULL, '127540561', 'lakasdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$UhVQ716WMIJAxKqf7e6ScenQBpuMEYnIwDaJxH3kS/H3HZoqIqW5y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:40:32', '2024-06-04 12:40:32', 1, NULL),
+(14, 'UIC000000014', '871e97b1e71e0046ba008723b46b4642', '149450924', 12, NULL, 2, 'kamrulhas@gmail.com', 5.00000000, NULL, NULL, '127540561', 'kamrulhas', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Z/CVLhROKbza5zGWLbzrGelbVxC907oQCeo4Rb5S9EqLXLf3jDXoG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:42:25', '2024-06-04 12:42:25', 1, NULL),
+(15, 'UIC000000015', '6f21357f863ce24ce21c1a82f49a7d5d', '150939929', 9, NULL, 2, 'rana@gmail.com', 5.00000000, NULL, NULL, 'rana@gmail.com', 'rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Scds8xUIhaHfCgkfZDO0TuMZRW.scsxIFbOLXLVDzKikbk4QNDCxW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:44:53', '2024-06-04 12:44:53', 1, NULL),
+(16, 'UIC000000016', '6b29ecaf275b8ca943e3b88c16d32656', '160496114', 9, NULL, 2, 'jant@gmail.com', 5.00000000, NULL, NULL, '97438377', 'jant', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$ZWEzi59kf5H0SEqI24ronejITe5KSxtQ1AqYydPVYV.9N0z.p.Pom', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:00:49', '2024-06-04 13:00:49', 1, NULL),
+(17, 'UIC000000017', 'cefa5941b89f26355f93a8b788b1ede1', '171493823', 12, NULL, 2, 'jasns@gmail.com', 2.00000000, NULL, 2, '127540561', 'jasns', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$m0Z2IxZ8m7ZvslzTUFBlJ.jpVt73ZaC1FiH/CydPvtSDRI8jrlAdG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:19:09', '2024-06-05 19:49:58', 1, NULL),
+(20, 'UIC000000020', '308a33ceb3b8af86a052fcead0f00393', '204936183', 17, NULL, 2, 'mdbijon@gmail.com', 3.00000000, NULL, 3, 'mdbijon@gmail.com', 'mdbijon', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$lFZIJTMzo2l6WKe.luRtM.1DJBJPyQbo1IG9O0N/ebtRtifPlU89C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:41:33', '2024-06-05 19:49:58', 1, NULL),
+(21, 'UIC000000021', 'ecf7690e0d7d0a62ac7c4d8b87ed9656', '216998113', 20, NULL, 2, 'test@gmail.com', 5.00000000, NULL, NULL, 'test@gmail.com', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$17hPBRBT7Mk6SqX7v6p1S.y51UQhJHSwYsWiN6.q60GhKcZmpy9Ha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-05 19:49:58', '2024-06-05 19:49:58', 0, NULL),
+(22, 'UIC000000022', 'bbaa200546e0f709cc3057d658eea32b', '223742843', 3, NULL, 2, 'ahmed@gmail.com', 5.00000000, NULL, NULL, 'ahmed@gmail.com', 'ahmed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$4Y.L80A6L59jCSM74VrjnOq7RrGoYX5XU45JzVh7toeHIbUZabERm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:02:22', '2024-06-06 06:02:22', 1, NULL),
+(23, 'UIC000000023', '83ee59fa5c84fcb505c0f08a510554e3', '230020229', 3, NULL, 2, 'ayesha@gmail.com', 3.00000000, NULL, 3, 'ayesha@gmail.com', 'ayesha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$i2vvydDWzaPO0LxAHItfiO77GHplvucOEam1KLAlh3elLwlKHQQqC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 12:09:42', '2024-06-06 06:06:42', '2024-06-06 06:10:32', 1, NULL),
+(24, 'UIC000000024', 'd1facb1fea58c28f7791d486baee8085', '242115953', 23, NULL, 2, 'fahim@gmail.com', 5.00000000, NULL, NULL, 'fahim@gmail.com', 'fahim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$mvX7Hm3963zjpvzS8IV/8uFdQLOY38WhDMJK5hA2uKegr/WvKAM4i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:10:11', '2024-06-06 06:10:11', 0, NULL),
+(25, 'UIC000000025', '36d1bfa4f4bc2b3f6d786aa676a9476a', '252327294', 23, NULL, 2, 'anim@gmail.com', 5.00000000, NULL, NULL, 'anim@gmail.com', 'anim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$sJ/uM0kU4Bvq6eUFw3c3e.IH1an.qW0A1ZuklCN.hUeY9OJsACmkO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:10:32', '2024-06-06 06:10:32', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1952,19 +1990,32 @@ CREATE TABLE `withdraw` (
   `id` int(11) NOT NULL,
   `withdrawID` varchar(255) DEFAULT NULL,
   `depscription` text DEFAULT NULL,
-  `transection_fee` int(11) NOT NULL COMMENT '%',
+  `account_number` varchar(255) DEFAULT NULL,
+  `usd_amount` varchar(255) DEFAULT NULL,
+  `uic_amount` varchar(255) DEFAULT NULL,
+  `payment_method` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
+  `receivable_amount` int(11) DEFAULT NULL COMMENT 'no need this column',
+  `password` varchar(255) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `approved_by` int(11) DEFAULT NULL,
+  `transection_fee` int(11) NOT NULL COMMENT '%',
   `payable_amount` double(10,2) DEFAULT NULL COMMENT 'After 5% deduction amount',
   `withdraw_amount` double(10,2) DEFAULT NULL,
-  `receivable_amount` int(11) DEFAULT NULL COMMENT 'no need this column',
-  `remarks` text DEFAULT NULL,
   `withdrawal_method_id` int(11) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `approved_by` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL COMMENT ' 	0=Review,2=Reject,1=Approved 	',
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `withdraw`
+--
+
+INSERT INTO `withdraw` (`id`, `withdrawID`, `depscription`, `account_number`, `usd_amount`, `uic_amount`, `payment_method`, `user_id`, `receivable_amount`, `password`, `remarks`, `approved_by`, `transection_fee`, `payable_amount`, `withdraw_amount`, `withdrawal_method_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'W.b17446af05919be6e83500be7f5df5c4', 'W.b17446af05919be6e83500be7f5df5c4', '8799', '6', '6', 'Easypaisa', 3, NULL, 'dfdf', NULL, NULL, 0, NULL, 6.00, NULL, 0, '2024-06-07 14:08:02', '2024-06-07 14:08:02'),
+(2, 'W.0e2db0cb2c4645904a054261104b7a14', 'W.0e2db0cb2c4645904a054261104b7a14', '34343434', '2', '5', 'Bank Account', 3, NULL, 'b@gmail.com', NULL, NULL, 0, NULL, 2222.00, NULL, 0, '2024-06-07 14:18:15', '2024-06-07 14:18:15'),
+(3, 'W.53edebc543333dfbf7c5933af792c9c4', 'W.53edebc543333dfbf7c5933af792c9c4', '6898999', '5', '55', 'Test-5', 3, NULL, 'b@gmail.com', NULL, NULL, 0, NULL, 55.00, NULL, 0, '2024-06-09 15:30:54', '2024-06-09 15:30:54');
 
 -- --------------------------------------------------------
 
@@ -1975,12 +2026,22 @@ CREATE TABLE `withdraw` (
 CREATE TABLE `withdrawal_method` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `account_number` varchar(255) DEFAULT NULL,
   `currency_type_id` int(11) DEFAULT NULL,
   `wallet_address` varchar(255) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `withdrawal_method`
+--
+
+INSERT INTO `withdrawal_method` (`id`, `user_id`, `name`, `account_number`, `currency_type_id`, `wallet_address`, `remarks`, `created_at`, `updated_at`) VALUES
+(1, 3, 'JBL', '2255666', NULL, NULL, NULL, '2024-06-09 14:19:43', '2024-06-09 14:19:43'),
+(5, 3, 'Test-5', '6898999', NULL, NULL, NULL, '2024-06-09 14:22:25', '2024-06-09 14:22:25');
 
 --
 -- Indexes for dumped tables
@@ -2172,6 +2233,12 @@ ALTER TABLE `rule`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `send_received`
+--
+ALTER TABLE `send_received`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `service`
 --
 ALTER TABLE `service`
@@ -2212,7 +2279,8 @@ ALTER TABLE `transfer`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `uic_address` (`uic_address`);
 
 --
 -- Indexes for table `verifyemail`
@@ -2230,8 +2298,7 @@ ALTER TABLE `withdraw`
 -- Indexes for table `withdrawal_method`
 --
 ALTER TABLE `withdrawal_method`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -2307,7 +2374,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `logs`
@@ -2325,7 +2392,7 @@ ALTER TABLE `manual_adjustment`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -2349,7 +2416,7 @@ ALTER TABLE `mining_categogy_duration`
 -- AUTO_INCREMENT for table `mining_process_history`
 --
 ALTER TABLE `mining_process_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `mining_service_buy_history`
@@ -2412,6 +2479,12 @@ ALTER TABLE `rule`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `send_received`
+--
+ALTER TABLE `send_received`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
@@ -2439,7 +2512,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `transfer`
@@ -2463,13 +2536,13 @@ ALTER TABLE `verifyemail`
 -- AUTO_INCREMENT for table `withdraw`
 --
 ALTER TABLE `withdraw`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `withdrawal_method`
 --
 ALTER TABLE `withdrawal_method`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

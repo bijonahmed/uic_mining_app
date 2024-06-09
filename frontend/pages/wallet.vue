@@ -33,7 +33,8 @@
                 <div class="flex-column flex-md-row">
                   <h3 class="">My Assets</h3>
                   <p class="mb-0 font-weight-medium">
-                    <i class="txt-green fa fa-arrow-up mr-10"></i>0.8224 BTc
+                    <i class="txt-green fa fa-arrow-up mr-10"></i>{{ mining_amount }} UIC<br/>
+                    <small><nuxt-link to="/show-uic-address">Show UIC Address</nuxt-link></small>
                   </p>
                 </div>
               </div>
@@ -130,6 +131,7 @@ const buttonClicked = ref(false);
 const errors_amount = ref('');
 const depositamount = ref(0);
 const available_balance = ref(0);
+const mining_amount = ref(0);
 
 const errors = ref({});
 
@@ -141,6 +143,7 @@ const fetchData = async () => {
     console.log("Response: ", response.data);
     available_balance.value = response.data.available_balance;
     depositamount.value = response.data.deposit_amount;
+    mining_amount.value = response.data.mining_amount;
   } catch (error) {
     console.error("Error fetching data:", error);
   } finally{
@@ -178,7 +181,7 @@ const submitForm = () => {
     .then((res) => {
       document.getElementById("formrest").reset();
       success_noti();
-      router.push('/success-deposit');
+      router.push('/success');
     })
     .catch((error) => {
       if (error.response && error.response.status === 422) {

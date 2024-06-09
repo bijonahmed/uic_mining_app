@@ -1095,6 +1095,8 @@ class DropUserController extends Controller
         $level3Profit = $lev_3totalOrderProfit * 0.03;
         $data['level_3_profit'] = number_format($level3Profit, 2);
         //Level 4
+
+
         $checkL4    = User::whereIn('ref_id', $level3_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
         $level4_ids = $checkL4->pluck('id')->toArray();
         $lev_4totalOrderProfit = 0;

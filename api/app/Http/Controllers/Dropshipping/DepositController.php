@@ -24,6 +24,9 @@ use App\Models\Setting;
 use App\Models\TransactionHistory;
 use App\Models\WalletAddress;
 use App\Models\Withdraw;
+use App\Models\addWithDrawMethod;
+use App\Models\SendReceived;
+use App\Models\WithdrawMethod;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
@@ -118,8 +121,34 @@ class DepositController extends Controller
         ], 200);
     }
 
+    public function addWithDrawMethod(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'name'                  => 'required',
+                'account_number'        => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
+            $data = array(
+                'name'           => $request->name,
+                'account_number' => $request->account_number,
+                'user_id'        => $this->userid
+            );
+            WithdrawMethod::insertGetId($data);
+            /////addWithDrawMethod
 
+            return response()->json(['message' => 'method add successfully'], 200);
+        } catch (QueryException $e) {
+            // Log the error or handle it as needed
+            return response()->json(['error' => 'Database error occurred.'], 500);
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+        }
+    }
 
     public function updateWithDrawRequest(Request $request)
     {
@@ -178,6 +207,161 @@ class DepositController extends Controller
         }
     }
 
+
+
+
+
+
+    public function sendReciverBuySell(Request $request){
+
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'receiver_uic_address'  => 'required',
+                'receiver_name'         => 'required',
+                'password'              => 'required',
+                'wallet_type'           => 'required',
+                'amount'                => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $user = User::find($this->userid);
+            // Check if the user exists
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            // Check if the provided password matches the user's password
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json(['errors' => ['password_wrong' => ['Incorrect password']]], 422);
+            }
+
+            $receiver_uic_address = User::where('uic_address',$request->receiver_uic_address)->first();
+
+          
+            if (empty($receiver_uic_address)) {
+                return response()->json(['errors' => ['invlaid_uic_address' => ['Invalid UIC Address']]], 422);
+            }
+
+
+            if($request->wallet_type == 2){
+                $usdtAmount     = SendReceived::where('user_id',$this->userid)->where('wallet_type',2)->sum('amount');
+                if ($request->amount > $usdtAmount) {
+                    return response()->json(['errors' => ['usdt_amount' => ['Invalid Request']]], 422);
+                }
+            }
+           
+            exit; 
+
+           
+            $data = array(
+                'receiver_uic_address'   => $request->receiver_uic_address,
+                'receiver_name'          => $request->receiver_name,
+                'password'               => $request->password,
+                'wallet_type'            => $request->wallet_type,
+                'amount'                 => $request->amount,
+                'user_id'                => $this->userid
+            );
+            $last_Id = SendReceived::insertGetId($data);
+
+             
+            $tran['user_id']     = $this->userid;
+            $tran['type']        = 4; //Send Received
+            $tran['last_Id']     = $last_Id;
+            $tran['amount']      = $request->amount;
+            $tran['description'] = 'Send/Receive';
+            TransactionHistory::insert($tran);
+            
+
+            return response()->json($last_Id);
+        } catch (QueryException $e) {
+            // Log the error or handle it as needed
+            return response()->json(['error' => 'Database error occurred.'], 500);
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+        }
+
+
+    }
+
+
+
+
+    public function withdrawRequest(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'withdrawal_method'  => 'required',
+                'account_number'     => 'required',
+                'confirm_password'   => 'required',
+                'usd_amount'         => 'required',
+                'uic_amount'         => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $user = User::find($this->userid);
+            // Check if the user exists
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            // Check if the provided password matches the user's password
+            if (!Hash::check($request->confirm_password, $user->password)) {
+                return response()->json(['errors' => ['password_wrong' => ['Incorrect password']]], 422);
+            }
+
+            /*
+            $setting= Setting::find(1);
+            $checkSetting = $setting->minimum_deposit_amount;
+ 
+            if ($request->deposit_amount <= $checkSetting) {
+              return response()->json(['errors' => ['deposit_amount' => ['Your deposit amount is low']]], 422);
+            }
+            */
+
+            $withmethod = $request->withdrawal_method;
+            $getRow     = WithdrawMethod::where('id',$withmethod)->first();
+
+            $uniqueID = 'W.' . $this->generateUnique4DigitNumber();
+            $data = array(
+                'withdrawID'     => $uniqueID,
+                'depscription'   => $uniqueID,
+                'withdraw_amount'=> $request->uic_amount,
+                'payment_method' => !empty($getRow) ? $getRow->name : "",
+                'account_number' => $request->account_number,
+                'usd_amount'     => $request->usd_amount,
+                'uic_amount'     => $request->uic_amount,
+                'password'       => $request->confirm_password,
+
+                'status'         => 0,
+                'user_id'        => $this->userid
+            );
+            $last_Id = Withdraw::insertGetId($data);
+
+            /*
+            $tran['user_id']     = $this->userid;
+            $tran['type']        = 2; //Withdraw
+            $tran['last_Id']     = $last_Id;
+            $tran['amount']      = $request->uic_amount;
+            $tran['description'] = 'Withdraw';
+            TransactionHistory::insert($tran);
+            */
+
+            return response()->json($last_Id);
+        } catch (QueryException $e) {
+            // Log the error or handle it as needed
+            return response()->json(['error' => 'Database error occurred.'], 500);
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+        }
+    }
+
     public function depositRequest(Request $request)
     {
         try {
@@ -190,14 +374,13 @@ class DepositController extends Controller
                 return response()->json(['errors' => $validator->errors()], 422);
             }
 
-            $setting= Setting::find(1);
+            $setting = Setting::find(1);
             $checkSetting = $setting->minimum_deposit_amount;
- 
 
             if ($request->deposit_amount <= $checkSetting) {
-              return response()->json(['errors' => ['deposit_amount' => ['Your deposit amount is low']]], 422);
+                return response()->json(['errors' => ['deposit_amount' => ['Your deposit amount is low']]], 422);
             }
-            
+
             $uniqueID = 'D.' . $this->generateUnique4DigitNumber();
             $data = array(
                 'depositID'      => $uniqueID,
@@ -210,16 +393,12 @@ class DepositController extends Controller
             );
             $last_Id = Deposit::insertGetId($data);
 
-
-
             $tran['user_id']     = $this->userid;
             $tran['type']        = 1; //Deposit 
             $tran['last_Id']     = $last_Id;
             $tran['amount']      = $request->deposit_amount;
             $tran['description'] = 'Deposit';
             TransactionHistory::insert($tran);
-
-
 
             return response()->json($last_Id);
         } catch (QueryException $e) {
@@ -240,6 +419,50 @@ class DepositController extends Controller
         return md5($uniqueNumber);
     }
 
+    public function getWithMethodList()
+    {
+        $data     = WithdrawMethod::where('user_id', $this->userid)->get();
+        foreach ($data as $v) {
+
+            $tran[] = [
+                'id'             => $v->id,
+                'name'     => $v->name,
+                'account_number' => $v->account_number,
+            ];
+        }
+
+        return response()->json($tran, 200);
+    }
+
+    public function getWithdrawRequest()
+    {
+
+        $data     = Withdraw::where('user_id', $this->userid)->get();
+        foreach ($data as $v) {
+
+            if ($v->status == 0) {
+                $wStatus = 'Review';
+            } elseif ($v->status == 1) {
+                $wStatus = 'Approved';
+            } elseif ($v->status == 2) {
+                $wStatus = 'Reject';
+            }
+
+            $tran[] = [
+                'id'             => $v->id,
+                'withdrawID'     => $v->withdrawID,
+                'payment_method' => $v->payment_method,
+                'account_number' => $v->account_number,
+                'wStatus'        => $wStatus,
+                'status'         => $v->status,
+                'usd_amount'     => $v->usd_amount,
+                'uic_amount'     => $v->uic_amount,
+                'created_at'     => date("d-m-Y H:i:s", strtotime($v->created_at)),
+            ];
+        }
+
+        return response()->json($tran, 200);
+    }
 
     public function getwithdrawalList(Request $request)
     {
@@ -287,7 +510,6 @@ class DepositController extends Controller
         } else {
             $query->whereIn('withdraw.status', [0, 1, 2]);
         }
-
 
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
 
@@ -343,7 +565,7 @@ class DepositController extends Controller
         // dd($selectedFilter);
         $query = Deposit::orderBy('deposit.id', 'desc')
             ->join('users', 'deposit.user_id', '=', 'users.id') // Join condition
-            ->select('deposit.*','users.email','users.name','users.phone_number')
+            ->select('deposit.*', 'users.email', 'users.name', 'users.phone_number')
             ->orderBy('deposit.id', 'desc'); // Sorting by 'id' in descending order
 
         // Check if filter dates are provided
@@ -362,10 +584,9 @@ class DepositController extends Controller
             $query->where('users.email', $searchEmail);
         }
 
-
         if (!empty($searchOrderId)) {
             // $query->where('depositID', 'like', '%' . $searchQuery . '%');
-            $query->where('deposit.depositID',$searchOrderId);
+            $query->where('deposit.depositID', $searchOrderId);
         }
 
         $cleanedSelectedFilter = isset($selectedFilter) ? (int) trim($selectedFilter) : null;
@@ -417,12 +638,11 @@ class DepositController extends Controller
     public function depositrow($id)
     {
 
-             
         try {
             $user = Deposit::where('deposit.id', $id)
-            ->select('users.name', 'deposit.*')
-            ->leftJoin('users', 'deposit.user_id', '=', 'users.id')
-            ->first();
+                ->select('users.name', 'deposit.*')
+                ->leftJoin('users', 'deposit.user_id', '=', 'users.id')
+                ->first();
             return response()->json($user);
         } catch (\Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -430,8 +650,6 @@ class DepositController extends Controller
             return response()->json($error);
         }
     }
-
-
 
     public function withdrawrow($id)
     {
@@ -455,4 +673,14 @@ class DepositController extends Controller
             return response()->json($error);
         }
     }
+
+
+
+
+    public function getWithMethodRow(Request $request)
+        {
+            $data = WithdrawMethod::where('id', $request->id)->first();
+            return response()->json($data);
+        }
+    
 }

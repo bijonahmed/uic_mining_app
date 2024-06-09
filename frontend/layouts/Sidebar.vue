@@ -31,18 +31,9 @@
 					</nuxt-link>
 				</li>
 
+				
 				<li v-if="isLoggedIn">
-					<nuxt-link to='/trading'><img src="/assets/img/content/icons/3.png" alt=""><strong
-							class="special">Crypto Trade</strong> </nuxt-link>
-				</li>
-
-				<li v-else>
-					<nuxt-link to='/login'><img src="/assets/img/content/icons/3.png" alt=""><strong
-							class="special">Crypto Trade</strong> </nuxt-link>
-				</li>
-
-				<li v-if="isLoggedIn">
-					<nuxt-link to='/buy-sell'><img src="/assets/img/content/icons/6.png" alt=""><strong
+					<nuxt-link to='/send-received'><img src="/assets/img/content/icons/6.png" alt=""><strong
 							class="special">Send/Receive</strong> </nuxt-link>
 				</li>
 
@@ -51,15 +42,7 @@
 							class="special">Send/Receive</strong> </nuxt-link>
 				</li>
 
-				<li v-if="isLoggedIn">
-					<nuxt-link to='/profile'><img src="/assets/img/content/icons/5.png" alt=""><strong
-							class="special">Trader Profile</strong> </nuxt-link>
-				</li>
-
-				<li v-else>
-					<nuxt-link to='/login'><img src="/assets/img/content/icons/5.png" alt=""><strong
-							class="special">Trader Profile</strong> </nuxt-link>
-				</li>
+				
 
 				<li v-if="isLoggedIn">
 					<nuxt-link href='/affiliate'><img src="/assets/img/content/icons/4.png" alt=""><strong

@@ -105,6 +105,9 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'user'
 ], function () {
+    Route::get('checkWalletType', [UserController::class, 'checkWalletType']);
+    Route::get('checkUicAddress', [UserController::class, 'checkUicAddress']);
+    Route::get('checkLevelHistory', [UserController::class, 'checkLevelHistory']);
     Route::get('getLevelDetails', [UserController::class, 'getLevelDetails']);
     Route::get('getBalance', [UserController::class, 'getBalance']);
     Route::get('getCommunity', [UserController::class, 'getCommunity']);
@@ -288,15 +291,21 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'deposit'
 ], function () {
+    Route::get('getWithMethodList', [DepositController::class, 'getWithMethodList']);
+    Route::get('getWithdrawRequest', [DepositController::class, 'getWithdrawRequest']);
     Route::post('depositRequest', [DepositController::class, 'depositRequest']);
+    Route::post('withdrawRequest', [DepositController::class, 'withdrawRequest']);
+    Route::post('sendReciverBuySell', [DepositController::class, 'sendReciverBuySell']);
     Route::get('filterRechargeList', [DepositController::class, 'filterRechargeList']);
     Route::get('depositrow/{id}', [DepositController::class, 'depositrow']);
     Route::get('withdrawrow/{id}', [DepositController::class, 'withdrawrow']);
-
+    Route::get('getWithMethodRow/', [DepositController::class, 'getWithMethodRow']);
     Route::get('deposit-list', [DepositController::class, 'getDepositList']);
     Route::get('withdrawal-list', [DepositController::class, 'getwithdrawalList']);
     Route::post('updateDepositRequest', [DepositController::class, 'updateDepositRequest']);
     Route::post('updateWithDrawRequest', [DepositController::class, 'updateWithDrawRequest']);
+    Route::post('addWithDrawMethod', [DepositController::class, 'addWithDrawMethod']);
+
 });
 
 // Route::group([

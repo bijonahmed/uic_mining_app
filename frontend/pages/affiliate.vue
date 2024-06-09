@@ -97,12 +97,16 @@
                                 <h2 style="color: #0a95ff;font-weight: 800;font-family: poppins;">Team 1</h2>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ level_1 }} Members</h4>
+                                    <small><nuxt-link to="/team/team-one-history" style="color:green">Check History</nuxt-link></small>
+
                                 </div>
                             </div>
                             <div class="ref-statistics ml-10">
                                 <h2 class="txt-green" style="font-weight: 800;font-family: poppins;">Team 2</h2>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ level_2 }} Members</h4>
+                                    <small><nuxt-link to="/team/team-two-history" style="color:green">Check History</nuxt-link></small>
+
                                 </div>
                             </div>
                         </div>
@@ -111,6 +115,8 @@
                                 <h2 class="txt-yellow" style="font-weight: 800;font-family: poppins;">Team 3</h2>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ level_3 }} Members</h4>
+                                    <small><nuxt-link to="/team/team-three-history" style="color:green">Check History</nuxt-link></small>
+
                                 </div>
                             </div>
                             <div class="ref-statistics ml-10">
@@ -126,88 +132,28 @@
                     </div>
                     <section class="container">
                         <h4 class="title-main mt-5">Recent Refered Members</h4>
-                        <ul class="transaction-list list-unstyled">
+
+                        <ul class="transaction-list list-unstyled" v-for="level in levels" :key="level.id">
                             <li>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <span style="width: 10px;margin-right: -25px;">1.</span>
                                     <div class="d-flex align-items-normal">
                                         <span class="member-img"><img src="/assets/img/content/avatar/user-1.png"
                                                 alt=""></span>
                                         <div class="ml-10">
-                                            <h4 class="coin-name">Member ID 2u47 <i class="fa fa-bronze"></i></h4>
+                                     
+                                            <small class="text-muted">Name <span
+                                                class="txt-turquoise">{{ level.name }}</span></small><br>
                                             <small class="text-muted">Registered Date <span
-                                                    class="txt-turquoise">31/12/24</span></small><br>
-                                            <small class="text-muted">MID 2742352902</small>
+                                                    class="txt-turquoise">{{ formatDate(level.created_at) }}</span></small><br>
+                                            <small class="text-muted">UIC Address: {{ level.uic_address }}</small>
                                         </div>
                                     </div>
-                                    <div>
-                                        <small class="d-block mb-0 txt-green">+0.94846 <span
-                                                class="text-muted">BTC</span></small>
-
-                                    </div>
+                                    
                                 </div>
                             </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span style="width: 10px;margin-right: -25px;">2.</span>
-                                    <div class="d-flex align-items-normal">
-                                        <span class="member-img"><img src="/assets/img/content/avatar/user-2.png"
-                                                alt="">
-                                            alt=""</span>
-                                        <div class="ml-10">
-                                            <h4 class="coin-name">Member ID 2u47 <i class="fa fa-bronze"></i></h4>
-                                            <small class="text-muted">Registered Date <span
-                                                    class="txt-turquoise">22/10/24</span></small><br>
-                                            <small class="text-muted">MID 2742352902</small>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <small class="d-block mb-0 txt-green">+0.94846 <span
-                                                class="text-muted">BTC</span></small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span style="width: 10px;margin-right: -25px;">3.</span>
-                                    <div class="d-flex align-items-normal">
-                                        <span class="member-img"><img src="/assets/img/content/avatar/user-3.png"
-                                                alt="">
-                                            alt=""</span>
-                                        <div class="ml-10">
-                                            <h4 class="coin-name">Member ID 2u47 <i class="fa fa-bronze"></i></h4>
-                                            <small class="text-muted">Registered Date <span
-                                                    class="txt-turquoise">01/06/24</span></small><br>
-                                            <small class="text-muted">MID 2742352902</small>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <small class="d-block mb-0 txt-green">+0.94846 <span
-                                                class="text-muted">BTC</span></small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span style="width: 10px;margin-right: -25px;">4.</span>
-                                    <div class="d-flex align-items-normal">
-                                        <span class="member-img"><img src="/assets/img/content/avatar/user-4.png"
-                                                alt="">
-                                            alt=""</span>
-                                        <div class="ml-10">
-                                            <h4 class="coin-name">Member ID 2u47 <i class="fa fa-bronze"></i></h4>
-                                            <small class="text-muted">Registered Date <span
-                                                    class="txt-turquoise">28/01/24</span></small><br>
-                                            <small class="text-muted">MID 2742352902</small>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <small class="d-block mb-0 txt-green">+0.94846 <span
-                                                class="text-muted">BTC</span></small>
-                                    </div>
-                                </div>
-                            </li>
+                            
                         </ul>
+                        <br/><br/>
                     </section>
                     <!-- <SocialFooter /> -->
                 </main>
@@ -238,6 +184,21 @@ const level_1 = ref('');
 const level_2 = ref('');
 const level_3 = ref('');
 const total = ref('');
+const levels = ref([]);
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    // hour: '2-digit',
+    // minute: '2-digit',
+    // second: '2-digit',
+    hour12: false
+  });
+}
+
 
 const getInviteCode = async () => {
     try {
@@ -314,18 +275,16 @@ const copyAddressToClipboard = () => {
     });
 }
 
-
-
-
 const fetchLevelData = async () => {
   try {
     const response = await axios.get("/user/getLevelDetails");
     console.log("Response data:", response.data.level_1);
     // Assuming maximum_supply and total_supply are DOM elements or component state
-    level_1.value = response.data.level_1;
+    level_1.value   = response.data.level_1;
     level_2.value   = response.data.level_2;
     level_3.value   = response.data.level_3;
-    total.value   = response.data.total;
+    total.value     = response.data.total;
+    levels.value     = response.data.levels;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
