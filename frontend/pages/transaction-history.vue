@@ -32,7 +32,7 @@
                                 <BulkLoader />
                             </div>
                         </center>
-
+                        <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
@@ -48,11 +48,13 @@
                                     <td>{{ transaction.description }}</td>
                                     <td>
                                         <span v-if="transaction.type == 1" style="color:green; font-weight: bold;;">${{
-                                            transaction.amount.toFixed(2) }}</span>
+                                            transaction.amount }}</span>
                                         <span v-if="transaction.type == 2" style="color:red; font-weight: bold;;">${{
-                                            transaction.amount.toFixed(2) }}</span>
+                                            transaction.amount }}</span>
                                         <span v-if="transaction.type == 3" style="color:red; font-weight: bold;;">${{
-                                            transaction.amount.toFixed(2) }}</span>
+                                            transaction.amount }}</span>
+                                               <span v-if="transaction.type == 4" style="color:red; font-weight: bold;;">${{
+                                            transaction.amount }}</span>
                                     </td>
 
 
@@ -86,12 +88,18 @@
                                             {{ transaction.machinestatus }}
                                         </span>
 
+                                        <span v-else-if="transaction.type == 4">
+                                            Send/Received
+                                        </span>
+
 
                                     </td>
                                 </tr>
                                 <!-- Add more rows as needed -->
                             </tbody>
                         </table>
+                    </div>
+                        <br/><br/><br/>
 
                     </div>
 
@@ -119,7 +127,7 @@ const tranhistory = ref([]);
 const fetchData = async () => {
     try {
         loading.value = true;
-        const response = await axios.get("/user/getBalance");
+        const response = await axios.get("/user/transactionHistory");
         //console.log("Response: ", response.data);
         tranhistory.value = response.data.transactionhistory;
     } catch (error) {

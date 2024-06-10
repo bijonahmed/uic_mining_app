@@ -23,7 +23,7 @@
             <div class="chat-header d-none">
               <input type="text" v-model="username" class="username-input" placeholder="Enter your username" readonly />
             </div>
-            <div class="chat-messages scrollarea">
+            <div class="chat-messages scrollarea" style="max-height: 250px;">
               <div v-for="message in messages" :key="message.id"
                 :class="{ 'message-container': true, 'sent': message.username === username, 'received': message.username !== username }">
                 <div class="message">
@@ -48,51 +48,50 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { format } from 'date-fns'; // Ensure correct import
-import { useRouter } from "vue-router";
+import { format } from 'date-fns';
+import { useRouter } from 'vue-router';
+import { useNuxtApp } from '#app';
+import Sidebar from '~/layouts/Sidebar.vue';
+import HeaderSecond from '~/layouts/HeaderSecond.vue';
+import HeaderThird from '~/layouts/HeaderThird.vue';
+import SocialFooter from '~/components/SocialFooter.vue';
+import Pusher from 'pusher-js';
+
 const router = useRouter();
-
-import Sidebar from "~/layouts/Sidebar.vue";
-import HeaderSecond from "~/layouts/HeaderSecond.vue";
-import HeaderThird from "~/layouts/HeaderThird.vue";
-import SocialFooter from "~/components/SocialFooter.vue";
-
-
-//const username = ref('r@gmail.com')
-const message = ref('');
-
-const messages = ref([])
+const { $echo } = useNuxtApp();
 
 const communitySlug = ref(router.currentRoute.value.query.slug);
 const username = ref(router.currentRoute.value.query.username);
 const name = ref(router.currentRoute.value.query.name);
-const { $echo } = useNuxtApp();
+const message = ref('');
+const messages = ref([]);
+const isAtBottom = ref(true);
+
 
 const formatTimestamp = (timestamp) => {
   return format(new Date(timestamp), 'HH:mm'); // Format to only show hours and minutes
 };
 
-onMounted(async () => {
-  await fetchMessages();
+// Polling logic
+let pollingInterval;
+onMounted(() => {
+  fetchMessages();
+  pollingInterval = setInterval(fetchMessages, 10000); // Poll every 10 seconds
+  chatMessagesRef.value = document.querySelector('.chat-messages'); // Set the reference after the component is mounted
+});
 
-  $echo.channel(`chat.${communitySlug.value}`)
-    .listen('.message', (data) => {
-      if (data && data.community_slug === communitySlug.value) {
-        messages.value.push(data);
-      }
-    });
+onUnmounted(() => {
+  clearInterval(pollingInterval);
 });
 
 const fetchMessages = async () => {
   try {
     const response = await axios.get(`/messages/${communitySlug.value}`);
     messages.value = response.data;
-
-
+    
   } catch (error) {
     console.error('Error fetching messages:', error);
   }
@@ -109,15 +108,36 @@ const submit = async () => {
       username: username.value,
       message: message.value,
       community_slug: communitySlug.value,
-      username: username.value,
     });
-
+   // scrollToTop();
     console.log('Message sent:', response.data);
     message.value = '';
+    await fetchMessages(); // Fetch messages after sending a new one
+   // scrollToTop();
+    setTimeout(scrollToBottom, 100);
   } catch (error) {
     console.error('Error sending message:', error);
   }
 };
+const chatMessagesRef = ref(null); // Initialize chatMessagesRef
+
+
+const scrollToBottom = () => {
+  const chatMessages = chatMessagesRef.value;
+  if (chatMessages) {
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+  }
+};
+
+
+const onScroll = () => {
+  const chatMessages = chatMessagesRef.value;
+  const threshold = 50; // Adjust based on your needs
+  if (chatMessages) {
+    isAtBottom.value = chatMessages.scrollHeight - chatMessages.scrollTop <= chatMessages.clientHeight + threshold;
+  }
+};
+
 </script>
 
 
@@ -128,6 +148,11 @@ const submit = async () => {
   max-width: 600px;
   margin: 50px auto;
   padding: 0 20px;
+}
+
+.message-input {
+  flex: 1;
+  padding: 10px;
 }
 
 /* Chat box styling */
@@ -217,9 +242,10 @@ const submit = async () => {
 
 /* Form styling */
 .chat-form {
-  background: #f1f1f1;
-  padding: 15px;
-  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: #f1f1f1; /* Optional background color */
 }
 
 .message-input {
@@ -234,5 +260,10 @@ const submit = async () => {
 
 .message-input:focus {
   border-color: #4a90e2;
+}
+.chat-messages {
+  flex: 1; /* Take up all available space */
+  overflow-y: auto;
+  padding: 10px;
 }
 </style>

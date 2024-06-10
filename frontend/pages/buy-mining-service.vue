@@ -65,8 +65,6 @@
                 <div class="popup-container modal-dialog modal-dialog-centered modal-dialog-scrollabl">
                     <div class="popup-header">
 
-
-
                         <h3 class="popup-title">Services : [{{ categoryName }}]</h3>
                         <span class="popup-close" data-dismiss="true"><i class="fa fa-times"></i></span>
                     </div>
@@ -106,8 +104,12 @@
                                 <th>Price</th>
                                 <td><input type="text" class="form-control" v-model="selectedPrice" placeholder="00"
                                         disabled />
-                                    <span class="text-danger"
-                                        v-if="errors.selectedPrice">{{ errors.selectedPrice[0] }}</span>
+                                    <span class="text-danger" v-if="errors.selectedPrice">{{ errors.selectedPrice[0] }}</span>
+                                    <span class="text-danger" v-if="errors.error_amount">{{ errors.error_amount[0] }}</span>
+
+
+                                    
+
                                 </td>
                             </tr>
                         </table>
@@ -142,6 +144,7 @@ const selectedPackageId = ref('')
 const selectedDuration = ref('')
 const selectedPrice = ref('')
 const errors = ref({});
+const error_amount = ref({});
 const buttonClicked = ref(false);
 const notify = ref('');
 
@@ -173,7 +176,11 @@ const submitForm = () => {
 
         }).catch(error => {
             if (error.response && error.response.status === 422) {
+                buttonClicked.value = false;
+                //console.log("-----" + error.response.data.errors.error_amount);
                 errors.value = error.response.data.errors;
+                error_amount.value =  error.response.data.errors.error_amount;
+
             } else {
                 // Handle other types of errors here
                 console.error('An error occurred:', error);

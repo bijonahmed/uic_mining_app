@@ -1,6 +1,6 @@
 <template>
     <div>
-        <title>Buy Sell</title>
+        <title>Send Received</title>
 
         <div class="wrapper">
             <div class="nav-menu">
@@ -36,7 +36,9 @@
 
                                     <div class="wallet-address">
                                         <h3 class="w-text mb-30 mt-0">Send currency</h3>
-
+                                        <div class="loading-indicator" v-if="loading" style="text-align: center">
+        <Loader />
+      </div>
                                         <div class="txt-left">
                                             <label class="g-text">Reciver UIC Address</label>
                                             <div class="form-row-group with-icons">
@@ -104,6 +106,7 @@
                                                     <img src="/assets/img/content/2.png" class="icon" alt="">
                                                     <input type="text" class="form-element" placeholder="0.0001" v-model="insertdata.amount" @keypress="isNumber($event)" >
                                                     <span class="text-danger" v-if="errors.amount">{{ errors.amount[0] }}</span>
+                                                    <span class="text-danger" v-if="errors.error_amount">{{ errors.error_amount[0] }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -128,7 +131,7 @@
                                             <div class="flex-column flex-md-row">
                                                 <img src="/assets/img/content/p1.png" alt="">
                                                 <h4>Total Sent</h4>
-                                                <p class="g-text mb-0 font-weight-medium">1000$ Has Been Sent in Last 30
+                                                <p class="g-text mb-0 font-weight-medium">{{ total_send }}$ Has Been Sent in Last 30
                                                     Days. </p>
                                             </div>
                                         </a>
@@ -137,7 +140,7 @@
                                             <div class="flex-column flex-md-row">
                                                 <img src="/assets/img/content/p2.png" alt="">
                                                 <h4>Total Receive</h4>
-                                                <p class="g-text mb-0 font-weight-medium">1000$ Has Received in Last 30
+                                                <p class="g-text mb-0 font-weight-medium">{{ total_received }}$ Has Received in Last 30
                                                     Days. </p>
                                             </div>
                                         </a>
@@ -149,20 +152,25 @@
                                 <section class="container">
                                     <h4 class="title-main">Recent Transactions</h4>
                                     <ul class="transaction-list list-unstyled">
-                                        <li>
+                                        <li v-for="val in list" :key="val.id">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <img class="img-xs" src="/assets/img/content/s2.png"
                                                         alt="coin image">
                                                     <div class="ml-10">
-                                                        <h4 class="coin-name">Hasan3241</h4>
-                                                        <small class="text-muted">08-24 <span
-                                                                class="ml-10">20.04PM</span></small>
+                                                        <h4 class="coin-name">{{ val.receiver_name }}</h4>
+                                                        <small class="text-muted"><span class="ml-10">{{ val.created_at }}</span></small>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <small class="d-block mb-0 txt-red">+0.94853</small>
-                                                    <small class="text-muted d-block">$2,748.94</small>
+                                                    <small class="d-block mb-0 txt-red">
+
+                                                        <span v-if="val.wallet_type ==1">{{ val.amount }} UIC</span>
+                                                        <span v-if="val.wallet_type ==2">{{ val.amount }} USDT</span>
+                                                        
+                                                    
+                                                    </small>
+                                                  
                                                 </div>
                                             </div>
                                         </li>
@@ -205,14 +213,13 @@ const loading = ref(true);
 const buttonClicked = ref(false);
 const password_wrong = ref("");
 const invlaid_uic_address = ref("");
-
+const error_amount = ref("");
+const total_send = ref(0);
+const total_received = ref(0);
 const list = ref([]);
 const errors = ref({});
 
-
-
 const checkWallet = async (wallet_type)  =>{
-
     const response = await axios.get('/user/checkWalletType', {
       params: {
         wallet_type: wallet_type,
@@ -234,25 +241,37 @@ const isNumber = (evt) => {
 
 
 const handleAddress = async ()  =>{
+    loading.value = true;
+try {
     const receiver_uic_address = insertdata.receiver_uic_address;
     const response = await axios.get('/user/checkUicAddress', {
-      params: {
-        uic_address: receiver_uic_address,
-      }
+        params: {
+            uic_address: receiver_uic_address,
+        }
     });
-    if(response.data.status == 0){
+
+    if (response.data.status == 0) {
         error_noti();
+    } else {
+        insertdata.receiver_name = response.data.response.name;
     }
-    insertdata.receiver_name= response.data.response.name;
+} catch (error) {
+    console.error(error);  // Log the error for debugging
+    error_noti();  // Notify the user about the error
+} finally {
+    loading.value = false;
+}
+
 
 }
 
 const fetchData = async () => {
   loading.value = true;
   try {
-    const response = await axios.get("/deposit/getWithMethodList");
-    console.log("Response: ", response.data);
-    list.value = response.data;
+    const response = await axios.get("/deposit/getSendReceived");
+    total_send.value = response.data.total_send;
+    total_received.value = response.data.total_received;
+    list.value = response.data.history;
    
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -272,7 +291,7 @@ const insertdata = reactive({
 });
 
 const submitForm = () => {
-  buttonClicked.value = true;
+  //buttonClicked.value = true;
   const formData = new FormData();
   formData.append("receiver_uic_address", insertdata.receiver_uic_address);
   formData.append("receiver_name", insertdata.receiver_name);
@@ -294,10 +313,12 @@ const submitForm = () => {
     })
     .catch((error) => {
       if (error.response && error.response.status === 422) {
-        buttonClicked.value = false;
+      //  buttonClicked.value = false;
         password_wrong.value = error.response.data.errors.password_wrong;
         invlaid_uic_address.value = error.response.data.errors.invlaid_uic_address;
+        error_amount.value = error.response.data.errors.error_amount;
         errors.value = error.response.data.errors;
+        
 
 
       } else {

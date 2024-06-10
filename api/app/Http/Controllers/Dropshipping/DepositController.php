@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Hash;
 use Session;
 use Carbon\Carbon;
 use DB;
+use PDO;
 use PhpParser\Node\Stmt\TryCatch;
 
 class DepositController extends Controller
@@ -227,7 +228,18 @@ class DepositController extends Controller
                 return response()->json(['errors' => $validator->errors()], 422);
             }
 
-            $user = User::find($this->userid);
+            $today_date             = date("Y-m-d");
+            $active_matching        = MiningServicesBuyHistory ::where('user_id', $this->userid)->first();
+
+            $sendRecived_uic        = SendReceived::where('user_id',$this->userid)->where('wallet_type',1)->sum('amount');
+            $sendRecived_usd        = SendReceived::where('user_id',$this->userid)->where('wallet_type',2)->sum('amount');
+
+            $usdtAmount             = Deposit::where('user_id',$this->userid)->where('status',1)->sum('deposit_amount');
+            $service_price          = ($active_matching && $active_matching->end_date >= $today_date) ? ($active_matching->service_price ?? 0) : 0;
+           
+
+            $user                   = User::find($this->userid);
+            $receiver_uic_address   = User::where('uic_address',$request->receiver_uic_address)->first();
             // Check if the user exists
             if (!$user) {
                 return response()->json(['error' => 'User not found'], 404);
@@ -238,24 +250,37 @@ class DepositController extends Controller
                 return response()->json(['errors' => ['password_wrong' => ['Incorrect password']]], 422);
             }
 
-            $receiver_uic_address = User::where('uic_address',$request->receiver_uic_address)->first();
-
-          
+           // Check if the receiver_uic_address
             if (empty($receiver_uic_address)) {
                 return response()->json(['errors' => ['invlaid_uic_address' => ['Invalid UIC Address']]], 422);
             }
+ 
+            if($request->wallet_type == 1){
+               
+                if ($request->amount <= 0) {
+                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
+                }
 
+                $row           = User::where('id',$this->userid)->first();
+                $result        = $row->mining_amount - $sendRecived_uic;
+                
+                if ($request->amount > $result) {
+                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
+                }
+            }
 
             if($request->wallet_type == 2){
-                $usdtAmount     = SendReceived::where('user_id',$this->userid)->where('wallet_type',2)->sum('amount');
-                if ($request->amount > $usdtAmount) {
-                    return response()->json(['errors' => ['usdt_amount' => ['Invalid Request']]], 422);
+                $result          = $usdtAmount - $sendRecived_usd - $service_price;
+                if ($request->amount <= 0) {
+                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
+                }
+
+                if ($request->amount > $result) {
+                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
                 }
             }
            
-            exit; 
-
-           
+          
             $data = array(
                 'receiver_uic_address'   => $request->receiver_uic_address,
                 'receiver_name'          => $request->receiver_name,
@@ -271,7 +296,14 @@ class DepositController extends Controller
             $tran['type']        = 4; //Send Received
             $tran['last_Id']     = $last_Id;
             $tran['amount']      = $request->amount;
-            $tran['description'] = 'Send/Receive';
+            if($request->wallet_type == 1){
+                $tran['description'] = 'Send/Receive-UIC Amount';
+            }
+
+            if($request->wallet_type == 2){
+                $tran['description'] = 'Send/Receive-USDT Amount';
+            }
+            
             TransactionHistory::insert($tran);
             
 
@@ -417,6 +449,34 @@ class DepositController extends Controller
         } while (in_array($uniqueNumber, $existingNumbers));
 
         return md5($uniqueNumber);
+    }
+
+
+    public function getSendReceived(){
+        
+        $getrows     = SendReceived::where('user_id', $this->userid)->get();
+        $history=[];
+        foreach ($getrows as $v) {
+            $history[] = [
+                'id'                           => $v->id,
+                'receiver_uic_address'         => $v->receiver_uic_address,
+                'receiver_name'                => $v->receiver_name,
+                'wallet_type'                  => $v->wallet_type,
+                'amount'                       => $v->amount,
+                'created_at'                   => date("d-m-Y H:i:s", strtotime($v->created_at)),
+            ];
+        }
+
+        $thirtyDaysAgo          = Carbon::now()->subDays(30);
+        $get_amounts            = SendReceived::where('user_id', $this->userid)
+                                    ->where('created_at', '>=', $thirtyDaysAgo)
+                                    ->sum('amount');
+        $data['history']        = $history;
+        $data['total_send']     = number_format($get_amounts,8);
+        $data['total_received'] = number_format($get_amounts,8);
+
+        return response()->json($data);
+
     }
 
     public function getWithMethodList()

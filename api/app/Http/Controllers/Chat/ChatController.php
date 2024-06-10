@@ -12,6 +12,7 @@ class ChatController extends Controller
 {
 
     protected $userid;
+    protected $email;
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -19,6 +20,7 @@ class ChatController extends Controller
         if (!empty($id)) {
             $user = User::find($id->id);
             $this->userid = $user->id;
+            $this->email = $user->email;
         }
     }
 
@@ -26,22 +28,24 @@ class ChatController extends Controller
     {
 
         $data = $request->validate([
-            'username' => 'required',
+           // 'username' => 'required',
             'message' => 'required',
             'community_slug' => 'required',
         ]);
 
+     
+     //  event(new Message($this->email, $data['message'], $data['community_slug']));
+       //event(new Message('b@gmail.com', $data['message'])); // Example message number
        //event(new Message($request->input('username'), $request->input('message')));
-       event(new Message($data['username'], $data['message'], $data['community_slug']));
-
+       //return [];
         $rdata['user_id']        = $this->userid;
         $rdata['community_slug'] = $request->community_slug;
         $rdata['message']        = $request->message;
-        $rdata['username']       = $request->username;
+        $rdata['username']       = $this->email;///$request->username;
         $message = MyMessage::insertGetId($rdata);
 
         return response()->json($message);
-        //return [];
+         
     }
 
     public function getMessages($community_slug)
@@ -64,4 +68,26 @@ class ChatController extends Controller
         }
         return response()->json($data, 200);
     }
+
+
+
+    public function longPoll(Request $request, $communitySlug)
+    {
+        
+        $lastMessageId = $request->query('last_message_id', 0);
+
+        while (true) {
+            $messages = MyMessage::where('community_slug', $communitySlug)
+                ->get();
+
+            if ($messages->count() > 0) {
+                return $messages;
+            }
+
+            // Sleep for a short time to avoid high CPU usage
+            usleep(5); // 500ms
+        }
+           
+    }
+
 }

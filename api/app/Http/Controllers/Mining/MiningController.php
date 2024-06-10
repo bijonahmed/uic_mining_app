@@ -13,6 +13,7 @@ use App\Models\Categorys;
 use App\Category;
 use App\Models\AttributeValues;
 use App\Models\Attribute;
+use App\Models\Deposit;
 use App\Models\MiningCategory;
 use App\Models\MiningCategoryDuration;
 use App\Models\MiningHistory;
@@ -51,7 +52,6 @@ class MiningController extends Controller
             ->select('mining_categogy_duration.*', 'mining_categogy.name')->where('mining_categogy_duration.id', $id)->first();
         return response()->json($responseData);
     }
-
 
     public function inserMiningDuration(Request $request)
     {
@@ -117,7 +117,6 @@ class MiningController extends Controller
             $query->whereIn('mining_categogy_duration.status', $status);
         }
 
-
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
 
         $modifiedCollection = $paginator->getCollection()->map(function ($item) {
@@ -152,6 +151,7 @@ class MiningController extends Controller
         $active_matching  = MiningServicesBuyHistory::where('user_id', $this->userid)->get();
 
         $current_date   = date("Y-m-d");
+        $storeInfoList = [];
         foreach ($active_matching as $store) {
             if ($store->end_date >= $current_date) {
                 $storeInfoList[] = [
@@ -264,6 +264,12 @@ class MiningController extends Controller
         $sdate          = $startDate->format('Y-m-d');
         $edate          = $endDate->format('Y-m-d');
 
+        $sendRecived_usd        = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
+
+        if ($request->selectedPrice > $sendRecived_usd) {
+            return response()->json(['errors' => ['error_amount' => ['Please make deposit. Your Deposit balance low']]], 422);
+        }
+
         //echo "Start Date: $sdate------END Date: $edate-----Current Date: $currentTime";
         // Check if there's any overlapping record
         $existingMining = MiningServicesBuyHistory::where('user_id', $this->userid)
@@ -287,13 +293,13 @@ class MiningController extends Controller
             $data['service_price']                  = $request->selectedPrice;
             $data['start_date']                     = $startDate->format('Y-m-d');
             $data['end_date']                       = $endDate->format('Y-m-d');
-            
+
             $duration  = $request->selectedDuration;
             $last_Id   = MiningServicesBuyHistory::insertGetId($data);
 
             //MiningServicesBuyHistory::create($data);
-            $miningCategoryRow   = MiningCategory::where('id',$request->mining_category_id)->first();
-            $m_cate_row          = !empty($miningCategoryRow->name) ? $miningCategoryRow->name : ""; 
+            $miningCategoryRow   = MiningCategory::where('id', $request->mining_category_id)->first();
+            $m_cate_row          = !empty($miningCategoryRow->name) ? $miningCategoryRow->name : "";
 
             $tran['user_id']     = $this->userid;
             $tran['type']        = 3; //Mining Machine purchage 
@@ -301,10 +307,6 @@ class MiningController extends Controller
             $tran['amount']      = $request->selectedPrice;
             $tran['description'] = "Mining Machine : [$m_cate_row], Duration : {$duration}";
             TransactionHistory::insert($tran);
-           
-
-
-
 
             $res['status']     = 1;
             $res['msg']        = "Mining machine successfully purchased";

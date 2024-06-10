@@ -11,28 +11,28 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Carbon\Carbon;
 
+
+// \Log::info('MessageSent event created with data:', [
+//     'username' => $username,
+//     'message' => $message,
+//     'created_at' => Carbon::now()->toDateTimeString(),
+// ]);
+
 class Message implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $username;
-    public $message;
-    public $community_slug;
-    public $created_at;
-
-    public function __construct(string $username, string $message, string $community_slug)
+  
+    public function __construct(
+        public string $username,
+        public string $message
+    )
     {
-        $this->username = $username;
-        $this->message = $message;
-        $this->community_slug = $community_slug;
-        $this->created_at = Carbon::now()->toDateTimeString();
     }
-     
 
     public function broadcastOn()
     {
-        //return ['chat'];
-        return new Channel('chat.' . $this->community_slug);
+        return ['chat'];
     }
 
     public function broadcastAs()

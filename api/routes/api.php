@@ -41,6 +41,7 @@ use App\Http\Middleware\CheckUserStatus;
 */
 Route::post('messages', [ChatController::class, 'message']);
 Route::get('/messages/{community_slug}', [ChatController::class, 'getMessages']);
+Route::get('/long-poll/{communitySlug}', [ChatController::class, 'longPoll']);
 Route::get('settingrowClient', [UnauthenticatedController::class, 'settingrowClient']);
 
 
@@ -110,6 +111,7 @@ Route::group([
     Route::get('checkLevelHistory', [UserController::class, 'checkLevelHistory']);
     Route::get('getLevelDetails', [UserController::class, 'getLevelDetails']);
     Route::get('getBalance', [UserController::class, 'getBalance']);
+    Route::get('transactionHistory', [UserController::class, 'transactionHistory']);
     Route::get('getCommunity', [UserController::class, 'getCommunity']);
     Route::get('adujustmentrow/{id}', [UserController::class, 'adujustmentrow']);
     Route::get('checkminusAmount', [UserController::class, 'checkminusAmount']);
@@ -291,6 +293,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'deposit'
 ], function () {
+    Route::get('getSendReceived', [DepositController::class, 'getSendReceived']);
     Route::get('getWithMethodList', [DepositController::class, 'getWithMethodList']);
     Route::get('getWithdrawRequest', [DepositController::class, 'getWithdrawRequest']);
     Route::post('depositRequest', [DepositController::class, 'depositRequest']);

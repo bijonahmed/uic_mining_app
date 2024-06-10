@@ -47,9 +47,10 @@ class UserController extends Controller
         }
     }
 
-    public function getBalance(){
+    public function transactionHistory()
+    {
 
-        $active_matching = MiningServicesBuyHistory ::where('user_id', $this->userid)->first();
+        $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
         $tranHistory     = TransactionHistory::where('user_id', $this->userid)->get();
 
         $today_date = date("Y-m-d");
@@ -61,52 +62,73 @@ class UserController extends Controller
             $service_price = 0;
             $machinestatus = "Not active";
         }
-     
-      // try {
-            $row            = User::find($this->userid);
-            $deposit        = Deposit::where('user_id',$this->userid)->where('status',1)->sum('deposit_amount');
-            $usdtAmount     = SendReceived::where('user_id',$this->userid)->where('wallet_type',2)->sum('amount');
-            $depositAmount  = abs($deposit - $service_price - $usdtAmount);
 
-            foreach ($tranHistory as $v) {
-                $depositrow = Deposit::where('id',$v->last_Id)->select('status')->first();
+        $tran = [];
+        foreach ($tranHistory as $v) {
+            $depositrow = Deposit::where('id', $v->last_Id)->select('status')->first();
 
-
-            if($v->type==1){
-                if($depositrow->status == 0){
+            if ($v->type == 1) {
+                if ($depositrow->status == 0) {
                     $dpstatus = 'Review';
-                }elseif($depositrow->status == 1){
+                } elseif ($depositrow->status == 1) {
                     $dpstatus = 'Approved';
-                }elseif($depositrow->status == 2){
+                } elseif ($depositrow->status == 2) {
                     $dpstatus = 'Reject';
                 }
             }
-               
 
-                $tran[] = [
-                    'id'             => $v->id,
-                    'user_id'        => $v->user_id,
-                    'type'           => $v->type,
-                    'depositStatus'  => $dpstatus,
-                    'dep_status'     => !empty($depositrow->status) ? $depositrow->status : "",
-                    'machinestatus'  => $machinestatus,
-                    'description'    => $v->description,
-                    'amount'         => $v->amount,
-                    'created_at'     => date("d-m-Y H:i:s", strtotime($v->created_at)),
-                ];
-            }
+            $tran[] = [
+                'id'             => $v->id,
+                'user_id'        => $v->user_id,
+                'type'           => $v->type,
+                'depositStatus'  => !empty($dpstatus) ? $dpstatus : "",
+                'dep_status'     => !empty($depositrow->status) ? $depositrow->status : "",
+                'machinestatus'  => $machinestatus,
+                'description'    => $v->description,
+                'amount'         => $v->amount,
+                'created_at'     => date("d-m-Y H:i:s", strtotime($v->created_at)),
+            ];
+        }
 
-            $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
-            $data['mining_amount']          = !empty($row->mining_amount) ? $row->mining_amount : 0;
-            $data['deposit_amount']         = number_format($depositAmount,2);
-            $data['transactionhistory']     = $tran;
+        $data['transactionhistory']     = $tran;
+        return response()->json($data);
+    }
 
-            return response()->json($data);
+    public function getBalance()
+    {
+
+        $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
+        $tranHistory     = TransactionHistory::where('user_id', $this->userid)->get();
+
+        $today_date = date("Y-m-d");
+        if ($active_matching && $active_matching->end_date >= $today_date) {
+            $enddate = $active_matching->end_date;
+            $service_price =  !empty($active_matching->service_price) ? $active_matching->service_price : 0;
+            $machinestatus = "Active";
+        } else {
+            $service_price = 0;
+            $machinestatus = "Not active";
+        }
+
+        // try {
+        $row            = User::find($this->userid);
+        $deposit        = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
+        $usdtAmount     = SendReceived::where('user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
+        $depositAmount  = $deposit - $service_price - $usdtAmount;
+
+        $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', 1)->sum('amount'); //UIC Amount
+        $row           = User::where('id', $this->userid)->first();
+        $result        = $row->mining_amount - (empty($sendRecv) ? 0 : $sendRecv);
+
+        $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
+        $data['mining_amount']          = $result;
+        $data['deposit_amount']         = number_format($depositAmount, 2);
+
+        return response()->json($data);
 
         // } catch (\Exception $e) {
         //     return response()->json(['error' => $e->getMessage()], 500);
         // }
-
 
     }
 
@@ -1062,8 +1084,6 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-
-
     public function deletewithdrawalAddress(Request $request)
     {
 
@@ -1453,59 +1473,50 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+    public function checkWalletType(Request $request)
+    {
 
+        $wallet_type         =  $request->wallet_type;
+        if ($wallet_type == 1) {
 
-
-    public function checkWalletType(Request $request){
-
-
-        $wallet_type =  $request->wallet_type; 
-        if($wallet_type == 1){
-            $row    = User::where('id',$this->userid)->first();
-            $data['amount'] = $row->mining_amount; 
+            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
+            $row           = User::where('id', $this->userid)->first();
+            $result        = $row->mining_amount - $sendRecv;
+            $data['amount'] = $result;
         }
 
-        if($wallet_type == 2){
-
-        $active_matching = MiningServicesBuyHistory ::where('user_id', $this->userid)->first();
-            
-        $today_date    = date("Y-m-d");
-        $service_price = ($active_matching && $active_matching->end_date >= $today_date) ? ($active_matching->service_price ?? 0) : 0;
-        $depositSum    = Deposit::where('user_id',$this->userid)->where('status',1)->sum('deposit_amount');
-        $usdtamount    = SendReceived::where('user_id',$this->userid)->where('wallet_type',$wallet_type)->sum('amount');
-        $result        = $depositSum - $service_price; 
-        $data['amount']= $result - $usdtamount;
-
+        if ($wallet_type == 2) {
+            $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
+            $today_date    = date("Y-m-d");
+            $service_price = ($active_matching && $active_matching->end_date >= $today_date) ? ($active_matching->service_price ?? 0) : 0;
+            $depositSum    = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
+            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
+            $result        = $depositSum - $service_price;
+            $data['amount'] = $result - $sendRecv;
         }
         return response()->json($data);
-
     }
 
+    public function checkUicAddress(Request $request)
+    {
 
-    public function checkUicAddress(Request $request){
-
-        $uic_address =  $request->uic_address; 
-        $row    = User::where('uic_address',$uic_address)->first();
-        if(!empty($row)){
+        $uic_address =  $request->uic_address;
+        $row    = User::where('uic_address', $uic_address)->first();
+        if (!empty($row)) {
             $data['status']     = 1;
             $data['response']   = $row;
-        }else{
+        } else {
             $data['status']     = 0;
             $data['response']   = "";
         }
         return response()->json($data);
-
     }
-
-
-
-
 
     public function checkLevelHistory()
     {
 
         $userId           = $this->userid;
-        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address' ,'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address', 'name', 'email', 'created_at', 'ref_id')->get();
 
         $level1_ids       = $checkL1->pluck('id')->toArray();
         // Fetch level 2 users based on level 1 IDs
@@ -1515,21 +1526,18 @@ class UserController extends Controller
         $checkL3          = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
         $level3_ids       = $checkL3->pluck('id')->toArray();
 
-
-        $data['level_1']  = $checkL1; 
+        $data['level_1']  = $checkL1;
         $data['level_2']  = $checkL2;
-        $data['level_3']  = $checkL3; 
+        $data['level_3']  = $checkL3;
 
         return response()->json($data);
     }
-
-
 
     public function getLevelDetails()
     {
 
         $userId           = $this->userid;
-        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address' ,'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address', 'name', 'email', 'created_at', 'ref_id')->get();
 
         $level1_ids       = $checkL1->pluck('id')->toArray();
         // Fetch level 2 users based on level 1 IDs
@@ -1539,14 +1547,11 @@ class UserController extends Controller
         $checkL3          = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
         $level3_ids       = $checkL3->pluck('id')->toArray();
 
-       
-
-        $data['level_1']  = count($level1_ids); 
+        $data['level_1']  = count($level1_ids);
         $data['level_2']  = count($level2_ids);
-        $data['level_3']  = count($level3_ids); 
-        $data['levels']   = $checkL1; 
-        $data['total']    = count($level1_ids) + count($level2_ids) + count($level3_ids); 
-
+        $data['level_3']  = count($level3_ids);
+        $data['levels']   = $checkL1;
+        $data['total']    = count($level1_ids) + count($level2_ids) + count($level3_ids);
 
         return response()->json($data);
     }
@@ -1596,7 +1601,6 @@ class UserController extends Controller
         $response = "Phone number successfully updated!";
         return response()->json($response);
     }
-
 
     public function changePasswordClient(Request $request)
     {
