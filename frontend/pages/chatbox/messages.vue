@@ -7,23 +7,21 @@
       </nav>
     </div>
 
-    <div class="wrapper-inline">
+    <div class="wrapper-inline message_box">
       <HeaderThird />
       <Footer />
       <!-- Page content start -->
       <main>
-        <div class="container">
-          <center>
-            <h4>
-              <u>{{ community_slug }}</u>
-            </h4>
-          </center>
+        <div class="conta">
           <!-- Start Chat HTML -->
           <div class="chat-box">
-            <div class="chat-header d-none">
+            <div class="chat-header">
+              <center><u class="text-white" style="text-transform: capitalize;">{{ communitySlug }}</u></center>
+              <span class="d-none">
               <input type="text" v-model="username" class="username-input" placeholder="Enter your username" readonly />
+            </span>
             </div>
-            <div class="chat-messages scrollarea" style="max-height: 250px;">
+            <div class="chat-messages scrollarea" style="max-height: 550px;">
               <div v-for="message in messages" :key="message.id"
                 :class="{ 'message-container': true, 'sent': message.username === username, 'received': message.username !== username }">
                 <div class="message">
@@ -141,7 +139,6 @@ const onScroll = () => {
 </script>
 
 
-
 <style scoped>
 /* Container styling */
 .container {
@@ -163,6 +160,8 @@ const onScroll = () => {
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background: #f9f9f9;
+  height: 85vh;
+  border-radius: 0;
 }
 
 /* Header styling */
@@ -194,7 +193,7 @@ const onScroll = () => {
 /* Message container styling */
 .message-container {
   display: flex;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .message-container.sent {
@@ -210,34 +209,64 @@ const onScroll = () => {
   padding: 10px 15px;
   border-radius: 15px;
   background: #333;
-  color: #fff;
+  color: #000;
+  width: 50%;
 }
 
 .sent .message {
-  background: #4a90e2;
+  
+  background: #fff;
   border-bottom-right-radius: 0;
+  box-shadow: 0 0 10px #0000004d;
+  padding: 3px 15px;
 }
-
+.sent .message-text{
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  font-size: 12px;
+  align-items: end;
+}
 .received .message {
-  background: #7b61ff;
+  background: #4a90e2;
   border-bottom-left-radius: 0;
+  box-shadow: 0 0 10px #0000004d;
+  padding: 5px 15px;
+}
+.received .message-username {
+  font-weight: bold;
+  margin-bottom: 2px;
+  /* text-align: end; */
+}
+.received .message-text small{
+  /* align-self: flex-start; */
 }
 
 .message-username {
   font-weight: bold;
   margin-bottom: 5px;
-  color: #fff;
+  color: green;
+  font-size: 12px;
 }
 
+.received .message-username {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #ffc458;
+  font-size: 12px;
+}
 .message-text {
   display: flex;
   flex-direction: column;
-  color: #ddd;
+  color: #474646;
 }
-
+.received .message-text{
+  color: #fff;
+}
 .message-text small {
   align-self: flex-end;
-  color: #bbb;
+  color: #5c5a5a;
+  font-size: 10px;
 }
 
 /* Form styling */
@@ -265,5 +294,8 @@ const onScroll = () => {
   flex: 1; /* Take up all available space */
   overflow-y: auto;
   padding: 10px;
+}
+.message_box main{
+  margin-top: 50px;
 }
 </style>

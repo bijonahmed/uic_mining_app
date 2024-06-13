@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Chat;
+
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\MyMessage;
 use Illuminate\Http\Request;
 use App\Events\Message;
-
 
 class ChatController extends Controller
 {
@@ -28,24 +28,22 @@ class ChatController extends Controller
     {
 
         $data = $request->validate([
-           // 'username' => 'required',
+            // 'username' => 'required',
             'message' => 'required',
             'community_slug' => 'required',
         ]);
 
-     
-     //  event(new Message($this->email, $data['message'], $data['community_slug']));
-       //event(new Message('b@gmail.com', $data['message'])); // Example message number
-       //event(new Message($request->input('username'), $request->input('message')));
-       //return [];
+        //event(new Message($this->email, $data['message'], $data['community_slug']));
+        //event(new Message('b@gmail.com', $data['message'])); // Example message number
+        //event(new Message($request->input('username'), $request->input('message')));
+        //return [];
         $rdata['user_id']        = $this->userid;
         $rdata['community_slug'] = $request->community_slug;
         $rdata['message']        = $request->message;
-        $rdata['username']       = $this->email;///$request->username;
+        $rdata['username']       = $this->email; ///$request->username;
         $message = MyMessage::insertGetId($rdata);
 
         return response()->json($message);
-         
     }
 
     public function getMessages($community_slug)
@@ -54,12 +52,12 @@ class ChatController extends Controller
 
         $data = [];
         foreach ($messages as $v) {
-            $check = User::where('email',$v->username)->select('name')->first();
+            $check = User::where('email', $v->username)->select('name')->first();
             $data[] = [
                 'id'                => $v->id,
                 'user_id'           => $v->user_id,
                 'username'          => $v->username,
-                'name'              => !empty($check) ? $check->name: "",
+                'name'              => !empty($check) ? $check->name : "",
                 'community_slug'    => $v->community_slug,
                 'message'           => $v->message,
                 'created_at'        => $v->created_at,
@@ -69,25 +67,16 @@ class ChatController extends Controller
         return response()->json($data, 200);
     }
 
-
-
     public function longPoll(Request $request, $communitySlug)
     {
-        
         $lastMessageId = $request->query('last_message_id', 0);
-
         while (true) {
             $messages = MyMessage::where('community_slug', $communitySlug)
                 ->get();
-
             if ($messages->count() > 0) {
                 return $messages;
             }
-
-            // Sleep for a short time to avoid high CPU usage
             usleep(5); // 500ms
         }
-           
     }
-
 }

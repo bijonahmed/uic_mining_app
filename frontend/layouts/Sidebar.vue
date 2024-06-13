@@ -63,16 +63,7 @@
 							alt=""><strong>Community</strong></nuxt-link>
 				</li>
 
-				<li v-if="!isLoggedIn">
-					<nuxt-link to='/login'><img src="/assets/img/content/icons/9.png"
-							alt=""><strong>Login</strong></nuxt-link>
-				</li>
-
-				<li v-if="!isLoggedIn">
-					<nuxt-link to='/register'><img src="/assets/img/content/icons/9.png"
-							alt=""><strong>Register</strong></nuxt-link>
-				</li>
-
+				
 
 				<!-- <li v-if="isLoggedIn">
 					<nuxt-link to="/deposit"><img src="/assets/img/content/icons/8.png" alt=""><strong
@@ -104,6 +95,17 @@
 					<nuxt-link to="/login"><img src="/assets/img/content/icons/10.png" alt=""><strong
 							class="special">User Profile</strong></nuxt-link>
 				</li>
+
+				<li v-if="!isLoggedIn">
+					<nuxt-link to='/login'><img src="/assets/img/content/icons/9.png"
+							alt=""><strong>Login</strong></nuxt-link>
+				</li>
+
+				<li v-if="!isLoggedIn">
+					<nuxt-link to='/register'><img src="/assets/img/content/icons/9.png"
+							alt=""><strong>Register</strong></nuxt-link>
+				</li>
+
 
 				<li v-if="isLoggedIn">
 					<a href="#" @click="logout"><i class="fa fa-sign-out" aria-hidden="true"></i><strong class="special">Logout</strong></a>

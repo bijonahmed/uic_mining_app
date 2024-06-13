@@ -53,7 +53,7 @@
                 <div class="flex-column flex-md-row">
                   <h3 class="">USDT Wallet</h3>
                   <nuxt-link to="/transaction-history"><p class="mb-0 font-weight-medium">
-                    <i class="txt-red fa fa-arrow-down mr-10"></i>{{ depositamount }} USDT
+                    <i class="txt-red fa fa-arrow-down mr-10"></i>{{ usdt_amount }} USDT
                   </p></nuxt-link>
                 </div>
               </div>
@@ -72,8 +72,7 @@
           <br />
           <div class="container">
             <div class="row">
-              <div class="col-4"></div>
-              <div class="col-4">
+              <div class="col-md-12">
                 <center>
                   <button class="btn btn-primary" type="button">Deposit</button>
                 </center>
@@ -87,11 +86,11 @@
                   </div>
                   <div class="mb-3">
                     <label for="currency" class="form-label">Currency</label>
-                    <select class="form-select" v-model="insertdata.payment_method">
+                    <select class="form-select form-control" v-model="insertdata.payment_method">
                       <option value="USDT (TRC20)">USDT (TRC20)</option>
                     </select>
                     <span class="text-danger" v-if="errors.payment_method">{{ errors.payment_method[0] }}</span>
-                    <img src="/assets/qrcode.png" alt="QR Code" />
+                    <img src="/assets/qrcode.png" alt="QR Code"  style="height: 100px; margin: 20px auto; display: flex;"/> <br>
                     <label>Input the Txid</label>
                     <input type="text" v-model="insertdata.trxId" class="form-control" />
                     <span class="text-danger" v-if="errors.trxId">{{ errors.trxId[0] }}</span>
@@ -129,7 +128,7 @@ const loading = ref(true);
 const buttonClicked = ref(false);
 
 const errors_amount = ref('');
-const depositamount = ref(0);
+const usdt_amount = ref(0);
 const available_balance = ref(0);
 const mining_amount = ref(0);
 
@@ -142,7 +141,7 @@ const fetchData = async () => {
     const response = await axios.get("/user/getBalance");
     console.log("Response: ", response.data);
     available_balance.value = response.data.available_balance;
-    depositamount.value = response.data.deposit_amount;
+    usdt_amount.value = response.data.usdt_amount;
     mining_amount.value = response.data.mining_amount;
   } catch (error) {
     console.error("Error fetching data:", error);

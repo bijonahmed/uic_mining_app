@@ -37,8 +37,8 @@
                                     <div class="wallet-address">
                                         <h3 class="w-text mb-30 mt-0">Send currency</h3>
                                         <div class="loading-indicator" v-if="loading" style="text-align: center">
-        <Loader />
-      </div>
+                                                     <Loader />
+                                        </div>
                                         <div class="txt-left">
                                             <label class="g-text">Reciver UIC Address</label>
                                             <div class="form-row-group with-icons">
@@ -254,6 +254,7 @@ try {
         error_noti();
     } else {
         insertdata.receiver_name = response.data.response.name;
+        insertdata.receiver_user_id = response.data.response.id;
     }
 } catch (error) {
     console.error(error);  // Log the error for debugging
@@ -282,6 +283,7 @@ const fetchData = async () => {
  
 
 const insertdata = reactive({
+    receiver_user_id:'',
     receiver_uic_address: "",
     receiver_name: "",
     password: "",
@@ -293,6 +295,7 @@ const insertdata = reactive({
 const submitForm = () => {
   //buttonClicked.value = true;
   const formData = new FormData();
+  formData.append("receiver_user_id", insertdata.receiver_user_id);
   formData.append("receiver_uic_address", insertdata.receiver_uic_address);
   formData.append("receiver_name", insertdata.receiver_name);
   formData.append("receiver_name", insertdata.receiver_name);
@@ -303,8 +306,7 @@ const submitForm = () => {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
-  axios
-    .post("/deposit/sendReciverBuySell", formData, { headers })
+  axios.post("/deposit/sendReciverBuySell", formData, { headers })
     .then((res) => {
         fetchData()
       document.getElementById("formrest").reset();

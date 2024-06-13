@@ -21,6 +21,7 @@ use App\Models\RuleModel;
 use App\Models\SendReceived;
 use App\Models\TransactionHistory;
 use App\Models\WalletAddress;
+use App\Models\kyc;
 use App\Models\Withdraw;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
@@ -45,6 +46,133 @@ class UserController extends Controller
             $this->userid = $user->id;
             $this->email = $user->email;
         }
+    }
+
+    public function insertKycDriving(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'selectedOptionDriving'    => 'required',
+            'frontFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'backFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $data['name']           = !empty($request->selectedOptionDriving) ? $request->selectedOptionDriving : "";
+        $data['user_id']        = $this->userid;
+
+        if (!empty($request->file('frontFile'))) {
+            $files = $request->file('frontFile');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['drivingFrontFile'] = $file_url;
+        }
+
+        if (!empty($request->file('backFile'))) {
+            $files = $request->file('backFile');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['drivingBackFile'] = $file_url;
+        }
+        kyc::insert($data);
+
+        $response = [
+            'message' => 'Has been successfully send KYC',
+        ];
+        return response()->json($response);
+    }
+
+    public function insertKycPassport(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'selectedOptionPassport'    => 'required',
+            'passportFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $data['name']           = !empty($request->selectedOptionPassport) ? $request->selectedOptionPassport : "";
+        $data['user_id']        = $this->userid;
+
+        if (!empty($request->file('passportFile'))) {
+            $files = $request->file('passportFile');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['passportFile'] = $file_url;
+        }
+        kyc::insert($data);
+
+        $response = [
+            'message' => 'Has been successfully send KYC',
+        ];
+        return response()->json($response);
+    }
+
+    public function insertKycCnic(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'selectedOptionCnic'    => 'required',
+            'frontFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'backFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $data['name']           = !empty($request->selectedOptionCnic) ? $request->selectedOptionCnic : "";
+        $data['user_id']        = $this->userid;
+
+        if (!empty($request->file('frontFile'))) {
+            $files = $request->file('frontFile');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['cnicFrontFile'] = $file_url;
+        }
+
+        if (!empty($request->file('backFile'))) {
+            $files = $request->file('backFile');
+            $fileName = Str::random(20);
+            $ext = strtolower($files->getClientOriginalExtension());
+            $path = $fileName . '.' . $ext;
+            $uploadPath = '/backend/files/';
+            $upload_url = $uploadPath . $path;
+            $files->move(public_path('/backend/files/'), $upload_url);
+            $file_url = $uploadPath . $path;
+            $data['cnicBackFile'] = $file_url;
+        }
+
+        kyc::insert($data);
+
+        $response = [
+            'message' => 'Has been successfully send KYC',
+        ];
+        return response()->json($response);
     }
 
     public function transactionHistory()
@@ -98,38 +226,50 @@ class UserController extends Controller
     {
 
         $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
-        $tranHistory     = TransactionHistory::where('user_id', $this->userid)->get();
 
-        $today_date = date("Y-m-d");
-        if ($active_matching && $active_matching->end_date >= $today_date) {
-            $enddate = $active_matching->end_date;
-            $service_price =  !empty($active_matching->service_price) ? $active_matching->service_price : 0;
-            $machinestatus = "Active";
-        } else {
-            $service_price = 0;
-            $machinestatus = "Not active";
-        }
+        $today_date             = date("Y-m-d");
+        $service_price          = $active_matching && $active_matching->end_date >= $today_date ? (!empty($active_matching->service_price) ? $active_matching->service_price : 0) : 0;
 
-        // try {
-        $row            = User::find($this->userid);
-        $deposit        = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
-        $usdtAmount     = SendReceived::where('user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
-        $depositAmount  = $deposit - $service_price - $usdtAmount;
+        $row                    = User::find($this->userid);
+        $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
 
-        $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', 1)->sum('amount'); //UIC Amount
-        $row           = User::where('id', $this->userid)->first();
-        $result        = $row->mining_amount - (empty($sendRecv) ? 0 : $sendRecv);
+        $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
+        $usdtAmount             = SendReceived::where('user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
+        $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount;
+
+        $sendRecv               = SendReceived::where('user_id', $this->userid)->where('wallet_type', 1)->sum('amount'); //UIC Amount
+        $row                    = User::where('id', $this->userid)->first();
+        $result                 = $row->mining_amount;
 
         $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
         $data['mining_amount']          = $result;
-        $data['deposit_amount']         = number_format($depositAmount, 2);
+        $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
 
         return response()->json($data);
+    }
 
-        // } catch (\Exception $e) {
-        //     return response()->json(['error' => $e->getMessage()], 500);
-        // }
+    public function checkWalletType(Request $request)
+    {
 
+        $wallet_type         =  $request->wallet_type;
+        if ($wallet_type == 1) {
+
+            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
+            $row           = User::where('id', $this->userid)->first();
+            $result        = $row->mining_amount;
+            $data['amount'] = $result;
+        }
+
+        if ($wallet_type == 2) {
+            $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
+            $today_date    = date("Y-m-d");
+            $service_price = ($active_matching && $active_matching->end_date >= $today_date) ? ($active_matching->service_price ?? 0) : 0;
+            $depositSum    = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
+            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
+            $result        = $depositSum - $service_price;
+            $data['amount'] = $result - $sendRecv;
+        }
+        return response()->json($data);
     }
 
     public function me()
@@ -1473,30 +1613,6 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function checkWalletType(Request $request)
-    {
-
-        $wallet_type         =  $request->wallet_type;
-        if ($wallet_type == 1) {
-
-            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
-            $row           = User::where('id', $this->userid)->first();
-            $result        = $row->mining_amount - $sendRecv;
-            $data['amount'] = $result;
-        }
-
-        if ($wallet_type == 2) {
-            $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
-            $today_date    = date("Y-m-d");
-            $service_price = ($active_matching && $active_matching->end_date >= $today_date) ? ($active_matching->service_price ?? 0) : 0;
-            $depositSum    = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
-            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
-            $result        = $depositSum - $service_price;
-            $data['amount'] = $result - $sendRecv;
-        }
-        return response()->json($data);
-    }
-
     public function checkUicAddress(Request $request)
     {
 
@@ -1767,6 +1883,14 @@ class UserController extends Controller
         $response  = User::where('id', $this->userid)->first();
         return response()->json($response);
     }
+
+
+    public function checkycData()
+        {
+            $response  = Kyc::where('user_id', $this->userid)->first();
+            return response()->json($response);
+        }
+    
 
     public function getFastLevel()
     {

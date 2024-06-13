@@ -204,8 +204,8 @@ nav.menu ul li{
 	display: block;
 	width: 100%;
 }
-nav.menu ul li img{
-	max-width: 23px
+nav.menu ul li img,nav.menu ul li i{
+	width: 18px;
 }
 nav.menu ul li strong{
 	position: relative;
@@ -242,7 +242,7 @@ nav.menu ul.main-menu > li.active i{
 
 nav.menu ul.main-menu>li>a>i{
 	display: inline-block;
-	width: 30px;
+	width: 18px;
 	font-size: 18px;
 	color: #777777;
 }
@@ -597,7 +597,7 @@ div.container{
 	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.2);
 }
 .form-row-group .form-row{
-	padding: 0 10px;
+	padding: 8px 12px;
 }
 .form-row-group.with-icons .form-row i{
 	position: absolute;
@@ -3385,4 +3385,17 @@ footer ul li a i {
 .serv-item{
 	padding-top: 0px;
 	width: 100%;
+}
+
+@media(max-width: 768px){
+	.resources-card-wrapper{
+		display: block;
+	}
+	.wallet-card{
+		width: 100%;
+    	margin: 10px 0px;
+	}
+	.supply_container .resources-card-wrapper{
+		display: flex;
+	}
 }

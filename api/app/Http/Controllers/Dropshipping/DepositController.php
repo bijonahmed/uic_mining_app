@@ -218,6 +218,7 @@ class DepositController extends Controller
 
         try {
             $validator = Validator::make($request->all(), [
+                'receiver_user_id'      => 'required',
                 'receiver_uic_address'  => 'required',
                 'receiver_name'         => 'required',
                 'password'              => 'required',
@@ -256,17 +257,33 @@ class DepositController extends Controller
             }
  
             if($request->wallet_type == 1){
-               
-                if ($request->amount <= 0) {
-                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
-                }
+            
+            if ($request->amount <= 0) {
+                return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
+            }
 
-                $row           = User::where('id',$this->userid)->first();
-                $result        = $row->mining_amount - $sendRecived_uic;
-                
-                if ($request->amount > $result) {
-                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
-                }
+            $row               = User::where('id',$this->userid)->first();
+            $mining_amount     = $row->mining_amount - $sendRecived_uic;
+
+            if ($request->amount > $mining_amount) {
+                return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
+            }
+
+            
+            //For Reciver 
+            $receiver_row                       = User::where('id',$request->receiver_user_id)->first();
+            #echo "Reciver row {$receiver_row->mining_amount}<br/>";
+            $initialAmount                      = $receiver_row->mining_amount; 
+            $mining_amount_final                = bcadd($initialAmount, (string) $request->amount, 7); //0.0000001 + $request->amount; // 10 decimal places
+            $reciverupdate['mining_amount']     =  $mining_amount_final;
+            User::where('id', $request->receiver_user_id)->update($reciverupdate);
+            //END
+
+            //For Sender 
+            $intAmount                          = $row->mining_amount; 
+            $requestAmount                      = (string) $request->amount; 
+            $senderupdate['mining_amount']      = bcsub($intAmount, $requestAmount, 7); // 7 decimal places
+            User::where('id', $this->userid)->update($senderupdate);
             }
 
             if($request->wallet_type == 2){
@@ -282,12 +299,14 @@ class DepositController extends Controller
            
           
             $data = array(
+                'receiver_user_id'       => $request->receiver_user_id,
                 'receiver_uic_address'   => $request->receiver_uic_address,
                 'receiver_name'          => $request->receiver_name,
                 'password'               => $request->password,
                 'wallet_type'            => $request->wallet_type,
                 'amount'                 => $request->amount,
-                'user_id'                => $this->userid
+                'user_id'                => $this->userid,
+                'sender_user_id'         => $this->userid
             );
             $last_Id = SendReceived::insertGetId($data);
 

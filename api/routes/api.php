@@ -106,6 +106,10 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'user'
 ], function () {
+    Route::get('checkycData', [UserController::class, 'checkycData']);
+    Route::post('insertKycDriving', [UserController::class, 'insertKycDriving']);
+    Route::post('insertKycPassport', [UserController::class, 'insertKycPassport']);
+    Route::post('insertKycCnic', [UserController::class, 'insertKycCnic']);
     Route::get('checkWalletType', [UserController::class, 'checkWalletType']);
     Route::get('checkUicAddress', [UserController::class, 'checkUicAddress']);
     Route::get('checkLevelHistory', [UserController::class, 'checkLevelHistory']);

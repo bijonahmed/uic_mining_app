@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <section class="bal-section container">
+      <section class="bal-section  container">
         <div class="resources-card-wrapper">
           <div class="wallet-card mr-10 round">
             <div class="flex-column flex-md-row">
@@ -149,7 +149,7 @@
         </div>
       </div>
 
-      <section class="bal-section container mt-30">
+      <section class="bal-section supply_container container mt-30">
         <h4 class="title-main mt-0">Cryptocoins Balance</h4>
         <div class="resources-card-wrapper">
           <div class="resources-card mr-10">

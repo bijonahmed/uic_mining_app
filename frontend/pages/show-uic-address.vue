@@ -29,11 +29,12 @@
                         </div>
 
                         <div class="ref-content">
-                                    <h4 class="mt-0">Your UIC Address</h4>
-                                    <div class="form-row-group relative">
-                                        <div class="form-row no-padding">
+                                    <h4 class="mt-0 text-center">Your UIC Address</h4>
+                                    <img src="/assets/qrcode.png" alt="QR Code"  style="height: 100px; margin: 5px auto; display: flex;"/> <br>
+                                    <div class="form-row-group relative">                                        
+                                        <div class="form-row no-padding" style="padding: 10px 20px;">
                                             <strong id="invite_link" class="textToCopy"> {{ uicAddress }}</strong>
-                                            <a href="#" class="ref-copy" @click="copyAddressToClipboard()"><i class="fa fa-copy"></i></a>
+                                            <a href="#" class="ref-copy"   @click="copyAddressToClipboard()"><i class="fa fa-copy"></i></a>
                                         </div>
                                     </div>
                                   
@@ -154,5 +155,17 @@ onMounted(async () => {
     font-size: 10px;
     padding: 1px 10px;
     text-align: center;
+}
+.ref-copy{
+    padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.ref-copy i{
+    color: #fff;
 }
 </style>
