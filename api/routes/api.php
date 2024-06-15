@@ -106,6 +106,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'user'
 ], function () {
+    Route::post('sweapCalculation', [UserController::class, 'sweapCalculation']);
     Route::get('checkycData', [UserController::class, 'checkycData']);
     Route::post('insertKycDriving', [UserController::class, 'insertKycDriving']);
     Route::post('insertKycPassport', [UserController::class, 'insertKycPassport']);

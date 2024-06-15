@@ -330,9 +330,6 @@ class DepositController extends Controller
     public function withdrawRequest(Request $request)
     {
  
-
-
-
         try {
             $validator = Validator::make($request->all(), [
                 'withdrawal_method'  => 'required',

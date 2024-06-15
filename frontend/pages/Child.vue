@@ -11,7 +11,7 @@
         <div class="d-flex align-items-center mt-30">
           <div class="d-flex flex-grow">
             <div class="mr-auto">
-              <h1 class="b-val" v-if="isLoggedIn">2,589.50 USDT</h1>
+              <h1 class="b-val" v-if="isLoggedIn">{{ currentPrice }} USDT</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
                 <p style="color: white">CURRENT PRICE</p>
               </p>
@@ -54,7 +54,7 @@
               <!-- <img src="/assets/img/return-on-investment.png" class="max50" alt="" /> -->
               <h3 class="">Circulating Supply</h3>
               <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
-                8,954.3 UIC
+                {{ circulatingSupply }} UIC
               </p>
               <p class="mb-0 font-weight-medium" v-else>
                 0 UIC
@@ -67,7 +67,7 @@
               <!-- <img src="/assets/img/2422796.png" class="max50" alt="" /> -->
               <h3 class="">Market Cap</h3>
               <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
-                1.269 
+                {{ marketCap }}
               </p>
               <p class="mb-0 font-weight-medium" v-else>
                 >0 
@@ -88,11 +88,7 @@
             <nuxt-link to="/login" class="btn btn-link btn-lg button custom-btn">Buy Mining Machine</nuxt-link>
           </span>
         </center>
-
-        <!-- ===={{ category_1 }}<br/>
-        ===={{ category_2 }}<br/>
-        ===={{ category_3 }}<br/>
-        ===={{ category_4 }}<br/> -->
+ 
 
         <div class="row">
           <div class="col text-center">
@@ -193,17 +189,39 @@ const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 const loading = ref(true);
 const maximum_supply = ref(0);
+const circulatingSupply = ref(0);
+const marketCap = ref(0);
+const currentPrice = ref(0);
 const total_supply = ref(0);
 const category_1 = ref(null);
 const category_2 = ref(null);
 const category_3 = ref(null);
 const category_4 = ref(null);
 
+
+
+
+
+const getBalances = async () => {
+  loading.value = true;
+  try {
+    const response = await axios.get("/user/getBalance");
+      circulatingSupply.value = response.data.circulatingSupply;
+      marketCap.value = response.data.marketCap;
+      currentPrice.value = response.data.currentPrice;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+
+
 const fetchData = async () => {
   try {
     const response = await axios.get("/settingrowClient");
     console.log("Response data:", response.data.data.maximum_supply);
-    // Assuming maximum_supply and total_supply are DOM elements or component state
     maximum_supply.value = response.data.data.maximum_supply;
     total_supply.value = response.data.data.total_supply;
   } catch (error) {
@@ -211,14 +229,11 @@ const fetchData = async () => {
   }
 };
 
+
+
 const checkMiningMatching = async () => {
   try {
     const response = await axios.get("/mining/checkMiningInfo");
-    console.log("Response data:==11====", response.data.category_1);
-    console.log("Response data:==22====", response.data.category_2);
-    console.log("Response data:==33====", response.data.category_3);
-    console.log("Response data:==44====", response.data.category_4);
-
     category_1.value = response.data.category_1;
     category_2.value = response.data.category_2;
     category_3.value = response.data.category_3;
@@ -228,6 +243,7 @@ const checkMiningMatching = async () => {
   }
 };
 
+getBalances();
 fetchData();
 checkMiningMatching();
 

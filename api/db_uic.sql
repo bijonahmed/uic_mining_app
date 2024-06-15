@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2024 at 03:29 AM
+-- Generation Time: Jun 16, 2024 at 12:45 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -474,7 +474,8 @@ CREATE TABLE `deposit` (
 --
 
 INSERT INTO `deposit` (`id`, `depositID`, `trxId`, `user_id`, `deposit_amount`, `receivable_amount`, `payment_method`, `depscription`, `wallet_address`, `status`, `approved_by`, `created_at`, `updated_at`) VALUES
-(1, 'D.64986d86a17424eeac96b08a6d519059', 'sdsdl0ekpd', 3, 100.00, NULL, 'USDT (TRC20)', 'D.64986d86a17424eeac96b08a6d519059', NULL, 1, NULL, '2024-06-10 12:34:41', '2024-06-10 12:34:41');
+(1, 'D.64986d86a17424eeac96b08a6d519059', 'sdsdl0ekpd', 3, 100.00, NULL, 'USDT (TRC20)', 'D.64986d86a17424eeac96b08a6d519059', NULL, 1, NULL, '2024-06-10 12:34:41', '2024-06-10 12:34:41'),
+(2, 'D.78679495fe70bfa486d8aaff1a2e4aa9', 'TPpMvdKfhENfJqYZsDJQLgEopMRBy15jeU', 3, 100.00, 100.00, 'USDT (TRC20)', 'D.78679495fe70bfa486d8aaff1a2e4aa9', NULL, 1, 1, '2024-06-16 02:48:38', '2024-06-16 02:51:15');
 
 -- --------------------------------------------------------
 
@@ -1853,6 +1854,9 @@ CREATE TABLE `setting` (
   `maximum_transfer_amount_to_other_user` double(10,2) DEFAULT NULL,
   `transfer_fee_fixed_amount` double(10,2) DEFAULT NULL,
   `traansfer_fee_on_percentage` double(10,2) DEFAULT NULL,
+  `liquidity_total_supply` varchar(255) DEFAULT NULL,
+  `beganing_price` varchar(255) DEFAULT NULL,
+  `circlation` varchar(255) DEFAULT NULL,
   `update_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
@@ -1862,8 +1866,8 @@ CREATE TABLE `setting` (
 -- Dumping data for table `setting`
 --
 
-INSERT INTO `setting` (`id`, `name`, `deposit_service_charge`, `convert_php_amt`, `withdraw_service_charge`, `withdraw_minimum_amount`, `withdraw_maximum_amount`, `minimum_trade_amount`, `minimum_deposit_amount`, `trade_fee`, `tel`, `email`, `address`, `whatsApp`, `emergency`, `photo`, `description`, `copyright`, `status`, `admin_photo`, `admin_name`, `admin_email`, `admin_phone`, `meta_keywords`, `meta_description`, `pphoto`, `bg_color`, `currency`, `openinig_balance_date`, `reffer_bonus`, `maximum_supply`, `total_supply`, `openinig_balance_comments`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `store_policy`, `crypto_wallet_address`, `master_pass_acc_no`, `website`, `telegram`, `register_bonus`, `mininmum_deposit_amount`, `maximum_deposit_amount`, `minimum_withdrawal`, `maximum_withdrawal`, `level_1_bonus`, `level_2_bonus`, `level_3_bonus`, `daily_max_withdraw_request`, `withdrawal_free_amount`, `withdrawal_free_on_percentage`, `mimumun_transfer_amount_to_other_user`, `maximum_transfer_amount_to_other_user`, `transfer_fee_fixed_amount`, `traansfer_fee_on_percentage`, `update_by`, `created_at`, `updated_at`) VALUES
-(1, 'UIC', 5, 64, 5, 20, 4000, 5, 10, 6, '+44245454545', 'uic@abcd.com', 'Addres', '00000055555', '+000000', 'pic/2tAjiUpJ0X8GziIrKJJJ.png', 'Business Description', 'Copyright © 2024 uic . All Rights Reserved', 1, 'pic/ZOdc8nsWAMY1YELkp9zH.jpg', 'admin', 'info@admin.com', '+44245454545', NULL, NULL, '', '#ffffff', '$', '2020-05-13', 5, '214748364722333', '2147483647343433', NULL, 'https://www.fiverr.com', 'https://www.facebook.com', 'https://web.whatsapp.com/', '#', '', 'TPpMvdKfhENfJqYZsDJQLgEopMRBy15jeU', '225588996633', 'http://winup360.com', '116898999999', 5, 55.00, 5.00, 5.00, 5.00, 3, 2, 1, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 50.00, 2993, '2024-05-12 05:32:50', '2024-05-12 03:42:05');
+INSERT INTO `setting` (`id`, `name`, `deposit_service_charge`, `convert_php_amt`, `withdraw_service_charge`, `withdraw_minimum_amount`, `withdraw_maximum_amount`, `minimum_trade_amount`, `minimum_deposit_amount`, `trade_fee`, `tel`, `email`, `address`, `whatsApp`, `emergency`, `photo`, `description`, `copyright`, `status`, `admin_photo`, `admin_name`, `admin_email`, `admin_phone`, `meta_keywords`, `meta_description`, `pphoto`, `bg_color`, `currency`, `openinig_balance_date`, `reffer_bonus`, `maximum_supply`, `total_supply`, `openinig_balance_comments`, `fblink`, `twitterlink`, `linkdinlink`, `instragramlink`, `store_policy`, `crypto_wallet_address`, `master_pass_acc_no`, `website`, `telegram`, `register_bonus`, `mininmum_deposit_amount`, `maximum_deposit_amount`, `minimum_withdrawal`, `maximum_withdrawal`, `level_1_bonus`, `level_2_bonus`, `level_3_bonus`, `daily_max_withdraw_request`, `withdrawal_free_amount`, `withdrawal_free_on_percentage`, `mimumun_transfer_amount_to_other_user`, `maximum_transfer_amount_to_other_user`, `transfer_fee_fixed_amount`, `traansfer_fee_on_percentage`, `liquidity_total_supply`, `beganing_price`, `circlation`, `update_by`, `created_at`, `updated_at`) VALUES
+(1, 'UIC', 5, 64, 5, 20, 4000, 5, 10, 6, '+44245454545', 'uic@abcd.com', 'Addres', '00000055555', '+000000', 'pic/2tAjiUpJ0X8GziIrKJJJ.png', 'Business Description', 'Copyright © 2024 uic . All Rights Reserved', 1, 'pic/ZOdc8nsWAMY1YELkp9zH.jpg', 'admin', 'info@admin.com', '+44245454545', NULL, NULL, '', '#ffffff', '$', '2020-05-13', 5, '214748364722333', '120000000', NULL, 'https://www.fiverr.com', 'https://www.facebook.com', 'https://web.whatsapp.com/', '#', '', 'TPpMvdKfhENfJqYZsDJQLgEopMRBy15jeU', '225588996633', 'http://winup360.com', '116898999999', 5, 55.00, 5.00, 5.00, 5.00, 3, 2, 1, 5.00, 5.00, 5.00, 5.00, 5.00, 5.00, 50.00, '1000', '0.0000083333', '66666666', 2993, '2024-05-12 05:32:50', '2024-05-12 03:42:05');
 
 -- --------------------------------------------------------
 
@@ -1889,6 +1893,31 @@ CREATE TABLE `states` (
   `name` varchar(30) NOT NULL,
   `country_id` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `swaphistory`
+--
+
+CREATE TABLE `swaphistory` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `wallet_type_frm` varchar(255) DEFAULT NULL,
+  `wallet_type_to` varchar(255) DEFAULT NULL,
+  `request_amount` decimal(10,2) DEFAULT NULL,
+  `swap_amount` varchar(255) DEFAULT NULL,
+  `swape_date` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `swaphistory`
+--
+
+INSERT INTO `swaphistory` (`id`, `user_id`, `wallet_type_frm`, `wallet_type_to`, `request_amount`, `swap_amount`, `swape_date`, `created_at`, `updated_at`) VALUES
+(1, 3, 'USDT', 'UIC', 50.00, '1.416607', '2024-06-16', '2024-06-15 22:41:35', '2024-06-15 22:41:35');
 
 -- --------------------------------------------------------
 
@@ -1940,7 +1969,8 @@ INSERT INTO `transaction_history` (`id`, `user_id`, `type`, `last_Id`, `descript
 (26, 3, 4, 20, 'Send/Receive-UIC Amount', '0.0000001', '2024-06-10 19:23:37', '2024-06-10 19:23:37'),
 (27, 3, 4, 21, 'Send/Receive-UIC Amount', '0.0000003', '2024-06-10 19:24:50', '2024-06-10 19:24:50'),
 (28, 3, 4, 22, 'Send/Receive-UIC Amount', '0.0000002347', '2024-06-10 19:25:30', '2024-06-10 19:25:30'),
-(29, 3, 4, 23, 'Send/Receive-UIC Amount', '0.0000002', '2024-06-10 19:29:54', '2024-06-10 19:29:54');
+(29, 3, 4, 23, 'Send/Receive-UIC Amount', '0.0000002', '2024-06-10 19:29:54', '2024-06-10 19:29:54'),
+(30, 3, 1, 2, 'Deposit', '100', '2024-06-15 20:48:38', '2024-06-15 20:48:38');
 
 -- --------------------------------------------------------
 
@@ -2019,9 +2049,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `mining_amount`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
-(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, 1, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-06-06 00:10:10', '2023-06-22 03:20:43', '2024-06-06 06:06:41', 1, NULL),
+(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, 1, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-06-16 02:50:40', '2023-06-22 03:20:43', '2024-06-15 20:50:40', 1, NULL),
 (2, NULL, '6f21357f86df3ce24ce21c1a82f49a7d5d13', '5726413', 1, NULL, 2, 'r@gmail.com', 0.00000010, '0.0000011', 1, 'r@gmail.com', 'Rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$pvmqv7CHQ0Vn.oP8SNl0I.SOIxaI7eyuMTRuhb05bIsye7R35ZUwi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-13 07:27:28', '2024-05-25 12:16:12', '2024-06-13 01:27:28', 1, NULL),
-(3, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13', '9696955', 2, NULL, 2, 'b@gmail.com', 2.00000000, '0.0002350', 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-13 06:32:53', '2024-05-26 21:26:09', '2024-06-13 00:32:53', 1, NULL),
+(3, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13', '9696955', 2, NULL, 2, 'b@gmail.com', 2.00000000, '0.0002350', 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-16 00:56:40', '2024-05-26 21:26:09', '2024-06-15 18:56:40', 1, NULL),
 (4, NULL, '6f21357f86df3ce24dfdfdfce21c1a82f49a7d5d13', '8454078', 3, NULL, 2, 'c@gmail.com', 3.00000000, NULL, NULL, 'c@gmail.com', 'test-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$fprDcwCveao7NImy8/p2JekUoTpZldCA7yGV4IgdnlNdtqqbbcVd6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:07:34', '2024-05-30 01:07:34', 1, NULL),
 (5, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13fff', '55493952', 3, NULL, 2, 'cc@gmail.com', 3.00000000, NULL, NULL, 'cc@gmail.com', 'test-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Km6RIjTkfRnTawxKuhswveA0d9HEivpgvXbnVwHrcadB2YcXtuD1S', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:09', '2024-05-30 01:09:09', 1, NULL),
 (6, NULL, '6f21ddd357f863ce24ce21c1a82f49a7d5d13', '65711692', 5, NULL, 2, 'dd@gmail.com', 3.00000000, NULL, NULL, 'dd@gmail.com', 'dd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$zrvWR2mgseg/CFgIAvx2G.nhGDA/2sjCU/KMhss9REYf23UFNBhFa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:31', '2024-06-01 01:34:42', 0, NULL),
@@ -2365,6 +2395,12 @@ ALTER TABLE `states`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `swaphistory`
+--
+ALTER TABLE `swaphistory`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
@@ -2458,7 +2494,7 @@ ALTER TABLE `customer_history`
 -- AUTO_INCREMENT for table `deposit`
 --
 ALTER TABLE `deposit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `expense_history`
@@ -2617,10 +2653,16 @@ ALTER TABLE `states`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `swaphistory`
+--
+ALTER TABLE `swaphistory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `transfer`

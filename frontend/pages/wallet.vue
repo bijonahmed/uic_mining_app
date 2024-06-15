@@ -61,6 +61,9 @@
                 </div>
               </div>
 
+
+
+              <form @submit.prevent="submitFormSwap" id="formrestsweap">
               <div class="wallet-card ml-10">
                 <div class="flex-column flex-md-row">
                   <strong class="text-center d-flex justify-content-center"><u>SWAP</u></strong>
@@ -69,7 +72,7 @@
                     <div class="w-100">
                       <label for="" class="w-100 text-left">From</label>
 
-                      <select name="" id="" class="form-control mb-2" v-model="wallet_type_frm"
+                      <select class="form-control mb-2" v-model="wallet_type_frm"
                         @change="checkWalletFrm($event.target.value)">
                         <option class="option" value="2">USDT</option>
                         <option selected class="option" value="1">UIC</option>
@@ -90,13 +93,20 @@
                     </div>
                   </div>
                   <div class="d-fle align-items-center mb-2">
-                    <input type="text" placeholder="0.00" v-model="swap_amount" class="form-control"
-                      @keyup="checkBalance"  @keypress="isNumber($event)"/>
+                    <input type="text" placeholder="0.00" v-model="swap_amount" class="form-control"  @keyup="checkBalance" @keypress="isNumber($event)" />
+                      <span class="text-danger" v-if="errors.swap_amount">{{ errors.swap_amount[0] }}</span>
+
                     <p style="font-size: 10px; text-align: start">
-                      Available balance: {{ availablebalance }}
+
+                      <span v-if="wallet_type_to==1">
+                        Available balance: {{ availablebalance }} USDT
+                      </span>
+                      <span v-else>
+                        Available balance: {{ availablebalance }} UIC
+                      </span>
                     </p>
                     <p style="font-size: 10px; text-align: start">
-                      Current Price UIC: 00.00 USDT
+                      Current Price UIC: {{ currentPrice }} USDT
                     </p>
                     <p style="font-size: 10px; text-align: start">
                       Provider fee : 00.00 <br />
@@ -105,11 +115,14 @@
                         provider. This fee is not paid to this platform.)</span>
                     </p>
                   </div>
-                  <button class="btn btn-primary text-center m-auto mt-3 w-100">
+
+                  <button class="btn btn-primary text-center m-auto mt-3 w-100" id="confirm_swap" type="submit" :disabled="buttonClicked">
                     Confirm Swap
                   </button>
                 </div>
               </div>
+            </form>
+
               <!-- <div class="wallet-card ml-10">
                 <div class="flex-column flex-md-row">
                   <h3 class="">Dash Wallet</h3>
@@ -212,8 +225,8 @@ const wallet_address = ref(null);
 const wallet_type_frm = ref(2);
 const wallet_type_to = ref(1);
 const availablebalance = ref(0);
-const swap_amount = ref();
-
+const swap_amount = ref('');
+const currentPrice = ref(0);
 const errors = ref({});
 
 const amount1 = ref(null);
@@ -224,6 +237,72 @@ const swapAmounts = () => {
   amount1.value = amount2.value;
   amount2.value = temp;
 };
+ 
+
+
+const insertdata = reactive({
+  deposit_amount: "",
+  payment_method: "",
+  trxId: "",
+});
+
+const submitForm = () => {
+  buttonClicked.value = true;
+  const formData = new FormData();
+  formData.append("deposit_amount", insertdata.deposit_amount);
+  formData.append("payment_method", insertdata.payment_method);
+  formData.append("trxId", insertdata.trxId);
+  const headers = {
+    "Content-Type": "multipart/form-data",
+  };
+  axios
+    .post("/deposit/depositRequest", formData, { headers })
+    .then((res) => {
+      document.getElementById("formrest").reset();
+      success_noti();
+      router.push("/success");
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 422) {
+        console.log("errors " + error.response.data.errors.deposit_amount);
+        errors_amount.value = error.response.data.errors.deposit_amount;
+        errors.value = error.response.data.errors;
+      } else {
+        // Handle other types of errors here
+        console.error("An error occurred:", error);
+      }
+    });
+};
+
+
+const submitFormSwap = () => {
+
+  buttonClicked.value = true;
+  const formData = new FormData();
+  formData.append("wallet_type_frm", wallet_type_frm.value);
+  formData.append("wallet_type_to", wallet_type_to.value);
+  formData.append("swap_amount", swap_amount.value);
+
+  const headers = {
+    "Content-Type": "multipart/form-data",
+  };
+  axios.post("/user/sweapCalculation", formData, { headers })
+    .then((res) => {
+        fetchData()
+      document.getElementById("formrestsweap").reset();
+      success_noti();
+      router.push('/success');
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 422) {
+        buttonClicked.value = false;
+        errors.value = error.response.data.errors;
+      } else {
+        // Handle other types of errors here
+        console.error("An error occurred:", error);
+      }
+    });
+};
 
 const checkBalance = () => {
 
@@ -231,36 +310,43 @@ const checkBalance = () => {
   const wallettype = wallet_type_frm.value;
 
   if (wallettype === '1') { //from 1=uic
-    console.log(`UIC: ${requestAmount} requestAmount`);
     const miningamount = mining_amount.value;
-    console.log("checkudtAmount:" + miningamount);
+    console.log(`UIC: ${miningamount} requestAmount: ${requestAmount}`);
     if (requestAmount > miningamount) {
-      console.log("===" + 'You have no sufficiant USDT balance');
+      error_noti();
+      console.log("===" + 'You have no sufficiant UIC  balance');
+      $('#confirm_swap').attr('disabled', 'disabled').addClass('btn-disabled');
+    } else {
+      $('#confirm_swap').removeAttr('disabled').removeClass('btn-disabled');
     }
   }
 
-  if (wallettype === '2') { //2=usdt 
-    console.log(`USDT: ${requestAmount} requestAmount`);
+  if (wallettype === 2) { //2=usdt 
     const usdtamount = usdt_amount.value;
-    console.log("checkudtAmount:" + usdtamount);
+    console.log(`USDT: ${usdtamount} requestAmount: ${requestAmount}`);
     if (requestAmount > usdtamount) {
+      error_noti();
+      $('#confirm_swap').attr('disabled', 'disabled').addClass('btn-disabled');
       console.log("===" + 'You have no sufficiant USDT balance');
+    } else {
+      $('#confirm_swap').removeAttr('disabled').removeClass('btn-disabled');
     }
   }
 
 }
 
+
+
 const checkWalletFrm = async (wallet_type) => {
 
   swap_amount.value = '';
-
   const wallettype = wallet_type_frm.value;
   if (wallettype === '1') {
-    wallet_type_to.value = '2'; // Set to USDT if UIC is selected
+    wallet_type_to.value = '2';
   }
 
   if (wallettype === '2') {
-    wallet_type_to.value = '1'; // Set to USDT if UIC is selected
+    wallet_type_to.value = '1'; 
   }
 
   loading.value = true;
@@ -354,11 +440,11 @@ const fetchData = async () => {
   loading.value = true;
   try {
     const response = await axios.get("/user/getBalance");
-    console.log("Response: ", response.data.wallet_address);
     available_balance.value = response.data.available_balance;
-    usdt_amount.value = response.data.usdt_amount;
-    mining_amount.value = response.data.mining_amount;
-    wallet_address.value = response.data.wallet_address;
+    usdt_amount.value       = response.data.usdt_amount;
+    mining_amount.value     = response.data.mining_amount;
+    wallet_address.value    = response.data.wallet_address;
+    currentPrice.value      = response.data.currentPrice;
 
     generateQrCode();
   } catch (error) {
@@ -394,39 +480,27 @@ const isNumber = (evt) => {
   }
 };
 
-const insertdata = reactive({
-  deposit_amount: "",
-  payment_method: "",
-  trxId: "",
-});
 
-const submitForm = () => {
-  buttonClicked.value = true;
-  const formData = new FormData();
-  formData.append("deposit_amount", insertdata.deposit_amount);
-  formData.append("payment_method", insertdata.payment_method);
-  formData.append("trxId", insertdata.trxId);
-  const headers = {
-    "Content-Type": "multipart/form-data",
-  };
-  axios
-    .post("/deposit/depositRequest", formData, { headers })
-    .then((res) => {
-      document.getElementById("formrest").reset();
-      success_noti();
-      router.push("/success");
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 422) {
-        console.log("errors " + error.response.data.errors.deposit_amount);
-        errors_amount.value = error.response.data.errors.deposit_amount;
-        errors.value = error.response.data.errors;
-      } else {
-        // Handle other types of errors here
-        console.error("An error occurred:", error);
-      }
-    });
+ 
+
+const error_noti = () => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+  Toast.fire({
+    icon: "error",
+    title: "You have no sufficiant UIC  balance.",
+  });
 };
+
 
 const success_noti = () => {
   const Toast = Swal.mixin({
@@ -452,3 +526,9 @@ onMounted(async () => {
   generateQrCode();
 });
 </script>
+<style scoped>
+.btn-disabled {
+  background-color: grey;
+  pointer-events: none;
+}
+</style>

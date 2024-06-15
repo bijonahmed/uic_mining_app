@@ -114,7 +114,6 @@
                                         <div class="form-mini-divider"></div>
 
                                         <div>
-                                            
                                             <button type="submit" class="btn btn-primary" :disabled="buttonClicked">Send</button>
                                         </div>
 
@@ -320,9 +319,6 @@ const submitForm = () => {
         invlaid_uic_address.value = error.response.data.errors.invlaid_uic_address;
         error_amount.value = error.response.data.errors.error_amount;
         errors.value = error.response.data.errors;
-        
-
-
       } else {
         // Handle other types of errors here
         console.error("An error occurred:", error);

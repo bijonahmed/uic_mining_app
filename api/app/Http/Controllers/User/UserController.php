@@ -23,6 +23,7 @@ use App\Models\TransactionHistory;
 use App\Models\WalletAddress;
 use App\Models\kyc;
 use App\Models\Setting;
+use App\Models\SwapHistory;
 use App\Models\Withdraw;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
@@ -129,6 +130,8 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+
+   
     public function insertKycCnic(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -228,7 +231,6 @@ class UserController extends Controller
 
         $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
 
-
         $setting                = Setting::find(1)->first();
 
         $today_date             = date("Y-m-d");
@@ -244,17 +246,91 @@ class UserController extends Controller
         $sendRecv               = SendReceived::where('user_id', $this->userid)->where('wallet_type', 1)->sum('amount'); //UIC Amount
         $row                    = User::where('id', $this->userid)->first();
         $result                 = $row->mining_amount;
+        $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
 
+        $beganing_price         = $setting->beganing_price;
+        $marketCap              = $setting->liquidity_total_supply * $beganing_price; 
 
 
         $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
         $data['mining_amount']          = $result;
         $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
         $data['wallet_address']         = !empty($setting->crypto_wallet_address) ? $setting->crypto_wallet_address : "";
-        
-
+        $data['circulatingSupply']      = $circulatingSupply;
+        $data['marketCap']              = $marketCap;
+        $currentPrice                   = $marketCap / $circulatingSupply;
+        $data['currentPrice']           = number_format($currentPrice,4);;  
         return response()->json($data);
     }
+
+    public function sweapCalculation(Request $request){
+
+        
+        $validator = Validator::make($request->all(), [
+            'wallet_type_frm'    => 'required',
+            'wallet_type_to'     => 'required',
+            'swap_amount'        => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $userid         = $request->userid;
+        $response       = app('App\Http\Controllers\User\UserController')->getBalance($userid);
+        $usdt_amount    = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
+        $uic_amount     = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+       
+
+        if($request->wallet_type_frm == 1){
+            if ($request->swap_amount > $uic_amount) {
+                return response()->json(['errors' => ['error_uic' => ['You have no sufficiant UIC balance']]], 422);
+            }
+            
+
+        }elseif($request->wallet_type_frm == 2){
+            if ($request->swap_amount > $usdt_amount) {
+                return response()->json(['errors' => ['error_usdt' => ['You have no sufficiant USDT balance']]], 422);
+            }
+    
+        }
+
+
+        
+
+        
+    
+        if($request->wallet_type_frm == 1){
+            $type_frm = 'UIC';
+        }elseif($request->wallet_type_frm == 2){
+            $type_frm = 'USDT';
+        }
+
+
+        if($request->wallet_type_to == 1){
+            $type_to = 'UIC';
+        }elseif($request->wallet_type_to == 2){
+            $type_to = 'USDT';
+        }
+        $setting                 = Setting::find(1)->first();
+        $circulatingSupply       = User::where('status', 1)->sum('mining_amount');
+        $beganing_price          = $setting->beganing_price;
+        $marketCap               = $setting->liquidity_total_supply * $beganing_price; 
+        $cprice                  = $marketCap / $circulatingSupply;
+        $currentPrice            = number_format($cprice,4);
+        $eSwapAmt                = $request->swap_amount / $currentPrice ;
+        $data['swap_amount']     = number_format($eSwapAmt,6);
+        $data['user_id']         = $this->userid;
+        $data['request_amount']  = $request->swap_amount;
+        $data['wallet_type_frm'] = $type_frm;
+        $data['wallet_type_to']  = $type_to;
+        $data['swape_date']      =  date("Y-m-d");
+        SwapHistory::insertGetId($data);
+        return response()->json(['message' => 'successfully transaction done'], 200);
+
+
+
+    }
+ 
 
     public function checkWalletType(Request $request)
     {
