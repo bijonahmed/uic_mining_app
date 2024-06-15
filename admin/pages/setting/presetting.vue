@@ -402,20 +402,53 @@
                                                     Supply
                                                 </label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control nagad_number"
+                                                    <input type="text" class="form-control"
                                                         v-model="insertdata.maximum_supply" placeholder="0.00"
                                                         @keypress="isNumber($event)" />
+                                                        <span class="text-danger" v-if="errors.maximum_supply">{{ errors.maximum_supply[0] }}</span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <label for="inputEnterYourName" class="col-sm-3 col-form-label">Total
                                                     Supply</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control nagad_number"
+                                                    <input type="text" class="form-control"
                                                         v-model="insertdata.total_supply" placeholder="0.00"
                                                         @keypress="isNumber($event)" />
+
+                                                        <span class="text-danger" v-if="errors.total_supply">{{ errors.total_supply[0] }}</span>
                                                 </div>
                                             </div>
+
+
+                                            <div class="row mb-3">
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Liquidity Up to total Supply</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"
+                                                        v-model="insertdata.liquidity_total_supply" placeholder="0.00"
+                                                        @keypress="isNumber($event)" @keyup="begaingCalculation" />
+                                                        <span class="text-danger" v-if="errors.liquidity_total_supply">{{ errors.liquidity_total_supply[0] }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Beganing Price</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"
+                                                        v-model="insertdata.beganing_price" placeholder="0.00" @keypress="isNumber($event)" />
+                                                        <span class="text-danger" v-if="errors.beganing_price">{{ errors.beganing_price[0] }}</span>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- <div class="row mb-3">
+                                                <label for="inputEnterYourName" class="col-sm-3 col-form-label">Circlation</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control nagad_number"
+                                                        v-model="insertdata.circlation" placeholder="0.00" @keypress="isNumber($event)" />
+                                                        <span class="text-danger" v-if="errors.circlation">{{ errors.circlation[0] }}</span>
+                                                </div>
+                                            </div> -->
                                             <hr />
 
                                             <div class="row mb-3">
@@ -480,6 +513,7 @@ const insertdata = reactive({
     level_1_bonus: "",
     level_2_bonus: "",
     level_3_bonus: "",
+    beganing_price: "",
 
     store_policy: "",
     description: "",
@@ -498,6 +532,10 @@ const insertdata = reactive({
     maximum_transfer_amount_to_other_user: "",
     transfer_fee_fixed_amount: "",
     traansfer_fee_on_percentage: "",
+    circlation: "",
+    liquidity_total_supply: "",
+    
+
 });
 
 const isNumber = (evt) => {
@@ -513,6 +551,17 @@ const isNumber = (evt) => {
 const errors = ref({});
 const notifmsg = ref("");
 const router = useRouter();
+
+const begaingCalculation = ()=>{
+
+    const total_supply = insertdata.total_supply;
+    const liquidity_total_supply = insertdata.liquidity_total_supply;
+    const b_price = liquidity_total_supply / total_supply;
+    const beganing_price = b_price.toFixed(10);
+    insertdata.beganing_price=beganing_price;
+    console.log("===" + beganing_price);
+
+}
 
 const checkImageDimensionsThunbnail = (file) => {
     const reader = new FileReader();
@@ -555,6 +604,10 @@ const saveData = () => {
     formData.append("maximum_deposit_amount", insertdata.maximum_deposit_amount);
     formData.append("minimum_withdrawal", insertdata.minimum_withdrawal);
     formData.append("maximum_withdrawal", insertdata.maximum_withdrawal);
+
+    formData.append("liquidity_total_supply", insertdata.liquidity_total_supply);
+    formData.append("circlation", insertdata.circlation);
+    formData.append("beganing_price", insertdata.beganing_price);
 
     formData.append("daily_max_withdraw_request", insertdata.daily_max_withdraw_request);
     formData.append("withdrawal_free_amount", insertdata.withdrawal_free_amount);
@@ -636,6 +689,9 @@ const loadingRow = () => {
         insertdata.register_bonus = response.data.data.register_bonus;
         insertdata.withdraw_service_charge =response.data.data.withdraw_service_charge;
         insertdata.crypto_wallet_address = response.data.data.crypto_wallet_address;
+
+        insertdata.liquidity_total_supply = response.data.data.liquidity_total_supply;
+        insertdata.circlation = response.data.data.circlation;
  
         insertdata.withdraw_minimum_amount =response.data.data.withdraw_minimum_amount;
         insertdata.maximum_supply = response.data.data.maximum_supply;
@@ -655,6 +711,7 @@ const loadingRow = () => {
         insertdata.maximum_transfer_amount_to_other_user = response.data.data.maximum_transfer_amount_to_other_user;
         insertdata.transfer_fee_fixed_amount = response.data.data.transfer_fee_fixed_amount;
         insertdata.traansfer_fee_on_percentage = response.data.data.traansfer_fee_on_percentage;
+        insertdata.beganing_price = response.data.data.beganing_price;
 
 
     });

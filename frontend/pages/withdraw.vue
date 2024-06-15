@@ -112,8 +112,8 @@
                                                         <input type="text" class="form-element"
                                                             v-model="insertdata.usd_amount"
                                                             @keypress="isNumber($event)" />
-                                                        <span class="text-danger" v-if="errors.usd_amount">{{
-                                                            errors.usd_amount[0] }}</span>
+                                                        <span class="text-danger" v-if="errors.error_usdt">{{
+                                                            errors.error_usdt[0] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -125,11 +125,8 @@
                                                 <div class="form-row-group with-icons">
                                                     <div class="form-row no-padding">
                                                         <img src="/assets/img/content/2.png" class="icon" alt="" />
-                                                        <input type="text" class="form-element"
-                                                            v-model="insertdata.uic_amount"
-                                                            @keypress="isNumber($event)" />
-                                                        <span class="text-danger" v-if="errors.uic_amount">{{
-                                                            errors.uic_amount[0] }}</span>
+                                                        <input type="text" class="form-element"  v-model="insertdata.uic_amount"  @keypress="isNumber($event)" />
+                                                        <span class="text-danger" v-if="errors.error_uic">{{ errors.error_uic[0] }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -209,7 +206,12 @@ const loading = ref(true);
 const buttonClicked = ref(false);
 
 const password_wrong = ref("");
+const error_usdt = ref("");
+const error_uic = ref("");
+
+
 const depositamount = ref(0);
+
 const withdrawData = ref([]);
 const list = ref([]);
 
@@ -228,6 +230,39 @@ const handleChange = async (event)  => {
    insertdata.account_number= response.data.account_number;
 
 }
+
+
+const available_balance = ref(0);
+const usdt_amount = ref(0);
+const mining_amount = ref(0);
+
+const getBalance = async () => {
+  try {
+    const response = await axios.get("/user/getBalance");
+    console.log("Response: ", response.data);
+    available_balance.value = response.data.available_balance;
+    usdt_amount.value = response.data.usdt_amount;
+    mining_amount.value = response.data.mining_amount;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+watch(usdt_amount, (newVal) => {
+  insertdata.usd_amount = newVal;
+});
+
+watch(mining_amount, (newVal) => {
+  insertdata.uic_amount = newVal;
+});
+
+const insertdata = reactive({
+    withdrawal_method: "",
+    account_number: "",
+    confirm_password: "",
+    usd_amount: usdt_amount.value,
+    uic_amount: mining_amount.value,
+});
 
 const fetchwithDrawlMethod = async () => {
     loading.value = true;
@@ -264,13 +299,7 @@ const isNumber = (evt) => {
     }
 };
 
-const insertdata = reactive({
-    withdrawal_method: "",
-    account_number: "",
-    confirm_password: "",
-    usd_amount: "",
-    uic_amount: "",
-});
+
 
 const submitForm = () => {
     // buttonClicked.value = true;
@@ -296,6 +325,10 @@ const submitForm = () => {
             if (error.response && error.response.status === 422) {
                 console.log("errors " + error.response.data.errors.deposit_amount);
                 password_wrong.value = error.response.data.errors.password_wrong;
+
+                error_usdt.value = error.response.data.errors.error_usdt;
+                error_uic.value = error.response.data.errors.error_uic;
+
                 errors.value = error.response.data.errors;
                 loading.value = false;
             } else {
@@ -324,6 +357,7 @@ const success_noti = () => {
 };
 
 onMounted(async () => {
+    getBalance();
     fetchData();
     fetchwithDrawlMethod();
 });

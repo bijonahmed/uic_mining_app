@@ -30,7 +30,7 @@
 
                         <div class="ref-content">
                                     <h4 class="mt-0 text-center">Your UIC Address</h4>
-                                    <img src="/assets/qrcode.png" alt="QR Code"  style="height: 100px; margin: 5px auto; display: flex;"/> <br>
+                                    <img :src="qrCodeUrl" alt="QR Code" v-if="qrCodeUrl" style="height: 100px; margin: 5px auto; display: flex;"/> <br>
                                     <div class="form-row-group relative">                                        
                                         <div class="form-row no-padding" style="padding: 10px 20px;">
                                             <strong id="invite_link" class="textToCopy"> {{ uicAddress }}</strong>
@@ -52,6 +52,7 @@ import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import Swal from "sweetalert2";
+import QRCode from 'qrcode'
 const router = useRouter();
 const loading = ref(false);
 definePageMeta({
@@ -62,15 +63,16 @@ import HeaderSecond from "~/layouts/HeaderSecond.vue";
 import SocialFooter from "~/components/SocialFooter.vue";
 
 const inviteCode = ref('');
-const uicAddress = ref('');
+const uicAddress = ref(null);
+const qrCodeUrl = ref(null)
 
 const getInviteCode = async () => {
     try {
         const response = await axios.get(`/user/getInviteCode`);
         const setUICaddress =response.data.uic_address;
         inviteCode.value = response.data.uic_address;
-        uicAddress.value = setUICaddress;
-
+        uicAddress.value = response.data.uic_address;
+        generateQrCode();
     } catch (error) {
         console.error(error);
     }
@@ -136,11 +138,26 @@ const copyAddressToClipboard = () => {
         title: "Successfully copy"
     });
 }
+// Generate QR code based on uicAddress
+const generateQrCode = async () => {
+  try {
+    const inv_Code = uicAddress.value
+    if (!inv_Code) {
+      console.error('UIC address is empty')
+      return
+    }
+    qrCodeUrl.value = await QRCode.toDataURL(inv_Code, { errorCorrectionLevel: 'H' })
+  } catch (error) {
+    console.error('Error generating QR code:', error)
+  }
+}
 
+ 
 
 
 onMounted(async () => {
     getInviteCode();
+    generateQrCode();
 
 });
 

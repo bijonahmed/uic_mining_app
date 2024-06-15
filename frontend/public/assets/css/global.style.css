@@ -2879,7 +2879,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ddc3e', end
 }
 .ref-copy{
 	position: absolute;
-    right: -6px;
+    right: 0px;
     background: #00adf2;
     width: 40px;
     height: 40px;

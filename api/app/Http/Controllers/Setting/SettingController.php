@@ -637,7 +637,9 @@ class SettingController extends Controller
             'level_3_bonus'      => 'required',
 
 
-            
+            'liquidity_total_supply'      => 'required',
+            'circlation'                  => 'required',
+            'beganing_price'              => 'required',
 
         ]);
         if ($validator->fails()) {
@@ -679,6 +681,9 @@ class SettingController extends Controller
             'transfer_fee_fixed_amount'             => !empty($request->transfer_fee_fixed_amount) ? $request->transfer_fee_fixed_amount : 0,
             'traansfer_fee_on_percentage'           => !empty($request->traansfer_fee_on_percentage) ? $request->traansfer_fee_on_percentage : 0,
 
+            'liquidity_total_supply'                => !empty($request->liquidity_total_supply) ? $request->liquidity_total_supply : 0,
+            //'circlation'                            => !empty($request->circlation) ? $request->circlation : 0,
+            'beganing_price'                        => !empty($request->beganing_price) ? $request->beganing_price : 0,
         );
 
         //dd($data);

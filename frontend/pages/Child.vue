@@ -11,13 +11,14 @@
         <div class="d-flex align-items-center mt-30">
           <div class="d-flex flex-grow">
             <div class="mr-auto">
-              <h1 class="b-val" v-if="isLoggedIn">$2,589.50</h1>
+              <h1 class="b-val" v-if="isLoggedIn">2,589.50 USDT</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
-                <small style="color: white">{{ userStore.email }}</small>
+                <p style="color: white">CURRENT PRICE</p>
               </p>
             </div>
             <div class="ml-auto align-self-end">
-              <!-- <a class="profile-av" href="profile"><img src="/assets/img/content/avatar/avatar.png" /></a> -->
+              <a class="profile-av m-auto" href="profile"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></a>
+              <p class="text-white" >{{ userStore.email }}</p>
             </div>
           </div>
         </div>
@@ -27,10 +28,10 @@
         <div class="resources-card-wrapper">
           <div class="wallet-card mr-10 round">
             <div class="flex-column flex-md-row">
-              <img src="/assets/img/5001578.png" class="max50" alt="" />
+              <!-- <img src="/assets/img/5001578.png" class="max50" alt="" /> -->
               <h3 class="">Maximum Supply</h3>
               <p class="mb-0 font-weight-medium">
-                <i class="txt-green fa fa-arrow-up mr-10"></i>{{ maximum_supply }} Billion
+                {{ maximum_supply }} UIC
               </p>
 
             </div>
@@ -38,10 +39,10 @@
 
           <div class="wallet-card ml-10">
             <div class="flex-column flex-md-row">
-              <img src="/assets/img/1027961.png" class="max50" alt="" />
+              <!-- <img src="/assets/img/1027961.png" class="max50" alt="" /> -->
               <h3 class="">Total Supply</h3>
               <p class="mb-0 font-weight-medium">
-                <i class="txt-red fa fa-arrow-down mr-10"></i>{{ total_supply }} ETH
+                {{ total_supply }} UIC
               </p>
 
             </div>
@@ -50,26 +51,26 @@
         <div class="resources-card-wrapper mt-15">
           <div class="wallet-card mr-10">
             <div class="flex-column flex-md-row">
-              <img src="/assets/img/return-on-investment.png" class="max50" alt="" />
+              <!-- <img src="/assets/img/return-on-investment.png" class="max50" alt="" /> -->
               <h3 class="">Circulating Supply</h3>
               <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
-                <i class="txt-red fa fa-arrow-down mr-10"></i>8,954.3 XRP
+                8,954.3 UIC
               </p>
               <p class="mb-0 font-weight-medium" v-else>
-                <i class="txt-red fa fa-arrow-down mr-10"></i>0 XRP
+                0 UIC
               </p>
             </div>
           </div>
 
           <div class="wallet-card ml-10">
             <div class="flex-column flex-md-row">
-              <img src="/assets/img/2422796.png" class="max50" alt="" />
+              <!-- <img src="/assets/img/2422796.png" class="max50" alt="" /> -->
               <h3 class="">Market Cap</h3>
               <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
-                <i class="txt-green fa fa-arrow-up mr-10"></i>1.269 DASH
+                1.269 
               </p>
               <p class="mb-0 font-weight-medium" v-else>
-                <i class="txt-green fa fa-arrow-up mr-10"></i>0 DASH
+                >0 
               </p>
             </div>
           </div>
