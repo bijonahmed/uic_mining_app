@@ -11,7 +11,7 @@
         <div class="d-flex align-items-center mt-30">
           <div class="d-flex flex-grow">
             <div class="mr-auto">
-              <h1 class="b-val" v-if="isLoggedIn">{{ currentPrice }} USDT</h1>
+              <h1 class="b-val" v-if="isLoggedIn">{{ availablebalance }} USDT</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
                 <p style="color: white">CURRENT PRICE</p>
               </p>
@@ -53,12 +53,10 @@
             <div class="flex-column flex-md-row">
               <!-- <img src="/assets/img/return-on-investment.png" class="max50" alt="" /> -->
               <h3 class="">Circulating Supply</h3>
-              <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
+              <p class="mb-0 font-weight-medium">
                 {{ circulatingSupply }} UIC
               </p>
-              <p class="mb-0 font-weight-medium" v-else>
-                0 UIC
-              </p>
+             
             </div>
           </div>
 
@@ -66,12 +64,10 @@
             <div class="flex-column flex-md-row">
               <!-- <img src="/assets/img/2422796.png" class="max50" alt="" /> -->
               <h3 class="">Market Cap</h3>
-              <p class="mb-0 font-weight-medium" v-if="isLoggedIn">
+              <p class="mb-0 font-weight-medium">
                 {{ marketCap }}
               </p>
-              <p class="mb-0 font-weight-medium" v-else>
-                >0 
-              </p>
+           
             </div>
           </div>
         </div>
@@ -192,30 +188,12 @@ const maximum_supply = ref(0);
 const circulatingSupply = ref(0);
 const marketCap = ref(0);
 const currentPrice = ref(0);
+const availablebalance = ref(0);
 const total_supply = ref(0);
 const category_1 = ref(null);
 const category_2 = ref(null);
 const category_3 = ref(null);
 const category_4 = ref(null);
-
-
-
-
-
-const getBalances = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get("/user/getBalance");
-      circulatingSupply.value = response.data.circulatingSupply;
-      marketCap.value = response.data.marketCap;
-      currentPrice.value = response.data.currentPrice;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
 
 
 const fetchData = async () => {
@@ -224,6 +202,14 @@ const fetchData = async () => {
     console.log("Response data:", response.data.data.maximum_supply);
     maximum_supply.value = response.data.data.maximum_supply;
     total_supply.value = response.data.data.total_supply;
+    //
+    circulatingSupply.value = response.data.circulatingSupply;
+    marketCap.value = response.data.marketCap;
+    currentPrice.value = response.data.currentPrice;
+    availablebalance.value = response.data.currentPrice_top;
+
+
+
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -243,7 +229,6 @@ const checkMiningMatching = async () => {
   }
 };
 
-getBalances();
 fetchData();
 checkMiningMatching();
 

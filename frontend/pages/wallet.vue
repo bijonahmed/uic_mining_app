@@ -94,7 +94,9 @@
                   </div>
                   <div class="d-fle align-items-center mb-2">
                     <input type="text" placeholder="0.00" v-model="swap_amount" class="form-control"  @keyup="checkBalance" @keypress="isNumber($event)" />
-                      <span class="text-danger" v-if="errors.swap_amount">{{ errors.swap_amount[0] }}</span>
+                    <span class="text-danger" v-if="errors.swap_amount">{{ errors.swap_amount[0] }}</span>
+                    <span class="text-danger" v-if="errors.error_usdt">{{ errors.error_usdt[0] }}</span>
+                    <span class="text-danger" v-if="errors.error_uic">{{ errors.error_uic[0] }}</span>
 
                     <p style="font-size: 10px; text-align: start">
 
@@ -277,7 +279,7 @@ const submitForm = () => {
 
 const submitFormSwap = () => {
 
-  buttonClicked.value = true;
+  //buttonClicked.value = true;
   const formData = new FormData();
   formData.append("wallet_type_frm", wallet_type_frm.value);
   formData.append("wallet_type_to", wallet_type_to.value);
@@ -296,7 +298,12 @@ const submitFormSwap = () => {
     .catch((error) => {
       if (error.response && error.response.status === 422) {
         buttonClicked.value = false;
+
+        console.log("error_usdt:" + error.response.data.errors.error_usdt);
+
         errors.value = error.response.data.errors;
+
+
       } else {
         // Handle other types of errors here
         console.error("An error occurred:", error);
@@ -308,31 +315,6 @@ const checkBalance = () => {
 
   const requestAmount = swap_amount.value;
   const wallettype = wallet_type_frm.value;
-
-  if (wallettype === '1') { //from 1=uic
-    const miningamount = mining_amount.value;
-    console.log(`UIC: ${miningamount} requestAmount: ${requestAmount}`);
-    if (requestAmount > miningamount) {
-      error_noti();
-      console.log("===" + 'You have no sufficiant UIC  balance');
-      $('#confirm_swap').attr('disabled', 'disabled').addClass('btn-disabled');
-    } else {
-      $('#confirm_swap').removeAttr('disabled').removeClass('btn-disabled');
-    }
-  }
-
-  if (wallettype === 2) { //2=usdt 
-    const usdtamount = usdt_amount.value;
-    console.log(`USDT: ${usdtamount} requestAmount: ${requestAmount}`);
-    if (requestAmount > usdtamount) {
-      error_noti();
-      $('#confirm_swap').attr('disabled', 'disabled').addClass('btn-disabled');
-      console.log("===" + 'You have no sufficiant USDT balance');
-    } else {
-      $('#confirm_swap').removeAttr('disabled').removeClass('btn-disabled');
-    }
-  }
-
 }
 
 

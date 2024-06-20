@@ -236,30 +236,38 @@ class UserController extends Controller
         $today_date             = date("Y-m-d");
         $service_price          = $active_matching && $active_matching->end_date >= $today_date ? (!empty($active_matching->service_price) ? $active_matching->service_price : 0) : 0;
 
+        $swap_type_2_frm        = SwapHistory::where('user_id', $this->userid)->where('type',2)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//USDT 
+        $swap_type_2_to         = SwapHistory::where('user_id', $this->userid)->where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//UIC 
+
+        $swap_type_1_frm        = SwapHistory::where('user_id', $this->userid)->where('type',1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//UIC 
+        $swap_type_1_to         = SwapHistory::where('user_id', $this->userid)->where('type',1)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//USDT 
+ 
         $row                    = User::find($this->userid);
         $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
-
+    
         $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
         $usdtAmount             = SendReceived::where('user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
-        $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount;
+        $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount - $swap_type_2_frm + $swap_type_1_to;
 
-        $sendRecv               = SendReceived::where('user_id', $this->userid)->where('wallet_type', 1)->sum('amount'); //UIC Amount
         $row                    = User::where('id', $this->userid)->first();
-        $result                 = $row->mining_amount;
+
+        $uicAmount              = $row->mining_amount + $swap_type_2_to - $swap_type_1_frm;
+
+        //echo "Mining amount:  $row->mining_amount----- Swap Amount : $swap_uic_history---- Sum Amount: $uicAmount";
+       // exit; 
+        
         $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
 
         $beganing_price         = $setting->beganing_price;
         $marketCap              = $setting->liquidity_total_supply * $beganing_price; 
 
-
         $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
-        $data['mining_amount']          = $result;
+        $data['mining_amount']          = number_format($uicAmount,2);
         $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
         $data['wallet_address']         = !empty($setting->crypto_wallet_address) ? $setting->crypto_wallet_address : "";
         $data['circulatingSupply']      = $circulatingSupply;
         $data['marketCap']              = $marketCap;
-        $currentPrice                   = $marketCap / $circulatingSupply;
-        $data['currentPrice']           = number_format($currentPrice,4);;  
+        $data['currentPrice']           = $beganing_price;
         return response()->json($data);
     }
 
@@ -294,11 +302,6 @@ class UserController extends Controller
     
         }
 
-
-        
-
-        
-    
         if($request->wallet_type_frm == 1){
             $type_frm = 'UIC';
         }elseif($request->wallet_type_frm == 2){
@@ -312,19 +315,45 @@ class UserController extends Controller
             $type_to = 'USDT';
         }
         $setting                 = Setting::find(1)->first();
-        $circulatingSupply       = User::where('status', 1)->sum('mining_amount');
-        $beganing_price          = $setting->beganing_price;
-        $marketCap               = $setting->liquidity_total_supply * $beganing_price; 
-        $cprice                  = $marketCap / $circulatingSupply;
-        $currentPrice            = number_format($cprice,4);
-        $eSwapAmt                = $request->swap_amount / $currentPrice ;
-        $data['swap_amount']     = number_format($eSwapAmt,6);
+       // $circulatingSupply       = User::where('status', 1)->sum('mining_amount');
+
+        if($request->wallet_type_frm == 2){ //FOR USDT 
+            $beganing_price          = $setting->beganing_price;
+            $eSwapAmt                = $request->swap_amount / $beganing_price ;
+            $formattedResult         = number_format($eSwapAmt, 2);
+        }
+
+        if($request->wallet_type_frm == 1){ //FOR UIC 
+            $beganing_price          = $setting->beganing_price;
+            $formattedResult         = $request->swap_amount * $beganing_price ;
+        }
+       
+
+        if($request->wallet_type_frm == 1){ //FOR UIC 
+            $data['type']        = $request->wallet_type_frm;
+        }
+
+        if($request->wallet_type_frm == 2){  //FOR USDT 
+            $data['type']        = $request->wallet_type_frm;
+        }
+        $data['to_amount']     = $formattedResult;
+       // dd($data['swap_amount']);
+
+
         $data['user_id']         = $this->userid;
-        $data['request_amount']  = $request->swap_amount;
+        $data['frm_amount']      = $request->swap_amount;
         $data['wallet_type_frm'] = $type_frm;
         $data['wallet_type_to']  = $type_to;
         $data['swape_date']      =  date("Y-m-d");
-        SwapHistory::insertGetId($data);
+        $last_Id                 = SwapHistory::insertGetId($data);
+        //Transaction
+        // $tran['user_id']     = $this->userid;
+        // $tran['type']        = 5; //Sweap Transaction
+        // $tran['last_Id']     = $last_Id;
+        // $tran['amount']      = $request->swap_amount;
+        // $tran['description'] = 'Sweap Transaction';
+        // TransactionHistory::insert($tran);
+
         return response()->json(['message' => 'successfully transaction done'], 200);
 
 
@@ -336,22 +365,15 @@ class UserController extends Controller
     {
 
         $wallet_type         =  $request->wallet_type;
+        $response       = app('App\Http\Controllers\User\UserController')->getBalance();
         if ($wallet_type == 1) {
-
-            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
-            $row           = User::where('id', $this->userid)->first();
-            $result        = $row->mining_amount;
-            $data['amount'] = $result;
+            $uic_amount        = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+            $data['amount']    = $uic_amount;
         }
 
         if ($wallet_type == 2) {
-            $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
-            $today_date    = date("Y-m-d");
-            $service_price = ($active_matching && $active_matching->end_date >= $today_date) ? ($active_matching->service_price ?? 0) : 0;
-            $depositSum    = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
-            $sendRecv      = SendReceived::where('user_id', $this->userid)->where('wallet_type', $wallet_type)->sum('amount');
-            $result        = $depositSum - $service_price;
-            $data['amount'] = $result - $sendRecv;
+            $usdt_amount    = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
+            $data['amount'] = $usdt_amount;
         }
         return response()->json($data);
     }

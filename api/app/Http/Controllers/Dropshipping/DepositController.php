@@ -329,7 +329,7 @@ class DepositController extends Controller
 
     public function withdrawRequest(Request $request)
     {
- 
+
         try {
             $validator = Validator::make($request->all(), [
                 'withdrawal_method'  => 'required',
@@ -353,12 +353,11 @@ class DepositController extends Controller
                 return response()->json(['errors' => ['password_wrong' => ['Incorrect password']]], 422);
             }
 
-
             $userid         = $request->userid;
             $response       = app('App\Http\Controllers\User\UserController')->getBalance($userid);
             $usdt_amount    = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
             $uic_amount     = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
-           
+
             if ($request->usd_amount > $usdt_amount) {
                 return response()->json(['errors' => ['error_usdt' => ['You have no sufficiant USDT balance']]], 422);
             }

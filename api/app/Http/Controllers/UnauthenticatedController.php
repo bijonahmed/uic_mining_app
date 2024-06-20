@@ -14,7 +14,9 @@ use App\Models\ProductCategory;
 use App\Models\Categorys;
 use App\Models\VerifyEmail;
 use App\Models\Setting;
+use App\Models\User;
 use App\Models\ProductAdditionalImg;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
@@ -28,17 +30,30 @@ class UnauthenticatedController extends Controller
     protected $frontend_url;
     protected $userid;
 
-
-
     public function settingrowClient()
     {
 
-        $data = Setting::find(1);
-        $response = [
-            'data' => $data,
-            'message' => 'success'
-        ];
-        return response()->json($response, 200);
+        $setting                    = Setting::find(1);
+        $response                   = app('App\Http\Controllers\User\UserController')->getBalance();
+        $circulatingSupply          = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+        $cirSupply                  = floatval(str_replace(',', '', $circulatingSupply));
+        $data['circulatingSupply']  = number_format($cirSupply,2);
+        $beganing_price             = $setting->beganing_price;
+        $liquidity_total_supply     = $setting->liquidity_total_supply;
+
+        $beggingPrice               = $beganing_price; // Convert to float
+        $circulatingSupply          = $circulatingSupply; // Convert to float
+
+        $circulatingSupply          = str_replace(',', '', $circulatingSupply);
+        $beggingPrice               = (float) $beggingPrice;
+        $marketCap                  = $beggingPrice * $circulatingSupply + $liquidity_total_supply;
+
+        $data['marketCap']          = number_format($marketCap,2);
+        $data['currentPrice']       = $beganing_price;
+        $data['currentPrice_top']   = number_format($beganing_price,8);
+        $data['data']               = $setting;
+
+        return response()->json($data, 200);
     }
 
     public function productWiseSubcategory(Request $request)
@@ -57,10 +72,8 @@ class UnauthenticatedController extends Controller
         return response()->json($result, 200);
     }
 
-
     public function productWiseBrand(Request $request)
     {
-
 
         $catId             = (int)$request->mainCategoryId;
         $subCatId          = (int)$request->subcategoryId;
@@ -70,13 +83,12 @@ class UnauthenticatedController extends Controller
         //$category          = Categorys::where('slug', $request->categorySlug)->first();
         $subcategory       = Categorys::where('parent_id', $catId)->get();
 
-
         $products        = ProductCategory::join('product', 'product.id', '=', 'produc_categories.product_id')
-                        ->join('categorys', 'categorys.id', '=', 'produc_categories.category_id')
-                        ->select('product.slug','product.id', 'product.name', 'categorys.name as category_name','product.thumnail_img','product.selling_price','product.buying_price')
-                        ->where('product.status', 1)
-                        ->whereRaw("FIND_IN_SET($catId, produc_categories.parent_id) > 0")
-                        ->whereRaw("FIND_IN_SET($subCatId, produc_categories.parent_id) > 0")->get();
+            ->join('categorys', 'categorys.id', '=', 'produc_categories.category_id')
+            ->select('product.slug', 'product.id', 'product.name', 'categorys.name as category_name', 'product.thumnail_img', 'product.selling_price', 'product.buying_price')
+            ->where('product.status', 1)
+            ->whereRaw("FIND_IN_SET($catId, produc_categories.parent_id) > 0")
+            ->whereRaw("FIND_IN_SET($subCatId, produc_categories.parent_id) > 0")->get();
 
         $result = [];
         foreach ($products as $v) {
@@ -100,17 +112,15 @@ class UnauthenticatedController extends Controller
             ];
         }
 
-      //  $data['allCategory']    = Categorys::where('status', 1)->where('parent_id', 0)->get();
+        //  $data['allCategory']    = Categorys::where('status', 1)->where('parent_id', 0)->get();
         $data['subCategory']    = $subcatresult;
         $data['result']         = $result;
 
         return response()->json($data, 200);
     }
 
-
     public function backup_ProductWiseBrand(Request $request)
     {
-
 
         dd($request->all());
 
@@ -121,7 +131,6 @@ class UnauthenticatedController extends Controller
         //$subcategory       = Categorys::where('parent_id', $category->id)->where('slug', $request->subcategorySlug)->first();
         //echo "Subcateogry: ".$request->subcategorySlug;
         // dd($subcategory);
-
 
         //
         $catId             = $category->id;
@@ -157,7 +166,6 @@ class UnauthenticatedController extends Controller
             ];
         }
 
-
         $subcatsArray = Categorys::where('parent_id', $category->id)->where('status', 1)->get();
 
         $subcatresult = [];
@@ -172,7 +180,6 @@ class UnauthenticatedController extends Controller
         }
 
         // dd($subcatresult);
-
 
         $data['allCategory']    = Categorys::where('status', 1)->where('parent_id', 0)->get();
         $data['subCategory']    = $subcatresult;
@@ -681,18 +688,16 @@ class UnauthenticatedController extends Controller
         $slider = sliders::where('status', 1)
             ->get();
 
-            $sliderArry = [];
-            foreach ($slider as $sliders) {
-                $sliderArry[] = [
-                    'id'            => $sliders->id,
-                    'name'          => $sliders->redirect_url,
-                    'images'     => !empty($sliders->images) ? url($sliders->images) : "",     
-                    'status'            => $sliders->status,               
-                ];
-            }
+        $sliderArry = [];
+        foreach ($slider as $sliders) {
+            $sliderArry[] = [
+                'id'            => $sliders->id,
+                'name'          => $sliders->redirect_url,
+                'images'     => !empty($sliders->images) ? url($sliders->images) : "",
+                'status'            => $sliders->status,
+            ];
+        }
 
-            return response()->json($sliderArry, 200);
-
-
+        return response()->json($sliderArry, 200);
     }
 }

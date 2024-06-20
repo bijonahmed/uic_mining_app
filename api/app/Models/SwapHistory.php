@@ -16,12 +16,13 @@ class SwapHistory extends Authenticatable
   public $table = "swapHistory";
   
   protected $fillable = [
-    'swap_amount',
+    'type',
+    'frm_amount',
     'user_id',
     'wallet_type_frm',
     'wallet_type_to',
     'swape_date',
-    'request_amount'
+    'to_amount'
   ];
  
  
