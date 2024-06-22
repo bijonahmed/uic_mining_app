@@ -52,6 +52,8 @@ class UnauthenticatedController extends Controller
         $data['currentPrice']       = $beganing_price;
         $data['currentPrice_top']   = number_format($beganing_price,8);
         $data['data']               = $setting;
+        $data['maximum_supply']     = number_format($setting->maximum_supply,2);
+        $data['total_supply']       = number_format($setting->total_supply,2);
 
         return response()->json($data, 200);
     }

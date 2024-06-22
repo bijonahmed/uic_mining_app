@@ -199,9 +199,9 @@ const category_4 = ref(null);
 const fetchData = async () => {
   try {
     const response = await axios.get("/settingrowClient");
-    console.log("Response data:", response.data.data.maximum_supply);
-    maximum_supply.value = response.data.data.maximum_supply;
-    total_supply.value = response.data.data.total_supply;
+    console.log("Response data:", response.data.maximum_supply);
+    maximum_supply.value = response.data.maximum_supply;
+    total_supply.value = response.data.total_supply;
     //
     circulatingSupply.value = response.data.circulatingSupply;
     marketCap.value = response.data.marketCap;

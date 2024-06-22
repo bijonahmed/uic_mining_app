@@ -279,7 +279,7 @@ const submitForm = () => {
 
 const submitFormSwap = () => {
 
-  //buttonClicked.value = true;
+  buttonClicked.value = true;
   const formData = new FormData();
   formData.append("wallet_type_frm", wallet_type_frm.value);
   formData.append("wallet_type_to", wallet_type_to.value);

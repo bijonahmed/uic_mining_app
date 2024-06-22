@@ -45,7 +45,7 @@
 
                                 <div class="col-lg-2 col-md-2 col-sm-6 mb-2">
                                     <select v-model="selectedFilter" class="form-control" @change="filterData">
-                                        <option value="">All</option>
+                                         <option value="5">All</option>  
                                         <option value="0">Review</option>
                                         <option value="2">Reject</option>
                                         <option value="1">Approved</option>
@@ -168,7 +168,7 @@ const totalPages = ref(0);
 const productdata = ref([]);
 const searchOrderId = ref("");
 const searchEmail = ref("");
-const selectedFilter = ref(""); // Add a ref for the search query
+const selectedFilter = ref(5); // Add a ref for the search query
 
 
 // Get today's date in YYYY-MM-DD format

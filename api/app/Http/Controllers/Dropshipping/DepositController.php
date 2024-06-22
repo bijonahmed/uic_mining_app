@@ -154,9 +154,10 @@ class DepositController extends Controller
 
     public function updateWithDrawRequest(Request $request)
     {
+
         try {
             $validator = Validator::make($request->all(), [
-                // 'remarks'             => 'required',
+                'remarks'             => 'required',
                 'status'              => 'required|numeric',
                 'id'                  => 'required',
             ]);
@@ -535,7 +536,7 @@ class DepositController extends Controller
 
     public function getwithdrawalList(Request $request)
     {
-        //dd($request->all());
+       // dd($request->all());
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
 
@@ -552,9 +553,11 @@ class DepositController extends Controller
             ->join('users', 'withdraw.user_id', '=', 'users.id') // Join condition
             ->orderBy('withdraw.id', 'desc'); // Sorting by 'id' in descending order
 
-        if (!empty($searchQuery)) {
-            $query->where('withdraw.withdrawID', $searchQuery);
+        if (!empty($searchOrderId)) {
+            $query->where('withdraw.withdrawID', $searchOrderId);
         }
+
+        
 
         // Check if filter dates are provided
         if (!empty($filterFrmDate) && !empty($filterToDate)) {
@@ -574,10 +577,10 @@ class DepositController extends Controller
 
         $cleanedSelectedFilter = isset($selectedFilter) ? (int) trim($selectedFilter) : null;
 
-        if ($cleanedSelectedFilter !== null) {
-            $query->where('withdraw.status', $cleanedSelectedFilter);
+        if ($cleanedSelectedFilter == 5) {
+            $query->whereIn('withdraw.status', [0, 1, 2]); 
         } else {
-            $query->whereIn('withdraw.status', [0, 1, 2]);
+            $query->where('withdraw.status', $cleanedSelectedFilter);
         }
 
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
@@ -600,7 +603,8 @@ class DepositController extends Controller
                 'user_info_email'   => !empty($userrow->email) ?  $userrow->email : "N/A",
                 'user_info_phone'   => !empty($userrow->phone_number) ?  $userrow->phone_number : "N/A",
                 'created_at'        => date("Y-m-d H:i:s", strtotime($item->created_at)),
-                'withdraw_amount'   => $item->withdraw_amount,
+                'usd_amount'        => $item->usd_amount,
+                'uic_amount'        => $item->uic_amount,
                 'payable_amount'    => $item->payable_amount,
                 'transection_fee'   => $item->transection_fee,
                 'withdrawal_method_id' => $item->withdrawal_method_id,
@@ -658,12 +662,14 @@ class DepositController extends Controller
             $query->where('deposit.depositID', $searchOrderId);
         }
 
-        $cleanedSelectedFilter = isset($selectedFilter) ? (int) trim($selectedFilter) : null;
+       // $cleanedSelectedFilter = isset($selectedFilter) ? (int) trim($selectedFilter) : null;
+       
 
-        if ($cleanedSelectedFilter !== null) {
-            $query->where('deposit.status', $cleanedSelectedFilter);
+        if ($selectedFilter == 5) {
+            $query->whereIn('deposit.status', [0, 1, 2]); 
+           
         } else {
-            $query->whereIn('deposit.status', [0, 1, 2]);
+            $query->where('deposit.status', $selectedFilter);
         }
 
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
@@ -722,20 +728,22 @@ class DepositController extends Controller
 
     public function withdrawrow($id)
     {
-        try {
-            $user = Withdraw::where('withdraw.id', $id)
-                ->select('users.name', 'withdraw.*', 'currency_type.name as currency_type_name')
-                ->join('withdrawal_method', 'withdraw.withdrawal_method_id', '=', 'withdrawal_method.id')
-                ->join('currency_type', 'withdrawal_method.currency_type_id', '=', 'currency_type.id')
-                ->join('users', 'withdraw.user_id', '=', 'users.id')
-                ->first();
 
-            $checkWalletAddress =  WalletAddress::where('user_id', $user->user_id)->first();
-            $wallet_address     = !empty($checkWalletAddress->wallet_address) ? $checkWalletAddress->wallet_address : "";
+        try {
+
+            $user = Withdraw::where('withdraw.id', $id)
+            ->select('users.name', 'withdraw.*')
+            ->join('users', 'withdraw.user_id', '=', 'users.id')
+            ->first();
+           
+            $checkWalletAddress     =  WalletAddress::where('user_id', $user->user_id)->first();
+            $wallet_address         = !empty($checkWalletAddress->wallet_address) ? $checkWalletAddress->wallet_address : "";
             $data['datarow']        = $user;
+            $data['created_at']     = !empty($user->created_at) ? date("d-m-Y H:i:s", strtotime($user->created_at)) : "";
+            $data['remarks']        = !empty($user->remarks) ? $user->remarks : "";
             $data['wallet_address'] = $wallet_address;
-            //dd($data['wallet_address']);
             return response()->json($data);
+           
         } catch (\Exception $e) {
             echo "Error: " . $e->getMessage();
             $error = $e->getMessage();

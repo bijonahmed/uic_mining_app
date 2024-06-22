@@ -37,7 +37,7 @@
                 class="forms-sample"
                 enctype="multipart/form-data"
               >
-                <div class="row">
+                <div class="row d-none">
                   <div class="col-md-6">
                     <h4 v-if="currentBalance">
                       Current Balance : ${{ currentBalance }}
@@ -86,17 +86,15 @@
                         class="form-control"
                         @change="emptyAmunt"
                       >
-                        <option value="1">Increased (+)
-                        </option>
-                        <option value="2">Credited (-)
-                        </option>
+                        <option value="1">Debited (+)</option>
+                        <option value="2">Credited (-)</option>
                       </select>
                       <span class="text-danger" v-if="errors.adjustment_type">{{
                         errors.adjustment_type[0]
                       }}</span>
                     </div>
                     <div class="form-group mb-2">
-                      <label for="">Adjustment amount</label>
+                      <label for="">Adjustment UIC amount</label>
                       <input
                         type="text"
                         v-model="manualAdjment.adjustment_amount"
@@ -186,7 +184,7 @@ const saveManualAdjustment = () => {
       manualAdjment.adjustment_amount = "";
       manualAdjment.detailed_remarks = "";
 
-      router.push("/walletmanagement/manual-adjustment");
+      router.push("/walletmanagement/manual-adjustment-report");
     })
     .catch((error) => {
       if (error.response && error.response.status === 422) {

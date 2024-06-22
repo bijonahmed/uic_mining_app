@@ -211,6 +211,7 @@ class DropUserController extends Controller
     public function getManualAdjustmentReport(Request $request)
     {
 
+        
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
         // Get search query from the request
@@ -226,13 +227,16 @@ class DropUserController extends Controller
                 'users.id  as userid'
             );
 
+
+
         if (!empty($searchQuery)) {
             // $query->where('depositID', 'like', '%' . $searchQuery . '%');
             $query->where('users.email', $searchQuery);
         }
 
-        if (!empty($selectedFilter)) {
-
+        if ($selectedFilter == 5) {
+            $query->whereIn('manual_adjustment.adjustment_type', [1,2]);
+        }else{
             $query->where('manual_adjustment.adjustment_type', $selectedFilter);
         }
 

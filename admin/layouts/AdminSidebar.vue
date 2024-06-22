@@ -176,11 +176,7 @@ const menuItems = ref([
     open: false,
     route: null,
     children: [
-      {
-        label: "Withdrawal Address",
-        icon: "fa-circle",
-        route: "/walletmanagement/withdrawal-address",
-      },
+      // { label: "Withdrawal Address", icon: "fa-circle", route: "/walletmanagement/withdrawal-address", },
       // { label: 'Wallet', icon: 'fa-circle', route: '/walletmanagement/wallet' },
       // { label: 'Transection report', icon: 'fa-circle', route: '/walletmanagement/transection' },
       // { label: 'Recharge report', icon: 'fa-circle', route: '/walletmanagement/recharge-report' },
@@ -194,11 +190,11 @@ const menuItems = ref([
         icon: "fa-circle",
         route: "/walletmanagement/manual-adjustment",
       },
-      {
-        label: "User wallet",
-        icon: "fa-circle",
-        route: "/walletmanagement/user-wallet",
-      },
+      // {
+      //   label: "User wallet",
+      //   icon: "fa-circle",
+      //   route: "/walletmanagement/user-wallet",
+      // },
       {
         label: "Deposit History ",
         icon: "fa-circle",

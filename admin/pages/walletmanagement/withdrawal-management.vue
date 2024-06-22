@@ -45,7 +45,7 @@
 
                                 <div class="col-lg-2 col-md-2 col-sm-6 mb-2">
                                     <select v-model="selectedFilter" class="form-control" @change="filterData">
-                                        <option value="">All</option>
+                                        <option value="5">All</option>
                                         <option value="0">Review</option>
                                         <option value="2">Reject</option>
                                         <option value="1">Approved</option>
@@ -73,9 +73,10 @@
                                                     <th class="text-left">User Info</th>
                                                     <th class="text-center">Date</th>
                                                     <th class="text-center">Status</th>
-                                                    <th class="text-center">Amount ($)</th>
+                                                    <th class="text-center">UIC</th>
+                                                    <th class="text-center">USDT($)</th>
                                                     <th class="text-center">Tras. Fee ($)</th>
-                                                    <th class="text-center">Payable Amount ($)</th>
+                                                    <!-- <th class="text-center">Payable Amount ($)</th> -->
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -91,9 +92,11 @@
                                                     <span class="badge rounded-pill bg-success w-100" v-if="pro.sts == 1">{{ pro.status }}</span>
                                                     <span class="badge rounded-pill bg-danger w-100" v-if="pro.sts == 2">{{ pro.status }}</span>
                                                     </td>
-                                                    <td class="text-center">{{ pro.withdraw_amount }}</td>
+
+                                                    <td class="text-center">{{ pro.uic_amount }}</td>
+                                                    <td class="text-center">{{ pro.usd_amount }}</td>
                                                     <td class="text-center">{{ pro.transection_fee }}%</td>
-                                                    <td class="text-center">{{ pro.payable_amount }}</td>
+                                                    <!-- <td class="text-center">{{ pro.payable_amount }}</td> -->
                                                   
                                                     <td>
                                                         <center>
@@ -112,9 +115,10 @@
                                                     <th class="text-left">User Info</th>
                                                     <th class="text-center">Date</th>
                                                     <th class="text-center">Status</th>
-                                                    <th class="text-center">Amount ($)</th>
+                                                    <th class="text-center">UIC</th>
+                                                    <th class="text-center">USDT($)</th>
                                                     <th class="text-center">Tras. Fee ($)</th>
-                                                    <th class="text-center">Payable Amount ($)</th>
+                                                    <!-- <th class="text-center">Payable Amount ($)</th> -->
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                             </tfoot>

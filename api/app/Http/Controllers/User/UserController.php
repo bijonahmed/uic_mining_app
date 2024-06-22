@@ -229,18 +229,26 @@ class UserController extends Controller
     public function getBalance()
     {
 
-        $active_matching = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
+        $active_matching        = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
+        $adj_type_sum           = ManualAdjustment::where('user_id', $this->userid)->where('adjustment_type',1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
+        $adj_type_minus         = ManualAdjustment::where('user_id', $this->userid)->where('adjustment_type',2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
 
         $setting                = Setting::find(1)->first();
 
         $today_date             = date("Y-m-d");
         $service_price          = $active_matching && $active_matching->end_date >= $today_date ? (!empty($active_matching->service_price) ? $active_matching->service_price : 0) : 0;
 
+        //user wise
         $swap_type_2_frm        = SwapHistory::where('user_id', $this->userid)->where('type',2)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//USDT 
         $swap_type_2_to         = SwapHistory::where('user_id', $this->userid)->where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//UIC 
 
         $swap_type_1_frm        = SwapHistory::where('user_id', $this->userid)->where('type',1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//UIC 
         $swap_type_1_to         = SwapHistory::where('user_id', $this->userid)->where('type',1)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//USDT 
+        // without user
+        $swaptype2to            = SwapHistory::where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//UIC 
+        $swaptype1frm           = SwapHistory::where('type',1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//UIC 
+
+        //
  
         $row                    = User::find($this->userid);
         $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
@@ -250,22 +258,31 @@ class UserController extends Controller
         $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount - $swap_type_2_frm + $swap_type_1_to;
 
         $row                    = User::where('id', $this->userid)->first();
-
-        $uicAmount              = $row->mining_amount + $swap_type_2_to - $swap_type_1_frm;
+        $mining_amount          = User::where('status', 1)->sum('mining_amount');
+        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus;
+        $uicAmountBalance       = $swaptype2to - $swaptype1frm;
 
         //echo "Mining amount:  $row->mining_amount----- Swap Amount : $swap_uic_history---- Sum Amount: $uicAmount";
        // exit; 
-        
         $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
-
         $beganing_price         = $setting->beganing_price;
         $marketCap              = $setting->liquidity_total_supply * $beganing_price; 
 
-        $data['available_balance']      = !empty($row->available_balance) ? $row->available_balance : 0;
-        $data['mining_amount']          = number_format($uicAmount,2);
+        $data['available_balance']        = !empty($row->available_balance) ? $row->available_balance : 0;
+
+        if(!empty($this->userid)){
+            $data['mining_amount']          = number_format($uicAmount,2);
+            $data['miningamount']           = $uicAmount;
+        }else{
+            $data['mining_amount']          = number_format($uicAmountBalance,2);
+            $data['miningamount']           = $uicAmountBalance;
+        }
+      
+
         $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
+        $data['usdtamount']             = $usdt_amount; //USDT Amount
         $data['wallet_address']         = !empty($setting->crypto_wallet_address) ? $setting->crypto_wallet_address : "";
-        $data['circulatingSupply']      = $circulatingSupply;
+        $data['circulatingSupply']      = number_format($uicAmount,2);//$circulatingSupply;
         $data['marketCap']              = $marketCap;
         $data['currentPrice']           = $beganing_price;
         return response()->json($data);
@@ -277,7 +294,8 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'wallet_type_frm'    => 'required',
             'wallet_type_to'     => 'required',
-            'swap_amount'        => 'required',
+            'swap_amount'        => 'required|gt:0',
+
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -285,8 +303,8 @@ class UserController extends Controller
 
         $userid         = $request->userid;
         $response       = app('App\Http\Controllers\User\UserController')->getBalance($userid);
-        $usdt_amount    = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
-        $uic_amount     = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+        $usdt_amount    = $response instanceof JsonResponse ? $response->getData(true)['usdtamount'] : 0;
+        $uic_amount     = $response instanceof JsonResponse ? $response->getData(true)['miningamount'] : 0;
        
 
         if($request->wallet_type_frm == 1){
@@ -1317,7 +1335,7 @@ class UserController extends Controller
             'entry_by'          => $row->entry_by,
             'delete_by'         => $this->userid,
         );
-        ManualAdjustmentDelete::insertGetId($data);
+       // ManualAdjustmentDelete::insertGetId($data);
 
         $manualAdjustment = ManualAdjustment::find($request->id);
         if ($manualAdjustment) {

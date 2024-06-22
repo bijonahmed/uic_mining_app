@@ -40,7 +40,7 @@
                       class="form-control"
                       @change="filterData"
                     >
-                      <option>All</option>
+                      <option value="5">All</option>
                       <option value="1">Debited (+)</option>
                       <option value="2">Credited (-)</option>
                     </select>
@@ -103,11 +103,11 @@
                     </td>
                     <td class="text-center">{{ pro.adjustment_amount }}</td>
                     <span v-if="pro.adjustment_type == 1">
-                      <div class="badge rounded-pill bg-success text-center w-100">{{ pro.status }}</div>
+                      <div class="badge rounded-pill bg-success text-center w-100">{{ pro.status }} (+) </div>
                     </span>
 
                     <span v-if="pro.adjustment_type == 2">
-                      <div class="badge rounded-pill bg-danger text-center w-100">{{ pro.status }}</div>
+                      <div class="badge rounded-pill bg-danger text-center w-100">{{ pro.status }} (-) </div>
                     </span>
                     <td class="text-center">{{ pro.created_at }}</td>
                     <td class="text-left">{{ pro.detailed_remarks }}</td>
@@ -188,7 +188,7 @@ const totalRecords = ref(0);
 const totalPages = ref(0);
 const productdata = ref([]);
 const searchQuery = ref(""); // Add a ref for the search query
-const selectedFilter = ref(null); // Add a ref for the search query
+const selectedFilter = ref(5); // Add a ref for the search query
 // Define a method to handle editing
 
 const deleteRow = (id) => {

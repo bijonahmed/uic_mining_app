@@ -51,33 +51,33 @@
                                                         <td>{{ request.name }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Withdrawal Amount</td>
+                                                        <td>UIC Amount</td>
                                                         <td><strong>:</strong></td>
-                                                        <td>{{ request.withdraw_amount }}</td>
+                                                        <td>{{ request.uic_amount }}</td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Payable Amount</td>
+                                                        <td>USDT Amount</td>
                                                         <td><strong>:</strong></td>
-                                                        <td>{{ request.payable_amount }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Payment Method </td>
-                                                        <td><strong>:</strong></td>
-                                                        <td>{{ request.currency_type_name }}</td>
+                                                        <td>{{ request.usdt_amount }}</td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Wallet Address </td>
+                                                        <td>Payment Method</td>
                                                         <td><strong>:</strong></td>
-                                                        <td>{{ request.wallet_address }}</td>
+                                                        <td>{{ request.payment_method }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Account Number </td>
+                                                        <td><strong>:</strong></td>
+                                                        <td>{{ request.account_number }}</td>
                                                     </tr>
 
 
                                                     <tr>
                                                         <td>Created Time</td>
                                                         <td><strong>:</strong></td>
-                                                        <td>{{ formatDate(request.created_at) }}</td>
+                                                        <td>{{ request.created_at }}</td>
                                                     </tr>
 
                                                     <tr>
@@ -92,26 +92,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-
-                                        <div class="col-12">
-                                            <form @submit.prevent="submitTopayment()" id="formrest" class="forms-sample"
-                                                enctype="multipart/form-data">
-                                                <div class="card card-primary card-outline card-tabs">
-
-                                                    <div class="card-body">
-                                                        <button type="submit" class="btn btn-primary btn-lg px-5 w-100">
-                                                            <i class="bx bx-check-circle mr-1"></i> Agree and submit to
-                                                            payment
-                                                        </button>
-                                                    </div>
-
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <hr>
+                                
                                     <div class="row">
 
                                         <div class="col-6">
@@ -177,11 +158,14 @@ const request = ref({
     withdrawID: '',
     transection_fee: '',
     user_id: '',
-    withdraw_amount: '',
+    uic_amount: '',
+    usdt_amount: '',
     wallet_address: '',
     payable_amount: '',
+    payment_method: '',
+    account_number: '',
     currency_type_name: '',
-    remarks: '',
+    remarks:'',
     approved_by: '',
     apiError: '',
     created_at: '',
@@ -194,8 +178,6 @@ const notifmsg = ref('');
 const errors = ref({});
 
 const submitToApproved = () => {
-
-
     swal.fire({
         title: "Are you sure?",
         text: "Approved this withdraw request !",
@@ -209,7 +191,7 @@ const submitToApproved = () => {
             const id = router.currentRoute.value.query.parameter;
             const payable_amount = request.value.payable_amount;
             axios
-                .get(`/dropUser/approvedWithdrawRequest/${id}`)
+                .get(`/deposit/approvedWithdrawRequest/${id}`)
                 .then((response) => {
                     // Assuming the response has a data object with expected data
                     router.push({
@@ -231,72 +213,20 @@ const submitToApproved = () => {
 
 
 }
-
-const submitTopayment = () => {
-
-    swal.fire({
-        title: "Are you sure?",
-        text: "Send to merchant withdrwarl request !",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes!"
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-
-            const formData = new FormData();
-            const id = router.currentRoute.value.query.parameter;
-            const payable_amount = request.value.payable_amount;
-            formData.append('id', id);
-            formData.append('payable_amount', payable_amount);
-            axios.post('/dropUser/sendWithdrawRequestToMerchant', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then((res) => {
-                //$('#formrest')[0].reset();
-               
-                // Redirect to product variant page
-                router.push({
-                    path: '/walletmanagement/withdrawal-management',
-                });
-
-            }).catch(error => {
-                if (error.response && error.response.status === 422) {
-                    errors.value = error.response.data.errors;
-                    const errorData = error.response.data;
-                        if (errorData.errors && errorData.errors.api_error) {
-                            apiError.value = errorData.errors.api_error;
-                        } else {
-                            apiError.value = 'An error occurred while processing your request.';
-                        }
-
-                } else {
-                    // Handle other types of errors here
-                    console.error("An error occurred:", error);
-                }
-            });
-
-            swal.fire({
-                title: "Request Succcess!",
-                text: "Successfully send request.",
-                icon: "success",
-                time: 100
-            });
-        }
-    });
-
-
-
-}
 const saveData = () => {
+
+
+    if(request.value.remarks == ""){
+        error_noti();
+        return false; 
+    }
+
     const formData = new FormData();
     const id = router.currentRoute.value.query.parameter;
     formData.append('id', id);
     formData.append('remarks', request.value.remarks);
-    formData.append('status', request.value.status);
+    formData.append('status', 2);
+  
 
     axios.post('/deposit/updateWithDrawRequest', formData, {
         headers: {
@@ -346,17 +276,23 @@ const getStatus = (status) => {
 const productDetails = () => {
     const id = router.currentRoute.value.query.parameter;
     axios.get(`/deposit/withdrawrow/${id}`).then(response => {
+        console.log("created_at" + response.data.created_at);
         const data = response.data.datarow;
-
         const wallet_address = response.data.wallet_address;
         request.value.name = data.name;
         request.value.withdrawID = data.withdrawID;
-        request.value.withdraw_amount = data.withdraw_amount;
+        request.value.uic_amount = data.uic_amount;
+        request.value.usdt_amount = data.usd_amount;
         request.value.payable_amount = data.payable_amount;
         request.value.payment_method = data.payment_method;
         request.value.approved_by = data.approved_by;
-        request.value.created_at = data.created_at;
-        request.value.remarks = data.remarks;
+
+        request.value.payment_method = data.payment_method;
+        request.value.account_number = data.account_number;
+
+        request.value.created_at = response.data.created_at;
+
+        request.value.remarks = response.data.remarks;
         request.value.status = data.status;
         request.value.currency_type_name = data.currency_type_name;
         request.value.wallet_address = wallet_address;
@@ -379,6 +315,25 @@ const success_noti = () => {
     Toast.fire({
         icon: "success",
         title: "Has been successfully update"
+    });
+};
+
+const error_noti = () => {
+    //alert("Your data has been successfully inserted.");
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+    Toast.fire({
+        icon: "error",
+        title: "Please write reject reason."
     });
 };
 onMounted(() => {

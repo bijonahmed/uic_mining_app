@@ -313,36 +313,37 @@ Route::group([
     Route::post('updateDepositRequest', [DepositController::class, 'updateDepositRequest']);
     Route::post('updateWithDrawRequest', [DepositController::class, 'updateWithDrawRequest']);
     Route::post('addWithDrawMethod', [DepositController::class, 'addWithDrawMethod']);
+    Route::get('approvedWithdrawRequest/{id}', [DropUserController::class, 'approvedWithdrawRequest']);
 
 });
 
-// Route::group([
-//     'middleware' => 'api',
-//     'prefix' => 'dropUser'
-// ], function () {
-//     Route::get('filterUsersProducts', [DropUserController::class, 'filterUsersProducts']);
-//     Route::get('filterOrders', [DropUserController::class, 'filterOrders']);
-//     Route::get('approvedWithdrawRequest/{id}', [DropUserController::class, 'approvedWithdrawRequest']);
-//     Route::post('sendWithdrawRequestToMerchant', [DropUserController::class, 'sendWithdrawRequestToMerchant']);
-//     Route::get('getTransactionReport', [DropUserController::class, 'getTransactionReport']);
-//     Route::get('getManualAdjustmentReport', [DropUserController::class, 'getManualAdjustmentReport']);
-//     Route::get('getwalletAddress', [DropUserController::class, 'getwalletAddress']);
-//     Route::get('report', [DropUserController::class, 'report']);
-//     Route::get('getComissionReport', [DropUserController::class, 'getComissionReport']);
-//     Route::get('getComissionReportToday', [DropUserController::class, 'getComissionReportToday']);
-//     Route::get('getCurrentBalance', [DropUserController::class, 'getCurrentBalance']);
-//     Route::post('depositRequest', [DropUserController::class, 'depositRequest']);
-//     Route::post('withdrawRequest', [DropUserController::class, 'withdrawRequest']);
-//     Route::get('depositRequestList', [DropUserController::class, 'depositRequestList']);
-//     Route::get('withDrawalRequestList', [DropUserController::class, 'withDrawalRequestList']);
-//     Route::get('accountDetailsList', [DropUserController::class, 'accountDetailsList']);
-//     Route::get('getMyDepositAmount', [DropUserController::class, 'getMyDepositAmount']);
-//     Route::get('getCurrencyType', [DropUserController::class, 'getCurrencyType']);
-//     Route::get('checkWithdrawalMethod', [DropUserController::class, 'checkWithdrawalMethod']);
-//     Route::get('chkfindWithdraInfo', [DropUserController::class, 'chkfindWithdraInfo']);
-//     Route::post('makeBank', [DropUserController::class, 'makeBank']);
-//     Route::post('updateMakeBank', [DropUserController::class, 'updateMakeBank']);
-// });
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'dropUser'
+], function () {
+    Route::get('filterUsersProducts', [DropUserController::class, 'filterUsersProducts']);
+    Route::get('filterOrders', [DropUserController::class, 'filterOrders']);
+    
+    Route::post('sendWithdrawRequestToMerchant', [DropUserController::class, 'sendWithdrawRequestToMerchant']);
+    Route::get('getTransactionReport', [DropUserController::class, 'getTransactionReport']);
+    Route::get('getManualAdjustmentReport', [DropUserController::class, 'getManualAdjustmentReport']);
+    Route::get('getwalletAddress', [DropUserController::class, 'getwalletAddress']);
+    Route::get('report', [DropUserController::class, 'report']);
+    Route::get('getComissionReport', [DropUserController::class, 'getComissionReport']);
+    Route::get('getComissionReportToday', [DropUserController::class, 'getComissionReportToday']);
+    Route::get('getCurrentBalance', [DropUserController::class, 'getCurrentBalance']);
+    Route::post('depositRequest', [DropUserController::class, 'depositRequest']);
+    Route::post('withdrawRequest', [DropUserController::class, 'withdrawRequest']);
+    Route::get('depositRequestList', [DropUserController::class, 'depositRequestList']);
+    Route::get('withDrawalRequestList', [DropUserController::class, 'withDrawalRequestList']);
+    Route::get('accountDetailsList', [DropUserController::class, 'accountDetailsList']);
+    Route::get('getMyDepositAmount', [DropUserController::class, 'getMyDepositAmount']);
+    Route::get('getCurrencyType', [DropUserController::class, 'getCurrencyType']);
+    Route::get('checkWithdrawalMethod', [DropUserController::class, 'checkWithdrawalMethod']);
+    Route::get('chkfindWithdraInfo', [DropUserController::class, 'chkfindWithdraInfo']);
+    Route::post('makeBank', [DropUserController::class, 'makeBank']);
+    Route::post('updateMakeBank', [DropUserController::class, 'updateMakeBank']);
+});
 
 Route::group([
     'middleware' => 'api',

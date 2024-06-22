@@ -63,8 +63,8 @@
                                         </LazyNuxtLink>
                                          
                                     </div>
-                                    <button type="button" class="btn btn-danger btn-flat btn-sm" @click="logoutUsers"><i
-                                            class="fas fa-trash-alt"></i>Logout All Users</button>
+                                    <!-- <button type="button" class="btn btn-danger btn-flat btn-sm" @click="logoutUsers"><i
+                                            class="fas fa-trash-alt"></i>Logout All Users</button> -->
                                     <button type="button" class="btn btn-warning btn-flat btn-sm"><i
                                             class="fas fa-trash-alt"></i>Reset</button>
 
@@ -133,17 +133,7 @@
                                                         class="far fa-eye"></i>Details</button>
                                                 <button class="btn w-100 btn-warning btn-sm btn-flat"
                                                     @click="edit(item.id)"><i class="fas fa-pen"></i>Edit</button>
-                                                <button class="btn  d-block w-100 d-block btn-default btn-sm btn-flat"
-                                                    @click="startOperation(item.id)" data-toggle="modal"
-                                                    data-target="#operation"><i class="fas fa-unlock-alt"></i>Start
-                                                    operation</button>
-                                                <button class="btn  d-block w-100 d-block btn-danger btn-sm btn-flat"
-                                                    @click="deleteItem(item.id)" data-toggle="modal"
-                                                    data-target="#delete"><i
-                                                        class="fas fa-trash-alt"></i>Delete</button>
-                                                <button class="btn  d-block w-100 d-block btn-default btn-sm btn-flat"
-                                                    @click="teamHidden(item.id)" data-toggle="modal"
-                                                    data-target="#team"><i class="fas fa-users"></i>Team hidden</button>
+                                                
                                             </div>
                                         </td>
                                     </tr>
