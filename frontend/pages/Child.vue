@@ -150,7 +150,8 @@
     <h4 class="title-main mt-0">Circulating Supply</h4>
     <div class="resources-card-wrapper">
       <div class="resources-card mr-10">
-        <iframe src="https://api.uicmax.com/chart" frameborder="0" width="100%" height="400" style="min-height: 400px;"></iframe>
+        <!-- <iframe src="https://api.uicmax.com/chart" frameborder="0" width="100%" height="400" style="min-height: 400px;"></iframe> -->
+        <canvas id="dailyChart" style="width: 100%; height: 400px;"></canvas>
       </div>
     </div>
   </section>
@@ -160,6 +161,7 @@
 </template>
 
 <script setup>
+import { Chart, registerables } from 'chart.js';
 import { ref, watchEffect } from "vue";
 import { useUserStore } from "~~/stores/user";
 import { storeToRefs } from "pinia";
@@ -179,6 +181,72 @@ const category_3 = ref(null);
 const category_4 = ref(null);
 
 
+// start chart 
+Chart.register(...registerables);
+
+const chartRef = ref(null);
+let dailyChart;
+
+const fetchChartData = async () => {
+  try {
+    const response = await axios.get('/chart-data');
+    const labels = Object.keys(response.data);
+    const dataValues = Object.values(response.data).map(value => parseFloat(value));
+
+    // Update chart data
+    dailyChart.data.labels = labels;
+    dailyChart.data.datasets[0].data = dataValues;
+    dailyChart.update();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+onMounted(() => {
+  const ctx = document.getElementById('dailyChart').getContext('2d');
+  dailyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [], // Initially empty, will be populated by fetched data
+      datasets: [{
+        label: 'Circulating Supply',
+        data: [],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(tooltipItem) {
+              if (tooltipItem.dataset) {
+                return tooltipItem.dataset.data[tooltipItem.dataIndex].toFixed(10);
+              }
+              return '';
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Fetch chart data initially
+  fetchChartData();
+
+  // Update chart data every 10 seconds
+  setInterval(fetchChartData, 10000); // 10 seconds interval (10000 milliseconds)
+});
+//end chart 
+
 const fetchData = async () => {
   try {
     const response = await axios.get("/settingrowClient");
@@ -190,13 +258,14 @@ const fetchData = async () => {
     marketCap.value = response.data.marketCap;
     currentPrice.value = response.data.currentPrice;
     availablebalance.value = response.data.currentPrice_top;
-
-
-
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
+
+ 
+
+
 
 
 
@@ -214,6 +283,7 @@ const checkMiningMatching = async () => {
 
 fetchData();
 checkMiningMatching();
+//getGraphHistory();
 
 watchEffect(async () => {
   // Create a promise that resolves after 5 seconds

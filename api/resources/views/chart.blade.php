@@ -32,14 +32,8 @@ function fetchDataAndUpdateChart() {
             dailyChart.data.labels = labels;
             dailyChart.data.datasets[0].data = dataValues;
             dailyChart.update();
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching data:', error);
-        }
-    });
-}
 
-// Initial chart setup
+            // Initial chart setup
 const ctx = document.getElementById('dailyChart').getContext('2d');
 const dailyChart = new Chart(ctx, {
     type: 'line',
@@ -75,6 +69,14 @@ const dailyChart = new Chart(ctx, {
         }
     }
 });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
+
 
 // Fetch data and update chart initially
 fetchDataAndUpdateChart();

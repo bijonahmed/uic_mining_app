@@ -29,6 +29,7 @@ use App\Http\Controllers\Report\PartnerReportController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Mining\MiningController;
 use App\Http\Middleware\CheckUserStatus;
+use App\Http\Controllers\ChartController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,6 +40,8 @@ use App\Http\Middleware\CheckUserStatus;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get('/chart-data', [ChartController::class, 'getData']);
 Route::post('messages', [ChatController::class, 'message']);
 Route::get('/messages/{community_slug}', [ChatController::class, 'getMessages']);
 Route::get('/long-poll/{communitySlug}', [ChatController::class, 'longPoll']);
