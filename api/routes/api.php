@@ -114,6 +114,7 @@ Route::group([
     Route::get('checkWalletType', [UserController::class, 'checkWalletType']);
     Route::get('checkUicAddress', [UserController::class, 'checkUicAddress']);
     Route::get('checkLevelHistory', [UserController::class, 'checkLevelHistory']);
+    Route::get('checkLevelHistorys', [UserController::class, 'checkLevelHistorys']);
     Route::get('getLevelDetails', [UserController::class, 'getLevelDetails']);
     Route::get('getBalance', [UserController::class, 'getBalance']);
     Route::get('transactionHistory', [UserController::class, 'transactionHistory']);

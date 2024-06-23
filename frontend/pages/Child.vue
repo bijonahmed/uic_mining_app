@@ -16,9 +16,13 @@
                 <p style="color: white">CURRENT PRICE</p>
               </p>
             </div>
-            <div class="ml-auto align-self-end">
-              <a class="profile-av m-auto" href="profile"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></a>
+            <div class="ml-auto align-self-end"  v-if="isLoggedIn">
+              <nuxt-link class="profile-av m-auto" to="/profile"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></nuxt-link>
               <p class="text-white" >{{ userStore.email }}</p>
+            </div>
+            <div class="ml-auto align-self-end">
+              <nuxt-link class="profile-av m-auto" to="#"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></nuxt-link>
+              
             </div>
           </div>
         </div>
@@ -143,34 +147,13 @@
       </div>
 
       <section class="bal-section supply_container container mt-30">
-        <h4 class="title-main mt-0">Cryptocoins Balance</h4>
-        <div class="resources-card-wrapper">
-          <div class="resources-card mr-10">
-            <div class="d-flex flex-column flex-md-row">
-              <img src="/assets/img/content/ex2.png" class="max-w mb-10" alt="" />
-              <div class="d-flex flex-column ml-md-2">
-                <p class="text-muted mb-10 font-weight-medium">Total Income</p>
-                <div class="progress">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 57%"></div>
-                </div>
-                <h4 class="mt-10 mb-0">$2,748,98</h4>
-              </div>
-            </div>
-          </div>
-          <div class="resources-card ml-10">
-            <div class="d-flex flex-column flex-md-row">
-              <img src="/assets/img/content/ex1.png" class="max-w mb-10" alt="" />
-              <div class="d-flex flex-column ml-md-2">
-                <p class="text-muted mb-10 font-weight-medium">Expenses</p>
-                <div class="progress">
-                  <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"></div>
-                </div>
-                <h4 class="mt-10 mb-0">$1,643.22</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <h4 class="title-main mt-0">Circulating Supply</h4>
+    <div class="resources-card-wrapper">
+      <div class="resources-card mr-10">
+        <iframe src="https://api.uicmax.com/chart" frameborder="0" width="100%" height="400" style="min-height: 400px;"></iframe>
+      </div>
+    </div>
+  </section>
       <br /><br /><br /><br />
     </main>
   </div>
@@ -247,6 +230,7 @@ watchEffect(async () => {
 </script>
 
 <style scoped>
+
 .countdown {
   font-size: 24px;
   margin-top: 20px;

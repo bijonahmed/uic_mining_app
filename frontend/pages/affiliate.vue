@@ -32,10 +32,9 @@
                             <div class="d-flex align-items-center">
                                 <div class="d-flex flex-grow">
                                     <div class="mr-auto">
-                                        <h1 class="b-val"> $1,249.03 </h1>
+                                        <h1 class="b-val"> {{ total_referal_warnings }} UIC</h1>
                                         <p class="g-text mb-10">Total Referal Earnings</p>
-                                        <div class="badge badge-pill"> This month 18.98% <i
-                                                class="txt-green fa fa-arrow-up ml-10"></i></div>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -59,10 +58,9 @@
                                         <div class="d-flex flex-grow">
                                             <div class="mr-auto">
                                                 <h3 class="w-text mt-0 mb-0">Refer Fiends & Earn</h3>
-                                                <p class="mb-0 g-text">Lorem ipsum dolor sit amet.</p>
                                             </div>
                                             <div class="ref-bouns">
-                                                <h3 class="mt-0 mb-5">$20</h3>
+                                                <h3 class="mt-0 mb-5">{{ levelBonus }} UIC</h3>
                                                 <span>Bouns</span>
                                             </div>
                                         </div>
@@ -184,6 +182,8 @@ const level_1 = ref('');
 const level_2 = ref('');
 const level_3 = ref('');
 const total = ref('');
+const total_referal_warnings = ref(0);
+const levelBonus = ref('');
 const levels = ref([]);
 
 const formatDate = (dateString) => {
@@ -285,6 +285,8 @@ const fetchLevelData = async () => {
     level_3.value   = response.data.level_3;
     total.value     = response.data.total;
     levels.value     = response.data.levels;
+    levelBonus.value     = response.data.levelBonus;
+    total_referal_warnings.value     = response.data.total_referal_warnings;
   } catch (error) {
     console.error("Error fetching data:", error);
   }

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use App\Models\MiningCategory;
 use App\Models\MiningHistory;
+use App\Models\MiningGraph;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
@@ -73,6 +74,16 @@ class StartCommand extends Command
                     //$user->available_balance += number_format($totalAssets, 8);
                     $user->mining_amount += number_format($totalAssets, 8);
                     $user->save(); // Save the changes to the database
+                    // Prepare data for insertion into MiningGraph
+                    $data = [
+                        'user_id' => $user->id,
+                        'mining_date' => date("Y-m-d"),
+                        'mining_amount' => number_format($totalAssets, 8)
+                    ];
+
+                    // Insert data into MiningGraph
+                    MiningGraph::insert($data);
+
                     echo "Updated User ID: $userId with new balance: {$user->mining_amount}<br>";
                 } else {
                     echo "User not found for ID: $userId<br>";

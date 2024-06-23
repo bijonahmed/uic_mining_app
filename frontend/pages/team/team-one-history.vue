@@ -37,17 +37,18 @@
                         <table class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
                                     <th>Register Date</th>
-                                    
+                                    <th>Name</th>
+                                    <th>Profit</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="level in resonseData" :key="level.id">
-                                    <td>{{ level.name }}</td>
-                                    <td>{{ level.email }}</td>
                                     <td>{{ formatDate(level.created_at) }}</td>
+                                    <td>{{ level.name }}</td>
+                                    <!-- <td>{{ level.email }}</td> -->
+                                    <td>{{ level.level_commision }} UIC</td>
+                                  
                                 </tr>
                                 <!-- Add more rows as needed -->
                             </tbody>
@@ -75,9 +76,6 @@ const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
 const resonseData = ref([]);
-
-
-
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);

@@ -270,13 +270,7 @@ const onScroll = () => {
 }
 
 /* Form styling */
-.chat-form {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  background: #f1f1f1; /* Optional background color */
-}
-
+ 
 .message-input {
   width: 100%;
   padding: 10px;
@@ -297,5 +291,15 @@ const onScroll = () => {
 }
 .message_box main{
   margin-top: 50px;
+}
+
+.chat-form  {
+    background: #f1f1f1;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    position: fixed;
+    bottom: 55px;
+    width: 100% !important;
 }
 </style>

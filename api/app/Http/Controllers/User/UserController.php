@@ -226,6 +226,82 @@ class UserController extends Controller
         return response()->json($data);
     }
 
+
+
+    public function getBalances($userid)
+    {
+
+        $user_id=$userid; 
+
+        $active_matching        = MiningServicesBuyHistory::where('user_id', $user_id)->first();
+        $adj_type_sum           = ManualAdjustment::where('user_id', $user_id)->where('adjustment_type',1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
+        $adj_type_minus         = ManualAdjustment::where('user_id', $user_id)->where('adjustment_type',2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
+
+        $setting                = Setting::find(1)->first();
+
+        $today_date             = date("Y-m-d");
+        $service_price          = $active_matching && $active_matching->end_date >= $today_date ? (!empty($active_matching->service_price) ? $active_matching->service_price : 0) : 0;
+        $swap_tran              = SwapHistory::where('user_id', $user_id)->get();
+        //user wise
+        $swap_type_2_frm        = SwapHistory::where('user_id', $user_id)->where('type',2)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//USDT 
+        $swap_type_2_to         = SwapHistory::where('user_id', $user_id)->where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//UIC 
+
+        $swap_type_1_frm        = SwapHistory::where('user_id', $user_id)->where('type',1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//UIC 
+        $swap_type_1_to         = SwapHistory::where('user_id', $user_id)->where('type',1)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//USDT 
+        // without user
+        $swaptype2to            = SwapHistory::where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//UIC 
+        $swaptype1frm           = SwapHistory::where('type',1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//UIC 
+ 
+        $row                    = User::find($user_id);
+        $deposit                = Deposit::where('user_id', $user_id)->where('status', 1)->sum('deposit_amount');
+
+        $withdraw_usdt          = Withdraw::where('user_id', $user_id)->where('status', 1)->sum('usd_amount');
+        $withdraw_uic           = Withdraw::where('user_id', $user_id)->where('status', 1)->sum('uic_amount');
+
+    
+        $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $user_id)->where('wallet_type', 2)->sum('amount');
+        $usdtAmount             = SendReceived::where('user_id', $user_id)->where('wallet_type', 2)->sum('amount');
+        $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount - $swap_type_2_frm + $swap_type_1_to;
+
+        $row                    = User::where('id', $user_id)->first();
+        $mining_amount          = User::where('status', 1)->sum('mining_amount');
+        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus;
+        $uicAmountBalance       = $swaptype2to - $swaptype1frm;
+
+        $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
+        $beganing_price         = $setting->beganing_price;
+        $register_bonus         = $setting->register_bonus;
+        $marketCap              = $setting->liquidity_total_supply * $beganing_price; 
+
+
+        $data['available_balance']        = !empty($row->available_balance) ? $row->available_balance : 0;
+
+        if(!empty($user_id)){
+            $data['mining_amount']          = number_format($uicAmount,2);
+            $data['miningamount']           = $uicAmount;
+        }else{
+            $data['mining_amount']          = number_format($uicAmountBalance,2);
+            $data['miningamount']           = $uicAmountBalance;
+        }
+      
+        $data['deposit_sum']            = $deposit;
+        $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
+        $data['usdtamount']             = $usdt_amount; //USDT Amount
+        $data['wallet_address']         = !empty($setting->crypto_wallet_address) ? $setting->crypto_wallet_address : "";
+        $data['circulatingSupply']      = number_format($uicAmount,2);//$circulatingSupply;
+        $data['marketCap']              = $marketCap;
+        $data['currentPrice']           = $beganing_price;
+        $data['withdraw_usdt']          = $withdraw_usdt; 
+        $data['withdraw_uic']           = $withdraw_uic;
+        $data['register_bonus']         = $register_bonus;
+        $data['adj_type_sum']           = $adj_type_sum ;
+        $data['adj_type_minus']         = $adj_type_minus;
+        $data['service_price']          = $service_price;
+        $data['swap_tran']              = $swap_tran;
+
+        return response()->json($data);
+    }
+
     public function getBalance()
     {
 
@@ -247,8 +323,6 @@ class UserController extends Controller
         // without user
         $swaptype2to            = SwapHistory::where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')"));//UIC 
         $swaptype1frm           = SwapHistory::where('type',1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')"));//UIC 
-
-        //
  
         $row                    = User::find($this->userid);
         $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
@@ -262,8 +336,6 @@ class UserController extends Controller
         $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus;
         $uicAmountBalance       = $swaptype2to - $swaptype1frm;
 
-        //echo "Mining amount:  $row->mining_amount----- Swap Amount : $swap_uic_history---- Sum Amount: $uicAmount";
-       // exit; 
         $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
         $beganing_price         = $setting->beganing_price;
         $marketCap              = $setting->liquidity_total_supply * $beganing_price; 
@@ -664,36 +736,44 @@ class UserController extends Controller
         return response()->json($currentBalance);
     }
 
+   
+
     public function findUserDetails(Request $request)
     {
 
-        $current_date   = date("Y-m-d");
-        $response       = app('App\Http\Controllers\Dropshipping\DropUserController')->getCurrentBalanceCheckAdminIndivUser($request->id);
-        $currentBalance = $response instanceof JsonResponse ? $response->getData(true)['current_balance'] : 0;
+        $userid             = $request->id;
+        $response           = app('App\Http\Controllers\User\UserController')->getBalances($userid);
+        $usdt_amount        = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
+        $uic_amount         = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+        $deposit_amount     = $response instanceof JsonResponse ? $response->getData(true)['deposit_sum'] : 0;
+        $withdraw_usdt      = $response instanceof JsonResponse ? $response->getData(true)['withdraw_usdt'] : 0;
+        $withdraw_uic       = $response instanceof JsonResponse ? $response->getData(true)['withdraw_uic'] : 0;
+        $airdrop            = $response instanceof JsonResponse ? $response->getData(true)['available_balance'] : 0;
+        $register_bonus     = $response instanceof JsonResponse ? $response->getData(true)['register_bonus'] : 0;
+        $adj_type_sum       = $response instanceof JsonResponse ? $response->getData(true)['adj_type_sum'] : 0;
+        $adj_type_minus     = $response instanceof JsonResponse ? $response->getData(true)['adj_type_minus'] : 0;
+        $swap_tran          = $response instanceof JsonResponse ? $response->getData(true)['swap_tran'] : "";
+   
 
-        $commission_resp        = app('App\Http\Controllers\Dropshipping\DropUserController')->getComissionReportAdmin($request->id);
-        $commission_sum         = $commission_resp instanceof JsonResponse ? $commission_resp->getData(true)['commission_sum'] : 0;
-        $profit_amount          = Order::where('user_id', $request->id)->whereIn('order_status', [6])->sum('profit');
+        $global             = app('App\Http\Controllers\UnauthenticatedController')->settingrowClient();
+        $circulatingSupply  = $global instanceof JsonResponse ? $global->getData(true)['circulatingSupply'] : 0;
+        $marketCap          = $global instanceof JsonResponse ? $global->getData(true)['marketCap'] : 0;
+        $currentPrice_top   = $global instanceof JsonResponse ? $global->getData(true)['currentPrice_top'] : 0;
+        $maximum_supply     = $global instanceof JsonResponse ? $global->getData(true)['maximum_supply'] : 0;
+        $total_supply       = $global instanceof JsonResponse ? $global->getData(true)['total_supply'] : 0;
 
-        $manAdjstSum            = ManualAdjustment::where('user_id', $request->id)->where('adjustment_type', 1)->sum('adjustment_amount');
-        $manAdjstMinus          = ManualAdjustment::where('user_id', $request->id)->where('adjustment_type', 2)->sum('adjustment_amount');
+      
+        
+        $commission_sum         = 0;//$commission_resp instanceof JsonResponse ? $commission_resp->getData(true)['commission_sum'] : 0; service_price
+        $profit_amount          = 0;//Order::where('user_id', $request->id)->whereIn('order_status', [6])->sum('profit');
 
-        // echo "manAdjstSum:------$manAdjstSum, manAdjstMinus:----$manAdjstMinus";exit;
-        $epense                 = MystoreHistory::where('user_id', $request->id)->sum('service_price');
-
-        //getComissionReportAdmin
+        $epense                 = MiningServicesBuyHistory::where('user_id', $request->id)->sum('service_price');
 
         $item = User::join('rule', 'users.role_id', '=', 'rule.id')
             ->select('users.doc_file', 'users.created_at', 'users.updated_at', 'lastlogin_country', 'register_ip', 'lastlogin_ip', 'users.ref_id', 'users.telegram', 'users.whtsapp', 'users.role_id', 'users.id', 'users.name', 'users.email', 'users.phone_number', 'users.show_password', 'users.status', 'rule.name as rulename')
             ->where('users.id', $request->id)
             ->first();
 
-        $chkPendingOrder = Order::where('user_id', $request->id)->whereIn('order_status', [2, 3, 4, 5])->sum('buying_price');
-
-        $totalDeposit               =  Deposit::where('user_id', $request->id)->where('status', 1)->sum('receivable_amount');
-
-        $totalWithdraw_success      =  Withdraw::where('user_id', $request->id)->where('status', 1)->sum('withdraw_amount');
-        $totalWithdraw_processing   =  Withdraw::where('user_id', $request->id)->where('status', 0)->sum('withdraw_amount');
 
         $telegram       = !empty($item->telegram) ? $item->telegram : "None";
         $phone          = !empty($item->phone_number) ? $item->phone_number : "";
@@ -703,8 +783,59 @@ class UserController extends Controller
         $chkInviteUser  = User::where('id', $ref_id)->select('name', 'phone_number', 'email')->first();
         $registerIP     = $item->register_ip;
         $ipdat          = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $registerIP));
+      
+
+        if (!function_exists('convertScientificToDecimal')) {
+            function convertScientificToDecimal($value) {
+                // Check if the value is in scientific notation
+                if (stripos($value, 'e') !== false) {
+                    list($base, $exponent) = explode('e', strtolower($value));
+                    // Calculate the number of decimal places
+                    $decimals = abs((int)$exponent);
+                    $number = bcmul($base, bcpow(10, $exponent, $decimals + strlen($base)));
+                    return rtrim(rtrim($number, '0'), '.');
+                }
+                return $value;
+            }
+        }
+
+        
+
+        $swaptran = [];
+        foreach ($swap_tran as $v) {
+
+            $toamount = $v['to_amount'];
+        $extractSignificantDigits = function ($value) {
+            if (is_numeric($value) && stripos($value, 'e') !== false) {
+                list($base, $exponent) = explode('e', strtolower($value));
+                return $base;
+            }
+            return $value;
+        };
+        $convertedToAmount = $extractSignificantDigits($toamount);
+        //echo "Original: $toamount, Converted: $convertedAmount<br>";
+           
+            $swaptran[] = [
+                'id'                           => $v['id'],
+                'user_id'                      => $v['user_id'],
+                'type'                         => $v['type'],
+                'wallet_type_frm'              => $v['wallet_type_frm'],
+                'wallet_type_to'               => $v['wallet_type_to'],
+                'frm_amount'                   => number_format($v['frm_amount'],2),
+                'to_amount'                    => $convertedToAmount, 
+                'created_at'                   => date("d-m-Y H:i:s", strtotime($v['created_at'])),
+            ];
+        }
+        
 
         $data = [
+            'marketCap'         => $marketCap, 
+            'currentPrice_top'  => $currentPrice_top, 
+            'maximum_supply'    => $maximum_supply, 
+            'total_supply'      => $total_supply, 
+            'circulatingSupply' => $circulatingSupply, 
+            'usdt_amount'=> $usdt_amount,
+            'uic_amount' => $uic_amount,
             'user_id'    => $item->id,
             'name'       => substr($item->name, 0, 250),
             'rulename'   => substr($item->rulename, 0, 250),
@@ -725,20 +856,25 @@ class UserController extends Controller
             'updated_at'        => date("Y-M-d H:i:s", strtotime($item->updated_at)),
             'phone_number'      => $item->phone_number,
             'show_password'     => $item->show_password,
-            'u_details_avail_balance'  => '$' . $currentBalance,
-            'u_details_frozenAmount'  => '$' . $chkPendingOrder,
+            'u_details_user_id'  => $item->id,
+         
             'u_details_kyc'     => !empty($item->doc_file) ? url($item->doc_file) : "",
             'status'            => $status,
-            'total_success_deposit'       => '$' . number_format($totalDeposit, 2),
-            'total_success_withdraw'      => '$' . number_format($totalWithdraw_success, 2),
-            'total_processing_withdraw'   => '$' . number_format($totalWithdraw_processing, 2),
+            'total_success_deposit'       => '$' . number_format($deposit_amount, 2),
+            'total_success_withdraw'      =>  'UIC:' . number_format($withdraw_uic,2) .', USDT: '. number_format($withdraw_usdt, 2),
+           
+            'total_airdrop'               => '$' . number_format($airdrop, 2),
             'total_profit'                => '$' . number_format($profit_amount, 2),
             'total_commission'            => '$' . number_format($commission_sum, 2),
-            'total_redward_plus'          => '$' . number_format($manAdjstSum, 2),
-            'total_redward_minus'         => '$' . number_format($manAdjstMinus, 2),
-            'total_expense'               => '$' . number_format($epense, 2)
+
+            'total_expense'               => '$' . number_format($epense, 2),
+            'register_bonus'              => '$' . number_format($register_bonus, 2),
+            'adj_type_sum'                => 'UIC: ' . number_format($adj_type_sum, 2),
+            'adj_type_minus'              => 'UIC: ' . number_format($adj_type_minus, 2),
+            'swap_tran'                   => $swaptran,
         ];
-        //dd($data);
+
+       // dd($data);
         return response()->json($data);
     }
 
@@ -1740,6 +1876,7 @@ class UserController extends Controller
     public function checkUicAddress(Request $request)
     {
 
+        
         $uic_address =  $request->uic_address;
         $row    = User::where('uic_address', $uic_address)->first();
         if (!empty($row)) {
@@ -1752,23 +1889,98 @@ class UserController extends Controller
         return response()->json($data);
     }
 
-    public function checkLevelHistory()
-    {
 
-        $userId           = $this->userid;
+
+    public function checkLevelHistorys(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'email'             => 'required|email',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $email    = $request->email; 
+        $chkUser  = User::where('email',$email)->first();
+        $userId   = $chkUser->id;
+
         $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address', 'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL1->transform(function ($item) {
+            $gloabl_setting   = Setting::find(1);
+            $item['level_commision'] = $gloabl_setting->level_1_bonus; // Adding the extra key with value 6
+            return $item;
+        });
+
 
         $level1_ids       = $checkL1->pluck('id')->toArray();
         // Fetch level 2 users based on level 1 IDs
         $checkL2          = User::whereIn('ref_id', $level1_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL2->transform(function ($item) {
+            $gloabl_setting   = Setting::find(1);
+            $item['level_commision'] = $gloabl_setting->level_2_bonus; // Adding the extra key with value 6
+            return $item;
+        });
+
         $level2_ids       = $checkL2->pluck('id')->toArray();
 
         $checkL3          = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL3->transform(function ($item) {
+            $gloabl_setting   = Setting::find(1);
+            $item['level_commision'] = $gloabl_setting->level_2_bonus; // Adding the extra key with value 6
+            return $item;
+        });
+        $level3_ids = $checkL3->pluck('id')->toArray();
+
+
+        $data['level_1']        = $checkL1;
+        $data['level_2']        = $checkL2;
+        $data['level_3']        = $checkL3;
+        $data['level_1_count']  = count($checkL1);
+        $data['level_2_count']  = count($checkL2);
+        $data['level_3_count']  = count($checkL3);
+        $data['total']    = count($level1_ids) + count($level2_ids) + count($level3_ids);
+        return response()->json($data);
+
+        
+    }
+
+
+    public function checkLevelHistory()
+    {
+
+        $userId           = $this->userid;
+        
+        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address', 'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL1->transform(function ($item) {
+            $gloabl_setting   = Setting::find(1);
+            $item['level_commision'] = $gloabl_setting->level_1_bonus; // Adding the extra key with value 6
+            return $item;
+        });
+
+
+        $level1_ids       = $checkL1->pluck('id')->toArray();
+        // Fetch level 2 users based on level 1 IDs
+        $checkL2          = User::whereIn('ref_id', $level1_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL2->transform(function ($item) {
+            $gloabl_setting   = Setting::find(1);
+            $item['level_commision'] = $gloabl_setting->level_2_bonus; // Adding the extra key with value 6
+            return $item;
+        });
+
+        $level2_ids       = $checkL2->pluck('id')->toArray();
+
+        $checkL3          = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        $checkL3->transform(function ($item) {
+            $gloabl_setting   = Setting::find(1);
+            $item['level_commision'] = $gloabl_setting->level_2_bonus; // Adding the extra key with value 6
+            return $item;
+        });
         $level3_ids       = $checkL3->pluck('id')->toArray();
+
 
         $data['level_1']  = $checkL1;
         $data['level_2']  = $checkL2;
         $data['level_3']  = $checkL3;
+        $data['total']    = count($level1_ids) + count($level2_ids) + count($level3_ids);
 
         return response()->json($data);
     }
@@ -1792,7 +2004,15 @@ class UserController extends Controller
         $data['level_3']  = count($level3_ids);
         $data['levels']   = $checkL1;
         $data['total']    = count($level1_ids) + count($level2_ids) + count($level3_ids);
+        $gloabl_setting   = Setting::find(1);
+        $data['levelBonus'] = $gloabl_setting->level_1_bonus; // Adding the extra key with value 6
 
+        // total referral earning
+
+        $team_1 = count($level1_ids) * $gloabl_setting->level_1_bonus;
+        $team_2 = count($level2_ids) * $gloabl_setting->level_2_bonus;
+        $team_3 = count($level3_ids) * $gloabl_setting->level_3_bonus;
+        $data['total_referal_warnings'] = $team_1 + $team_2 + $team_3;
         return response()->json($data);
     }
 

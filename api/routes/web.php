@@ -5,6 +5,7 @@ use App\Http\Controllers\Public\PublicController;
 use App\Http\Controllers\Public\PublicOrderStatusUpdate;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\ChartController;
 
 Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('optimize:clear');
@@ -20,10 +21,13 @@ Route::get('/clear-cache', function () {
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('showProfileData', [UserController::class, 'me']);
-Route::get('activate-account', [PublicController::class, 'activationAccount']);
-Route::get('upload', [PublicController::class, 'upload']);
-Route::post('submit', [PublicController::class, 'submit']);
+
+Route::get('/chart-data', [ChartController::class, 'getData']);
+ 
+Route::get('/chart', function () {
+    return view('chart');
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

@@ -150,7 +150,8 @@ class AuthController extends Controller
             'name'                => $trimmedEmail,
             'email'               => $request->email,
             'role_id'             => 2,
-            'available_balance'   => !empty($setting->register_bonus) ? $setting->register_bonus : 0, // 3 UIC
+            'available_balance'   => !empty($setting->register_bonus) ? $setting->register_bonus : 0, 
+            'register_bonus'      => !empty($setting->register_bonus) ? $setting->register_bonus : 0, 
             'ref_id'              => $user->id,
             'status'              => 0,
             'register_ip'         => $request->ip(),

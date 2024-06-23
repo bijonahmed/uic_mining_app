@@ -101,7 +101,7 @@ const menuItems = ref([
       //{ label: 'Bulk Order Status ', icon: 'fa-circle', route: '/usermanagement/bulk-order-status' },
       //{ label: 'Create Bulk Order ', icon: 'fa-circle', route: '/usermanagement/bulk-order' },
       //{ label: 'Manual dispatch', icon: 'fa-circle', route: '#'},
-      //{ label: 'Agent list', icon: 'fa-circle', route: '/usermanagement/agent-list' },
+      { label: 'Affiliate ', icon: 'fa-circle', route: '/usermanagement/affiliate' },
     ],
   },
   /*
