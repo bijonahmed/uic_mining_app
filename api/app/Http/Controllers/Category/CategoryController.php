@@ -44,6 +44,8 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
+    
+
     public function inserMiningCategory(Request $request)
     {
 

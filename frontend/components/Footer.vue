@@ -18,10 +18,10 @@
 						<nuxt-link class="b-m-pluse" to="/login"><i class="fa fa-plus"></i></nuxt-link>
 					</li>
 					<li v-if="isLoggedIn">
-						<nuxt-link to='/ledger'> <i class="fa-duotone fa-file menuli"></i><p>Ledger</p> </nuxt-link>
+						<nuxt-link to='/holders'> <i class="fa-duotone fa-file menuli"></i><p>Holders</p> </nuxt-link>
 					</li>
 					<li v-else>
-						<nuxt-link to='/login'> <i class="fa-duotone fa-file menuli"></i><p>Ledger</p> </nuxt-link>
+						<nuxt-link to='/login'> <i class="fa-duotone fa-file menuli"></i><p>Holders</p> </nuxt-link>
 					</li>
 					<li v-if="isLoggedIn">
 						<nuxt-link to='/profile'><i class="fa-duotone fa-user menuli"></i><p>Profile</p></nuxt-link>

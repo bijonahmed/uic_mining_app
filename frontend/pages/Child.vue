@@ -262,10 +262,6 @@ const fetchData = async () => {
   }
 };
 
- 
-
-
-
 
 
 const checkMiningMatching = async () => {

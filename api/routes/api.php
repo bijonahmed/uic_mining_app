@@ -110,8 +110,14 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'user'
 ], function () {
+
+    Route::get('deleteNotification/{id}', [UserController::class, 'deleteNotification']);
+    Route::get('getNotifications', [UserController::class, 'getNotifications']);
+    Route::get('allNotification', [UserController::class, 'allNotification']);
+    Route::get('allTopUicHolders', [UserController::class, 'allTopUicHolders']);
     Route::post('sweapCalculation', [UserController::class, 'sweapCalculation']);
     Route::get('checkycData', [UserController::class, 'checkycData']);
+    Route::post('sendNotification', [UserController::class, 'sendNotification']);
     Route::post('insertKycDriving', [UserController::class, 'insertKycDriving']);
     Route::post('insertKycPassport', [UserController::class, 'insertKycPassport']);
     Route::post('insertKycCnic', [UserController::class, 'insertKycCnic']);

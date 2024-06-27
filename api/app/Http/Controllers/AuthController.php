@@ -71,7 +71,7 @@ class AuthController extends Controller
             return response()->json([
                 'errors' => [
                     'account' => [
-                        "This user is blocked"
+                        "Verify your email to activate your account."//"This user is blocked"
                     ]
                 ]
             ], 403);

@@ -292,7 +292,7 @@ const success_noti = () => {
 const checkRow = () => {
         const id = router.currentRoute.value.query.parameter;
         insertdata.id = id;
-        axios.get(`/category/minningCategoryrow/${id}`).then(response => {
+  axios.get(`/category/minningCategoryrow/${id}`).then(response => {
         insertdata.id = response.data.data.id;
         insertdata.name = response.data.data.name;
         insertdata.minining_amount_per_secnd = response.data.data.minining_amount_per_secnd;
