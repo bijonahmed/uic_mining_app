@@ -254,14 +254,25 @@ class UserController extends Controller
     {
 
         try {
-            $users = User::where('mining_amount', '!=', '0')
-                ->select('id', 'uic_address', 'mining_amount')
-                ->orderBy('mining_amount', 'desc')
-                ->limit(1000)
-                ->get();
+            $users = User::select('id', 'uic_address', 'mining_amount')
+                    ->orderBy('mining_amount', 'desc')
+                    ->get();
+
+
+            $userrows = [];
+            foreach ($users as $v) {
+                $userrows[] = [
+                    'id'             => $v->id,
+                    'uic_address'    => $v->uic_address,
+                    'mining_amount'    => !empty($v->mining_amount) ? number_format($v->mining_amount,7) : '0.000000',
+                ];
+            }
+
+
+
 
             $data['totalHolders'] = count($users);
-            $data['users']        = $users;
+            $data['users']        = $userrows;
 
             return response()->json($data);
             // Do something with the $users collection if needed

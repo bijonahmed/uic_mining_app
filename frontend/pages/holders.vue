@@ -69,8 +69,8 @@
                                             </span>{{ v.uic_address }}</small>
                                     </div>
                                     <div>
-                                        <small class="d-block mb-0 txt-green">{{ v.mining_amount }} <span
-                                                class="text-muted">UIC</span></small>
+                                        <small class="d-block mb-0 txt-green">{{ v.mining_amount }} <span  class="text-muted">UIC</span></small>
+                                        
                                         <!--<small class="text-white border-radius" style="background-color: rgb(119, 0, 255);">Level 1</small>
               </div>-->
                                     </div>

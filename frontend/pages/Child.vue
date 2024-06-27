@@ -11,7 +11,7 @@
         <div class="d-flex align-items-center mt-30">
           <div class="d-flex flex-grow">
             <div class="mr-auto">
-              <h1 class="b-val" v-if="isLoggedIn">{{ availablebalance }} USDT</h1>
+              <h1 class="b-val" v-if="isLoggedIn">${{ availablebalance }}</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
                 <p style="color: white">CURRENT PRICE</p>
               </p>
@@ -68,7 +68,7 @@
               <!-- <img src="/assets/img/2422796.png" class="max50" alt="" /> -->
               <h3 class="">Market Cap</h3>
               <p class="mb-0 font-weight-medium">
-                {{ marketCap }}
+                ${{ marketCap }}
               </p>
            
             </div>
