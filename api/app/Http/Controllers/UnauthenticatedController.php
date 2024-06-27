@@ -10,6 +10,7 @@ use Validator;
 use Helper;
 use App\Models\Product;
 use App\Models\Sliders;
+use App\Models\Post;
 use App\Models\ProductCategory;
 use App\Models\Categorys;
 use App\Models\VerifyEmail;
@@ -701,5 +702,23 @@ class UnauthenticatedController extends Controller
         }
 
         return response()->json($sliderArry, 200);
+    }
+
+    public function allPostLists()
+    {
+
+        $response = Post::orderBy('id', 'desc')->get();
+        $result = [];
+        foreach ($response as $v) {
+            $result[] = [
+                'id'            => $v->id,
+                'name'          => $v->name, //substr($v->name, 0, 12) . '...',
+                'thumnail_img'  => !empty($v->thumnail_img) ? url($v->thumnail_img) : "",
+                'slug'          => $v->slug,
+                'description_full' => strip_tags($v->description_full),
+            ];
+        }
+
+        return response()->json($result);
     }
 }

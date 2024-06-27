@@ -104,7 +104,7 @@ const menuItems = ref([
       { label: 'Affiliate ', icon: 'fa-circle', route: '/usermanagement/affiliate' },
     ],
   },
-  /*
+  
   {
     label: 'Post Management',
     icon: 'fa-folder',
@@ -117,7 +117,7 @@ const menuItems = ref([
 
     ]
   },
-  */
+  
 
   //new menu
   {

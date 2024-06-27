@@ -63,6 +63,11 @@
 							alt=""><strong>Community</strong></nuxt-link>
 				</li>
 
+				<li>
+					<nuxt-link to='/post'><img src="/assets/img/content/icons/11.png"
+							alt=""><strong>Post</strong></nuxt-link>
+				</li>
+
 				
 
 				<!-- <li v-if="isLoggedIn">

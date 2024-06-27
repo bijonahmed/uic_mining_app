@@ -20,9 +20,8 @@
               <nuxt-link class="profile-av m-auto" to="/profile"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></nuxt-link>
               <p class="text-white" >{{ userStore.email }}</p>
             </div>
-            <div class="ml-auto align-self-end">
+            <div class="ml-auto align-self-end" v-else>
               <nuxt-link class="profile-av m-auto" to="#"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></nuxt-link>
-              
             </div>
           </div>
         </div>
@@ -147,9 +146,9 @@
       </div>
 
       <section class="bal-section supply_container container mt-30">
-    <h4 class="title-main mt-0">Circulating Supply</h4>
+    <!-- <h4 class="title-main mt-0">Circulating Supply</h4> -->
     <div class="resources-card-wrapper">
-      <div class="resources-card mr-10">
+      <div class="resources-card mr-10 w-100">
         <!-- <iframe src="https://api.uicmax.com/chart" frameborder="0" width="100%" height="400" style="min-height: 400px;"></iframe> -->
         <canvas id="dailyChart" style="width: 100%; height: 400px;"></canvas>
       </div>
@@ -327,5 +326,10 @@ button {
 .custom-btn:hover {
   background-color: #29529e;
   /* Custom hover color */
+}
+@media(max-width: 576px){
+  .resources-card canvas{
+    height: 300px !important;
+  }
 }
 </style>

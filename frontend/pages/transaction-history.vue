@@ -76,8 +76,6 @@
                                                 {{ transaction.depositStatus }}
                                             </div>
 
-
-
                                         </span>
 
                                         <span v-else-if="transaction.type == 2">

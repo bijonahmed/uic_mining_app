@@ -44,7 +44,7 @@
                       <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel"
                         aria-labelledby="custom-tabs-three-home-tab">
                         <!-- General  -->
-                        <div class="row mb-3 required">
+                        <div class="row mb-3 required d-none">
                           <label for="input-name-1" class="col-sm-2 col-form-label required-label">Title</label>
                           <div class="col-sm-10">
                             <input type="text" name="name" placeholder="Name" v-model="insertdata.name"
@@ -61,49 +61,21 @@
                           </div>
                         </div>
 
-                        <div class="row mb-3">
-                          <label for="input-meta-description-1" class="col-sm-2 col-form-label required-label">Post
-                            Categories</label>
-                          <div class="col-sm-10">
-                            <div>
-                              <!-- ======{{ postCat }}===== -->
-
-                              <select id="category" class="form-control" v-model="categoryId" @change="handleCategoryChange">
-                                <option v-for="option in postCat" :value="option.id" :key="option.id">{{ option.name }}
-                                </option>
-                              </select>
-
-                              <span class="text-danger" v-if="errors.category">{{ errors.category[0] }}</span>
-
-                            </div>
-                          </div>
-                        </div>
+                       
 
                         <div class="row mb-3">
-                          <label for="input-description-1" class="col-sm-2 col-form-label">Full Description</label>
+                          <label for="input-description-1" class="col-sm-2 col-form-label">Description</label>
                           <div class="col-sm-10">
                             <div ref="summernoteEditorFull" style="height: 100%;"></div>
                           </div>
                         </div>
                         <hr />
 
-                        <div v-if="categoryId === 3">
-                          <div class="row mb-3 required">
-                            <label for="input-meta-title-1" class="col-sm-4 col-form-label">Question</label>
-                            <div class="col-sm-8">
-                              <input type="text" placeholder="" v-model="insertdata.question" class="form-control" />
-                            </div>
-                          </div>
-                          <div class="row mb-3 required">
-                            <label for="input-meta-title-1" class="col-sm-4 col-form-label">Answer</label>
-                            <div class="col-sm-8">
-                              <input type="text" placeholder="" v-model="insertdata.answer" class="form-control" />
 
-                            </div>
 
-                          </div>
-                        </div>
-                        <hr />
+
+
+
 
                         <div class="alert alert-info" bis_skin_checked="1">
                           <i class="fas fa-info-circle"></i>Thumbnail
@@ -137,8 +109,30 @@
                             </div>
                           </div>
                         </div>
+
+                        <div class="row mb-3">
+                          <label for="input-meta-description-1" class="col-sm-2 col-form-label required-label">Status</label>
+                          <div class="col-sm-10">
+                            <div>
+                              <!-- ======{{ postCat }}===== -->
+
+                              <!-- <select id="category" class="form-control" v-model="categoryId" @change="handleCategoryChange">
+                                <option v-for="option in postCat" :value="option.id" :key="option.id">{{ option.name }}
+                                </option>
+                              </select>
+                              <span class="text-danger" v-if="errors.category">{{ errors.category[0] }}</span> -->
+
+                              <select id="category" class="form-control" v-model="insertdata.status">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                              </select>
+                              <span class="text-danger" v-if="errors.status">{{ errors.status[0] }}</span>
+
+                            </div>
+                          </div>
+                        </div>
                         <button type="submit" class="btn btn-success px-5 w-100">
-                          <i class="bx bx-check-circle mr-1"></i> Save & Next
+                          <i class="bx bx-check-circle mr-1"></i> Save
                         </button>
 
                       </div>
@@ -182,7 +176,7 @@ const insertdata = reactive({
   question: '',
   answer: '',
   images: '',
-  status: 1,
+  status: '',
 });
 // Define a ref to store the HTML content of the editor
 
@@ -192,6 +186,7 @@ const descriptionFull = ref('');
 const previewUrl = ref(null);
 const images = ref([]);
 const categoryId = ref(null);
+const status = ref(null);
 const categories = ref('');
 const searchResults = ref([]);
 const showProCategories = ref([]);
@@ -297,12 +292,9 @@ const saveData = () => {
   });
   formData.append('id', insertdata.id);
   formData.append('files', file.value);
-  formData.append('name', insertdata.name);
-  formData.append('categoryId', categoryId.value);
-  formData.append('description_short', descriptionShort.value);
   formData.append('description_full', descriptionFull.value);
-  formData.append('question', insertdata.question);
-  formData.append('answer', insertdata.answer);
+  formData.append('status', insertdata.status);
+
   
   axios.post('/post/update', formData, {
       headers: {
@@ -370,13 +362,12 @@ const productrow = () => {
   axios.get(`/post/postrow/${product_id}`).then(response => {
       console.log("=====" + response.data.data.categoryId);
       insertdata.id = response.data.data.id;
-      insertdata.categoryId = response.data.data.categoryId;
-      categoryId.value = response.data.data.categoryId;
+ 
       insertdata.name = response.data.data.name;
       insertdata.description_full = response.data.data.description_full
       insertdata.description_short = response.data.data.description_short
-      insertdata.question = response.data.data.question
-      insertdata.answer = response.data.data.answer
+      insertdata.status = response.data.data.status
+
       previewUrl.value = response.data.images;
       if (summernoteEditorShort.value) {
           // Initialize Summernote

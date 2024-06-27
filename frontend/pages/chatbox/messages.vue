@@ -33,7 +33,7 @@
                 </div>
               </div>
             </div>
-            <form @submit.prevent="submit" class="chat-form">
+            <form @submit.prevent="submit" class="chat-form w-100">
               <input class="message-input" placeholder="Write a message" v-model="message" />
             </form>
           </div>

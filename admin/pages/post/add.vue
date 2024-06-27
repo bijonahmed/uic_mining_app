@@ -45,7 +45,7 @@
                       <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel"
                         aria-labelledby="custom-tabs-three-home-tab">
                         <!-- General  -->
-                        <div class="row mb-3 required">
+                        <div class="row mb-3 required d-none">
                           <label for="input-name-1" class="col-sm-2 col-form-label required-label">Title</label>
                           <div class="col-sm-10">
                             <input type="text" name="name" placeholder="Name" v-model="insertdata.name"
@@ -62,7 +62,7 @@
                           </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <div class="row mb-3 d-none">
                           <label for="input-meta-description-1" class="col-sm-2 col-form-label required-label">Post
                             Categories</label>
                           <div class="col-sm-10">
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="row mb-3">
-                          <label for="input-description-1" class="col-sm-2 col-form-label">Full Description</label>
+                          <label for="input-description-1" class="col-sm-2 col-form-label">Description</label>
                           <div class="col-sm-10">
                             <div ref="summernoteEditorFull" style="height: 100%;"></div>
                           </div>
@@ -145,7 +145,6 @@
                         </button>
 
                       </div>
-
                     </div>
                   </div>
                 </div>

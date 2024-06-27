@@ -34,32 +34,23 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <table class="table table-bordered w-100">
-                                                    <tr>
-                                                        <td width="40%">Product Name</td>
+                                                    <!-- <tr>
+                                                        <td width="40%">Name</td>
                                                         <td width="1%"><strong>:</strong></td>
                                                         <td width="50%">{{ productData.name }}</td>
-                                                    </tr>
+                                                    </tr> -->
                                                     <tr>
-                                                        <td>Full Description</td>
+                                                        <td>Description</td>
                                                         <td><strong>:</strong></td>
                                                         <td class="description_full"></td>
                                                     </tr>
 
-                                                    <tr>
+                                                    <tr class="d-none">
                                                         <td>Category</td>
                                                         <td><strong>:</strong></td>
                                                         <td>{{ productData.category_name }}</td>
                                                     </tr>
-                                                    <tr v-if="productData.categoryId === 3">
-                                                        <td>Question</td>
-                                                        <td><strong>:</strong></td>
-                                                        <td>{{ productData.question }}</td>
-                                                    </tr>
-                                                    <tr v-if="productData.categoryId === 3">
-                                                        <td>Answer</td>
-                                                        <td><strong>:</strong></td>
-                                                        <td>{{ productData.answer }}</td>
-                                                    </tr>
+                                                     
 
                                                     
                                                 </table>
@@ -121,9 +112,7 @@ const productDetails = () => {
     axios.get(`/post/postrow/${product_id}`).then(response => {
         //console.log("====" + response.data.data.name);
         productData.value.name = response.data.data.name;
-        productData.value.category_name = response.data.data.category_name;
-        productData.value.question = response.data.data.question;
-        productData.value.answer = response.data.data.answer;
+        //productData.value.category_name = response.data.data.category_name;
         productData.value.categoryId = response.data.data.categoryId;
         productImg.value = response.data.images;
         $(".description_full").html(response.data.data.description_full);

@@ -41,6 +41,7 @@ use App\Http\Controllers\ChartController;
 |
 */
 
+Route::get('allPost', [UnauthenticatedController::class, 'allPostLists']);
 Route::get('/chart-data', [ChartController::class, 'getData']);
 Route::post('messages', [ChatController::class, 'message']);
 Route::get('/messages/{community_slug}', [ChatController::class, 'getMessages']);
@@ -355,10 +356,13 @@ Route::group([
 ], function () {
 
     Route::post('save', [PostController::class, 'save']);
+    Route::post('userRequestPost', [PostController::class, 'userRequestPost']);
     Route::post('update', [PostController::class, 'update']);
     Route::get('postrow/{id}', [PostController::class, 'postrow']);
     Route::get('allPost', [PostController::class, 'allPostList']);
+    Route::get('allPosts', [PostController::class, 'allPosts']);
     Route::get('postCategoryData', [PostController::class, 'postCategoryData']);
+
 });
 
 Route::group([
@@ -454,6 +458,7 @@ Route::group([
     Route::get('autocomplete', [UnauthenticatedController::class, 'autocomplete']);
     Route::get('sliders', [UnauthenticatedController::class, 'slidersImages']);
     Route::post('getCategoryViewStore', [UnauthenticatedController::class, 'getCategoryViewStore']);
+   
 });
 
 Route::group([
