@@ -17,11 +17,11 @@
               </p>
             </div>
             <div class="ml-auto align-self-end"  v-if="isLoggedIn">
-              <nuxt-link class="profile-av m-auto" to="/profile"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></nuxt-link>
+              <nuxt-link class="profile-av m-auto" to="/profile"><img src="/assets/img/content/avatar/user-4.png" class="img-fluid" /></nuxt-link>
               <p class="text-white" >{{ userStore.email }}</p>
             </div>
             <div class="ml-auto align-self-end" v-else>
-              <nuxt-link class="profile-av m-auto" to="#"><img src="/assets/img/content/avatar/avatar-2-white.png" class="img-fluid" /></nuxt-link>
+              <nuxt-link class="profile-av m-auto" to="#"><img src="/assets/img/content/avatar/user-4.png" class="img-fluid" /></nuxt-link>
             </div>
           </div>
         </div>

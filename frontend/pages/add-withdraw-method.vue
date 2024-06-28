@@ -37,13 +37,13 @@
 
                         <form @submit.prevent="submitForm" id="formrest">
                             <div class="mb-3">
-                                <label for="amount" class="form-label">Payment Method Name</label>
-                                <input type="text" class="form-control"   v-model="insertdata.name"/>
+                                <label for="amount" class="form-label">Method</label>
+                                <input type="text" class="form-control" v-model="insertdata.name" readonly disabled/>
                                 <span class="text-danger" v-if="errors.name">{{ errors.name[0] }}</span>
                                
                             </div>
                             <div class="mb-3">
-                                <label for="amount" class="form-label">Account Numbe</label>
+                                <label for="amount" class="form-label">TRC-20 Address</label>
                                 <input type="text" class="form-control"   v-model="insertdata.account_number"/>
                                 <span class="text-danger" v-if="errors.account_number">{{ errors.account_number[0] }}</span>
                             </div>
@@ -115,7 +115,7 @@ const fetchData = async () => {
  
 
 const insertdata = reactive({
-  name: "",
+  name: "USDT TRC-20",
   account_number: "",
 });
 
@@ -133,7 +133,7 @@ const submitForm = () => {
         fetchData()
       document.getElementById("formrest").reset();
       success_noti();
-      router.push('/add-withdraw-method');
+      router.push('/withdraw');
     })
     .catch((error) => {
       if (error.response && error.response.status === 422) {
