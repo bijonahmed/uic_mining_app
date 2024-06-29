@@ -179,11 +179,15 @@ onMounted(async () => {
 
 <style scoped>
 .dash-balance {
-  
-    background-size: auto;
+  background-size: auto;
   background-size: cover;
   position: relative;
   overflow: hidden;
   padding: 10px 10px 10px;
+}
+@media(max-width: 325px){
+    #invite_link{
+      font-size: 10px;
+    }
 }
 </style>

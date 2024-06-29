@@ -185,4 +185,10 @@ onMounted(async () => {
 .ref-copy i{
     color: #fff;
 }
+
+@media(max-width: 325px){
+    #invite_link{
+      font-size: 10px;
+    }
+}
 </style>

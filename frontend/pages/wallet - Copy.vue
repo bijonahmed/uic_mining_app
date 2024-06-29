@@ -513,9 +513,4 @@ onMounted(async () => {
   background-color: grey;
   pointer-events: none;
 }
-@media(max-width: 425px){
-  #invite_link{
-    font-size: 12px;
-}
-}
 </style>
