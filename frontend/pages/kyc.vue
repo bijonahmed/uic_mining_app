@@ -18,8 +18,7 @@
       <main>
         <div class="text-align-center">
           <h2 style="color: #4e4e4e">Verify Account</h2>
-          <span class="short-title"
-            >verify your account using Passport / CNIC / Driving License.</span
+          <span class="short-title" >Verify your account using Passport / CNIC / Driving License.</span
           >
         </div>
 
@@ -27,7 +26,7 @@
 
         <section v-if="!checkKyc">
           <form action="#">
-            <h2>Choose One</h2>
+            <!-- <h2>Choose One</h2> -->
                             <div class="loading-indicator" v-if="loading" style="text-align: center">
                                                      <Loader />
                                         </div>
@@ -129,8 +128,8 @@
                 aria-labelledby="pills-passport-tab">
                 <form @submit.prevent="submitFormPassport" id="formpassport">
                   <div
-                    class="d-flex justify-content-center" style="margin-top: 60px">
-                    <div class="front-back">
+                    class="d-flex justify-content-center w-100" style="margin-top: 60px">
+                    <div class="front-back w-100">
                       <label for="passport">
                         <p class="text-center">Passport</p>
                         <img :src="passport" alt="Passport" v-if="passport" />

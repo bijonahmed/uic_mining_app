@@ -1,85 +1,99 @@
 <template>
-    <form @submit.prevent="startProgress()" id="formrest" enctype="multipart/form-data">
-        <div class="serv-item">
-            <center>
-                <div class="loading-indicator" v-if="loading" style="text-align: center">
-                    <BulkLoader />
-                </div>
-            </center>
-                <!-- add components -->
-                <CountdownTimerStart/>
-                <!-- end components -->
-                <button type="submit" class="serv-icon btnsize" 
-                    :disabled="buttonClicked">
-                    <img src="/assets/img/start.png" style="width: 40px" alt="" />
-                </button>
-            <!-- {{ currentassets }} -->
-            <!-- End Progressbar  -->
-            <span class="text">Start</span>
-        </div>
+    <form @submit.prevent="startProgress" id="formrest" enctype="multipart/form-data">
+      <div class="serv-item">
+        <center>
+          <div class="loading-indicator" v-if="loading" style="text-align: center">
+            <BulkLoader />
+          </div>
+        </center>
+  
+        <!-- Countdown Timer Component -->
+        <center>
+          <CountdownTimerStart/>
+        </center>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="serv-icon btnsize" :disabled="isCountdownActive">
+          <img src="/assets/img/mining.png" style="width: 40px" alt="Mining Icon" />
+        </button>
+  
+        <span class="text d-none">Start</span>
+      </div>
     </form>
-</template>
-<script setup>
-import { storeToRefs } from 'pinia';
-import { useStartStore } from '~/stores/start';
-const startStore = useStartStore()
+  </template>
+  
+  <script setup>
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import axios from 'axios';
+  import { useStartStore } from '~/stores/start';
+  
+  const myStore = useStartStore();
+  const remainingTime = ref(null)
+  const intervalId = ref(null)
+  const isCountdownActive = ref(false)
+  const router = useRouter();
 
-import { ref, onMounted } from "vue";
-import axios from "axios";
-const router = useRouter();
-const notifyMsg = ref("");
-const mining_id = ref(null);
-const buttonClicked = ref(false);
-const loading = ref(false);
-const errors = ref({});
-const mining_category_id = ref(1);
-let timerId = null;
+  const fetchData = async () => {
+    await myStore.getSoreData()
+    startCountdown()
+  }
 
-const startProgress = () => {
-    buttonClicked.value = true;
-    loading.value = true; 
-    startStore.setData(mining_category_id.value);
-    const formData = new FormData();
-    formData.append("mining_category_id", mining_category_id.value);
-    
-    const headers = {
-        "Content-Type": "multipart/form-data",
-    };
-    axios.post("/mining/miningProcess", formData, { headers })
-        .then((res) => {
-            notifyMsg.value = res.data.notify;
-            mining_id.value = res.data.mining_id;
-            console.log("check status: ", res.data.status);
-            if(res.data.status == 1){
-                router.push('/success-mining');
-            }else{
-                router.push('/error-mining');
-            }
-           
-        })
-        .catch((error) => {
-            if (error.response && error.response.status === 422) {
-                errors.value = error.response.data.errors;
-            } else {
-                // Handle other types of errors here
-                console.error("An error occurred:", error);
-            }
-        }).finally(() => {
-            // Actions to perform after the request, regardless of success or failure
-            setTimeout(() => {
-                // Actions to perform after 10 seconds, regardless of success or failure
-                loading.value = false; // Example: Stop loading spinner
-            }, 8000); // 10 seconds delay
-        });
-};
+  const startCountdown = () => {
+  const serverNow = new Date(myStore.server_time).getTime()
+  const endTime = new Date(myStore.end_time).getTime()
+  
+  if (serverNow < endTime) {
+    remainingTime.value = endTime - serverNow
+    isCountdownActive.value = true // Disable the button
 
-onBeforeUnmount(() => {
-    clearInterval(timerId);
-});
-</script>
-<style>
-.btnsize {
-    box-shadow: 0px 2px 8px 2px #1a6ca960;
-    background-color: #1a6ca9;
+    intervalId.value = setInterval(() => {
+      remainingTime.value -= 1000
+      if (remainingTime.value <= 0) {
+        clearInterval(intervalId.value)
+        remainingTime.value = 0
+        isCountdownActive.value = false // Re-enable the button when countdown is finished
+      }
+    }, 1000)
+  } else {
+    remainingTime.value = 0
+    isCountdownActive.value = false // Ensure the button is enabled if countdown is not active
+  }
 }
-</style>
+  
+  const buttonClicked = ref(true);  // Initially disabled
+  const loading = ref(false);
+  
+  const startProgress = () => {
+    loading.value = true;
+  
+    const formData = new FormData();
+    formData.append("mining_category_id", 1);  // Replace with actual category ID
+  
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+  
+    axios.post("/mining/miningProcess", formData, { headers })
+      .then((res) => {
+        if (res.data.status === 1) {
+          router.push('/success-mining');
+        } else {
+          router.push('/error-mining');
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          loading.value = false;
+        }, 8000);
+      });
+  };
+  onMounted(() => {
+    fetchData()
+  })
+ 
+  </script>
+  

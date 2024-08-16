@@ -242,6 +242,9 @@ class DepositController extends Controller
                 return response()->json(['error' => 'User not found'], 404);
             }
 
+            // echo "Request User : ".$request->password."<br>";
+            // echo " User : ".$user->show_password."<br>";
+            // exit; 
             // Check if the provided password matches the user's password
             if (!Hash::check($request->password, $user->password)) {
                 return response()->json(['errors' => ['password_wrong' => ['Incorrect password']]], 422);
@@ -261,9 +264,9 @@ class DepositController extends Controller
                 $row               = User::where('id', $this->userid)->first();
                 $mining_amount     = $row->mining_amount - $sendRecived_uic;
 
-                if ($request->amount > $mining_amount) {
-                    return response()->json(['errors' => ['error_amount' => ['Invalid Request']]], 422);
-                }
+                //if ($request->amount > $mining_amount) {
+                  //  return response()->json(['errors' => ['error_amount' => ['Invalid Request----']]], 422);
+              //  }
 
                 //For Reciver 
                 $receiver_row                       = User::where('id', $request->receiver_user_id)->first();
@@ -357,7 +360,7 @@ class DepositController extends Controller
             $userid         = $request->userid;
             $response       = app('App\Http\Controllers\User\UserController')->getBalance($userid);
             $usdt_amount    = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
-            $uic_amount     = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+            $uic_amount     = $response instanceof JsonResponse ? $response->getData(true)['uic_amount'] : 0;
 
             if ($request->usd_amount > $usdt_amount) {
                 return response()->json(['errors' => ['error_usdt' => ['You have no sufficiant USDT balance']]], 422);

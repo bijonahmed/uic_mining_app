@@ -368,6 +368,7 @@ Route::group([
     Route::get('allPost', [PostController::class, 'allPostList']);
     Route::get('allPosts', [PostController::class, 'allPosts']);
     Route::get('postCategoryData', [PostController::class, 'postCategoryData']);
+    Route::get('insertPostLikes', [PostController::class, 'insertPostLikes']);
 
 });
 
@@ -394,6 +395,9 @@ Route::group([
     Route::post('buyMiningDuration', [MiningController::class, 'buyMiningDuration']);
     Route::get('checkMiningProcess', [MiningController::class, 'checkMiningProcess']);
     Route::get('miningProcessState', [MiningController::class, 'miningProcessState']);
+    Route::get('insertaptap', [MiningController::class, 'insertaptap']);
+    Route::get('inserspin', [MiningController::class, 'inserspin']);
+    Route::get('getSpinList', [MiningController::class, 'getSpinList']);
    
 });
 

@@ -36,11 +36,11 @@
                                     </div>
                                     <br/>
                                     <div class="text-box">
-                                        <label for="file" class="file-label">
-                                            <i class="fa-thin fa-upload"></i>
+                                       <label for="file" class="file-label">
+                                            <!-- <i class="fa-thin fa-upload"></i> -->
                                             <small>&nbsp;Please Upload Image/Video or Any Docs.</small>
                                         </label>
-                                        <input type="file" value class="form-control" id="fileInput" accept="image/png,image/jpeg" ref="files" @change="onFileSelected" />
+                                        <input type="file" id="fileInput" ref="files" @change="onFileSelected" />
                                         <span class="text-danger" v-if="errors.files">{{errors.files[0]}}</span>
                                     </div>
                                     <br/>

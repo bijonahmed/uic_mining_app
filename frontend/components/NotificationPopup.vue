@@ -23,7 +23,7 @@
                             <i class="fa fa-check"></i>
                         </div>
                         <div class="ml-10">
-                            <h4 class="coin-name">{{ v.name }}</h4>
+                            <h4 class="coin-name">{{ v.msg }}</h4>
                             <small class="text-muted">{{ v.created_at }}</small>
                         </div>
                     </div>

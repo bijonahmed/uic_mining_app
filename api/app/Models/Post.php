@@ -16,6 +16,7 @@ class Post extends Authenticatable
         'slug',
         'description_short',
         'description_full',
+        'likeCount',
         'question',
         'answer',
         'categoryId',

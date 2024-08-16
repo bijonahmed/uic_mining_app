@@ -92,7 +92,7 @@
 
                                             <div class="form-mini-divider"></div>
 
-                                            <div class="txt-left calc-crr">
+                                            <div class="txt-left" style="width: 100%;">
                                                 <label class="g-text">Select Wallet</label>
                                                 <div class="form-row-group with-icons">
                                                     <div class="form-row no-padding">
@@ -109,10 +109,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="txt-left calc-crr-mid">
+                                            <!-- <div class="txt-left calc-crr-mid">
                                                 <img src="/assets/img/content/exchange.png" class="mt-15" alt="">
-                                            </div>
-                                            <div class="txt-left calc-crr">
+                                            </div> -->
+                                            <div class="txt-left" style="width: 100%;">
                                                 <label class="g-text">Amount</label>
                                                 <div class="form-row-group with-icons">
                                                     <div class="form-row no-padding">
@@ -130,7 +130,7 @@
                                             <div class="form-mini-divider"></div>
 
                                             <div>
-                                                <button type="submit" class="btn btn-primary"
+                                                <button type="submit" class="btn button w-100 yellow" style="cursor: pointer;font-weight: 600;"
                                                     :disabled="buttonClicked">Send</button>
                                             </div>
 

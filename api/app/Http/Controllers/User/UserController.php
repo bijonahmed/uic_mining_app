@@ -235,7 +235,7 @@ class UserController extends Controller
             foreach ($notification as $v) {
                 $msg[] = [
                     'id'             => $v->id,
-                    'name'           => $v->name,
+                    'msg'           => $v->msg,
                     'created_at'     => date("d-m-Y H:i:s", strtotime($v->created_at)),
                 ];
             }
@@ -255,21 +255,17 @@ class UserController extends Controller
 
         try {
             $users = User::select('id', 'uic_address', 'mining_amount')
-                    ->orderBy('mining_amount', 'desc')
-                    ->get();
-
+                ->orderBy('mining_amount', 'desc')
+                ->get();
 
             $userrows = [];
             foreach ($users as $v) {
                 $userrows[] = [
                     'id'             => $v->id,
                     'uic_address'    => $v->uic_address,
-                    'mining_amount'    => !empty($v->mining_amount) ? number_format($v->mining_amount,7) : '0.000000',
+                    'mining_amount'    => !empty($v->mining_amount) ? number_format($v->mining_amount, 7) : '0.000000',
                 ];
             }
-
-
-
 
             $data['totalHolders'] = count($users);
             $data['users']        = $userrows;
@@ -284,80 +280,58 @@ class UserController extends Controller
         }
     }
 
-    public function getBalances($userid)
+    public function getComissionReport($userId)
     {
-
-        $user_id = $userid;
-
-        $active_matching        = MiningServicesBuyHistory::where('user_id', $user_id)->first();
-        $adj_type_sum           = ManualAdjustment::where('user_id', $user_id)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
-        $adj_type_minus         = ManualAdjustment::where('user_id', $user_id)->where('adjustment_type', 2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
-
-        $setting                = Setting::find(1)->first();
-
-        $today_date             = date("Y-m-d");
-        $service_price          = $active_matching && $active_matching->end_date >= $today_date ? (!empty($active_matching->service_price) ? $active_matching->service_price : 0) : 0;
-        $swap_tran              = SwapHistory::where('user_id', $user_id)->get();
-        //user wise
-        $swap_type_2_frm        = SwapHistory::where('user_id', $user_id)->where('type', 2)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //USDT 
-        $swap_type_2_to         = SwapHistory::where('user_id', $user_id)->where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
-
-        $swap_type_1_frm        = SwapHistory::where('user_id', $user_id)->where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
-        $swap_type_1_to         = SwapHistory::where('user_id', $user_id)->where('type', 1)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //USDT 
-        // without user
-        $swaptype2to            = SwapHistory::where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
-        $swaptype1frm           = SwapHistory::where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
-
-        $row                    = User::find($user_id);
-        $deposit                = Deposit::where('user_id', $user_id)->where('status', 1)->sum('deposit_amount');
-
-        $withdraw_usdt          = Withdraw::where('user_id', $user_id)->where('status', 1)->sum('usd_amount');
-        $withdraw_uic           = Withdraw::where('user_id', $user_id)->where('status', 1)->sum('uic_amount');
-
-        $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $user_id)->where('wallet_type', 2)->sum('amount');
-        $usdtAmount             = SendReceived::where('user_id', $user_id)->where('wallet_type', 2)->sum('amount');
-        $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount - $swap_type_2_frm + $swap_type_1_to;
-
-        $row                    = User::where('id', $user_id)->first();
-        $mining_amount          = User::where('status', 1)->sum('mining_amount');
-        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus;
-        $uicAmountBalance       = $swaptype2to - $swaptype1frm;
-
-        $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
-        $beganing_price         = $setting->beganing_price;
-        $register_bonus         = $setting->register_bonus;
-        $marketCap              = $setting->liquidity_total_supply * $beganing_price;
-
-        $data['available_balance']        = !empty($row->available_balance) ? $row->available_balance : 0;
-
-        if (!empty($user_id)) {
-            $data['mining_amount']          = number_format($uicAmount, 2);
-            $data['miningamount']           = $uicAmount;
-        } else {
-            $data['mining_amount']          = number_format($uicAmountBalance, 2);
-            $data['miningamount']           = $uicAmountBalance;
+        $setting = Setting::find(1);
+        // echo "User ID: $userId<br/>";
+        $checkL1 = User::where('ref_id', $userId)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        //Level 1
+        $level1_ids = $checkL1->pluck('id')->toArray();
+        // dd($level1_ids);
+        $lev_profit_1 = 0;
+        foreach ($level1_ids as $id) {
+            $level_profit = !empty($setting->level_1_bonus) ? $setting->level_1_bonus : 0;
+            $lev_profit_1 += $level_profit;
         }
+        $level1Profit = $lev_profit_1;
+        $data['level_1_profit'] = number_format($level1Profit, 2);
+        //Level 2
+        $checkL2    = User::whereIn('ref_id', $level1_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        $level2_ids = $checkL2->pluck('id')->toArray();
 
-        $data['deposit_sum']            = $deposit;
-        $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
-        $data['usdtamount']             = $usdt_amount; //USDT Amount
-        $data['wallet_address']         = !empty($setting->crypto_wallet_address) ? $setting->crypto_wallet_address : "";
-        $data['circulatingSupply']      = number_format($uicAmount, 2); //$circulatingSupply;
-        $data['marketCap']              = $marketCap;
-        $data['currentPrice']           = $beganing_price;
-        $data['withdraw_usdt']          = $withdraw_usdt;
-        $data['withdraw_uic']           = $withdraw_uic;
-        $data['register_bonus']         = $register_bonus;
-        $data['adj_type_sum']           = $adj_type_sum;
-        $data['adj_type_minus']         = $adj_type_minus;
-        $data['service_price']          = $service_price;
-        $data['swap_tran']              = $swap_tran;
+        $lev_profit_2 = 0;
+        foreach ($level2_ids as $id) {
+            $level_profit = !empty($setting->level_2_bonus) ? $setting->level_2_bonus : 0;
+            $lev_profit_2 += $level_profit;
+        }
+        $level2Profit = $lev_profit_2;
 
+        $data['level_2_profit'] = number_format($level2Profit, 2);
+        //Level 3
+        $checkL3    = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
+        $level3_ids = $checkL3->pluck('id')->toArray();
+
+        $lev_profit_3 = 0;
+        foreach ($level3_ids as $id) {
+            $level_profit3 = !empty($setting->level_3_bonus) ? $setting->level_3_bonus : 0;
+            $lev_profit_3 += $level_profit3;
+        }
+        $level3Profit = $lev_profit_3;
+        $data['level_3_profit'] = number_format($level3Profit, 2);
+
+        $allsum = $level1Profit + $level2Profit + $level3Profit;
+        $data['commission_sum'] = number_format($allsum, 2);
         return response()->json($data);
+        // return response()->json($data, 200);
+        //dd($data);
     }
 
     public function getBalance()
     {
+        //$this->getComissionReport($this->userid);
+        $response                   = app('App\Http\Controllers\User\UserController')->getComissionReport($this->userid);
+        $levComissionsum               = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
+        //dd($levComissionsum);
 
         $active_matching        = MiningServicesBuyHistory::where('user_id', $this->userid)->first();
         $adj_type_sum           = ManualAdjustment::where('user_id', $this->userid)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
@@ -378,29 +352,52 @@ class UserController extends Controller
         $swaptype2to            = SwapHistory::where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
         $swaptype1frm           = SwapHistory::where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
 
-        $row                    = User::find($this->userid);
+        //$row                    = User::find($this->userid);
         $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
 
         $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
         $usdtAmount             = SendReceived::where('user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
+
         $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount - $swap_type_2_frm + $swap_type_1_to;
 
         $row                    = User::where('id', $this->userid)->first();
-        $mining_amount          = User::where('status', 1)->sum('mining_amount');
-        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus;
+        $mining_amount          = User::where('id', $this->userid)->where('status', 1)->sum('mining_amount');
+        $level_commission       = $levComissionsum;
+        $register_bonus         = User::where('id', $this->userid)->where('status', 1)->sum('register_bonus');
+        //echo "no to checkd.";
+        $allbonusesAmount      = $level_commission + $register_bonus;
+
+        // echo "mining_amount:  $mining_amount <br/>
+        //     swap_type_2_to: $swap_type_2_to  <br/>
+        //     swap_type_1_frm: $swap_type_1_frm <br/>
+        //     adj_type_sum:  $adj_type_sum  <br/> 
+        //     adj_type_minus: $adj_type_minus<br/> 
+        //     Level Comission: $level_commission<br/>
+        //     Register Bonus: $register_bonus <br/>
+        //     ";
+        // exit; 
+
+        //$uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus; //--
+        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
+
         $uicAmountBalance       = $swaptype2to - $swaptype1frm;
 
         $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
         $beganing_price         = $setting->beganing_price;
         $marketCap              = $setting->liquidity_total_supply * $beganing_price;
 
-        $data['available_balance']        = !empty($row->available_balance) ? $row->available_balance : 0;
+        $data['available_balance']          = !empty($row->available_balance) ? $row->available_balance : 0;
+
+        $spain_balance = $row->spincount ?? 0; // If $row->spincount is null or not set, default to 0
+        $data['taptap_balance'] = ($row->taptap_coin ?? 0) + $spain_balance; // If $row->taptap_coin is null or not set, default to 0
+
+
 
         if (!empty($this->userid)) {
-            $data['mining_amount']          = number_format($uicAmount, 2);
+            $data['uic_amount']          = number_format($uicAmount, 2);
             $data['miningamount']           = $uicAmount;
         } else {
-            $data['mining_amount']          = number_format($uicAmountBalance, 2);
+            $data['uic_amount']          = number_format($uicAmountBalance, 2);
             $data['miningamount']           = $uicAmountBalance;
         }
 
@@ -499,7 +496,7 @@ class UserController extends Controller
         $wallet_type         =  $request->wallet_type;
         $response       = app('App\Http\Controllers\User\UserController')->getBalance();
         if ($wallet_type == 1) {
-            $uic_amount        = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+            $uic_amount        = $response instanceof JsonResponse ? $response->getData(true)['uic_amount'] : 0;
             $data['amount']    = $uic_amount;
         }
 
@@ -2045,7 +2042,7 @@ class UserController extends Controller
         $checkL3          = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
         $checkL3->transform(function ($item) {
             $gloabl_setting   = Setting::find(1);
-            $item['level_commision'] = $gloabl_setting->level_2_bonus; // Adding the extra key with value 6
+            $item['level_commision'] = $gloabl_setting->level_3_bonus; // Adding the extra key with value 6
             return $item;
         });
         $level3_ids       = $checkL3->pluck('id')->toArray();
@@ -2062,8 +2059,19 @@ class UserController extends Controller
     {
 
         $userId           = $this->userid;
-        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address', 'name', 'email', 'created_at', 'ref_id')->get();
 
+        $response         = app('App\Http\Controllers\User\UserController')->getComissionReport($userId);
+        $L1comission      = $response instanceof JsonResponse ? $response->getData(true)['level_1_profit'] : 0;
+        $L2comission      = $response instanceof JsonResponse ? $response->getData(true)['level_2_profit'] : 0;
+        $L3comission      = $response instanceof JsonResponse ? $response->getData(true)['level_3_profit'] : 0;
+        $allcomission     = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
+
+        $data['level_1_comission']  = $L1comission;
+        $data['level_2_comission']  = $L2comission;
+        $data['level_3_comission']  = $L3comission;
+        $data['comission_sum']      = $allcomission;
+
+        $checkL1          = User::where('ref_id', $userId)->select('id', 'uic_address', 'name', 'email', 'created_at', 'ref_id')->get();
         $level1_ids       = $checkL1->pluck('id')->toArray();
         // Fetch level 2 users based on level 1 IDs
         $checkL2          = User::whereIn('ref_id', $level1_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
@@ -2330,28 +2338,25 @@ class UserController extends Controller
         return response()->json(['data' => 'Real name updated successfully'], 200);
     }
 
-
-    public function sendNotification(Request $request){
+    public function sendNotification(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'name'                       => 'required',
-            
+
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
         // Check if a category with the same name already exists
-       
+
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->input('name'))));
         $data = array(
             'name'                       => $request->name,
-          
+
         );
         $resdata['id']                    = Notification::insertGetId($data);
         return response()->json($resdata);
-
-
-
     }
 }

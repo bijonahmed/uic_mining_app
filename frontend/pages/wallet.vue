@@ -19,13 +19,14 @@
           <Loader />
         </div>
         <!-- Page content start -->
+        
         <main class="margin mt-0">
           <div class="dash-balance">
             <div class="dash-content relative">
               <h3 class="w-text">My Wallet</h3>
             </div>
           </div>
-
+        
           <section class="bal-section container">
             <div class="resources-card-wrapper">
               <div class="wallet-card mr-10 round">
@@ -33,7 +34,8 @@
                   <h3 class="">UIC</h3>
                   <p class="mb-0 font-weight-medium">
                     <!-- <i class="txt-green fa fa-arrow-up mr-10"></i> -->
-                    {{ mining_amount }} UIC<br />
+                    {{ uic_amount }} UIC<br />
+                    <!-- <center><button type="button" class="btn btn-primary btn-lg" @click="fetchData">Test</button></center> -->
                     <small><nuxt-link to="/show-uic-address">Show UIC Address</nuxt-link></small>
                   </p>
                 </div>
@@ -44,7 +46,7 @@
                   <h3 class="">Airdrop</h3>
                   <p class="mb-0 font-weight-medium">
                     <!-- <i class="txt-red fa fa-arrow-down mr-10"></i> -->
-                    {{ available_balance }} UIC
+                    {{ taptap_balance }} U
                   </p>
                 </div>
               </div>
@@ -64,7 +66,7 @@
 
 
               <form @submit.prevent="submitFormSwap" id="formrestsweap">
-              <div class="wallet-card ml-10">
+              <div class="wallet-card ml-10 d-none">
                 <div class="flex-column flex-md-row">
                   <strong class="text-center d-flex justify-content-center"><u>SWAP</u></strong>
                   <div class="d-flex align-items-end mb-2">
@@ -118,7 +120,7 @@
                     </p>
                   </div>
 
-                  <button class="btn btn-primary text-center m-auto mt-3 w-100" id="confirm_swap" type="submit" :disabled="buttonClicked">
+                  <button class="btn btn-primary ref-copy text-center m-auto mt-3 w-100" id="confirm_swap" type="submit" :disabled="buttonClicked">
                     Confirm Swap
                   </button>
                 </div>
@@ -220,7 +222,8 @@ const buttonClicked = ref(false);
 const errors_amount = ref("");
 const usdt_amount = ref(0);
 const available_balance = ref(0);
-const mining_amount = ref(0);
+const taptap_balance = ref(0);
+const uic_amount = ref(0);
 const uicAddress = ref(null);
 const qrCodeUrl = ref(null);
 const wallet_address = ref(null);
@@ -423,8 +426,9 @@ const fetchData = async () => {
   try {
     const response = await axios.get("/user/getBalance");
     available_balance.value = response.data.available_balance;
+    taptap_balance.value = response.data.taptap_balance;
     usdt_amount.value       = response.data.usdt_amount;
-    mining_amount.value     = response.data.mining_amount;
+    uic_amount.value     = response.data.uic_amount;
     wallet_address.value    = response.data.wallet_address;
     currentPrice.value      = response.data.currentPrice;
 

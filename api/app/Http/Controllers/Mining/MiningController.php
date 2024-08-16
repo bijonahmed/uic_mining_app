@@ -18,7 +18,7 @@ use App\Models\MiningCategory;
 use App\Models\MiningCategoryDuration;
 use App\Models\MiningHistory;
 use App\Models\MiningServicesBuyHistory;
-use App\Models\Mystore;
+use App\Models\Spin;
 use App\Models\PostCategory;
 use App\Models\SubAttribute;
 use App\Models\ProductAttributes;
@@ -51,6 +51,40 @@ class MiningController extends Controller
         $responseData['data']  = MiningCategoryDuration::join('mining_categogy', 'mining_categogy_duration.mining_category_id', '=', 'mining_categogy.id')->orderBy('id', 'desc')
             ->select('mining_categogy_duration.*', 'mining_categogy.name')->where('mining_categogy_duration.id', $id)->first();
         return response()->json($responseData);
+    }
+
+    public function getSpinList(){
+
+        $responseData = Spin::where('status',1)->get();
+        return response()->json($responseData);
+
+    }
+
+
+    public function inserspin(Request $request)
+    {
+
+        $spinAmount  = $request->input('spinAmount');
+        $userow      = User::find($this->userid);
+        $userspinamt = !empty($userow->spincount) ? $userow->spincount: 0 ; 
+       // $data['spincount'] = $userspinamt + $spinAmount;
+        User::where('id', $this->userid)->update([
+            'spincount'              => $userspinamt + $spinAmount,
+        ]);
+        return response()->json(['success' => true, 'spincount' => $spinAmount]);
+    }
+
+    public function insertaptap(Request $request)
+    {
+
+        $userCoins  = $request->input('userCoins');
+        $user       = User::find($this->userid);
+        $userCoins  = $request->userCoins;
+        $user->taptap_coin = (int)$userCoins;
+        // Save changes to the database
+        $user->save();
+
+        return response()->json(['success' => true, 'newTaptapCoin' => (int)$user->taptap_coin]);
     }
 
     public function inserMiningDuration(Request $request)

@@ -91,36 +91,40 @@
 
                     <section class="container">
                         <div class="resources-card-wrapper">
-                            <div class="ref-statistics mr-10">
+                            <div class="ref-statistics  w-100 px-2">
                                 <h2 style="color: #0a95ff;font-weight: 800;font-family: poppins;">Team 1</h2>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ level_1 }} Members</h4>
+                                    <h4 class="mt-10 mb-5 ">Total Earning : {{ level1_comission }} UIC</h4>
                                     <small><nuxt-link to="/team/team-one-history" style="color:green">Check History</nuxt-link></small>
 
                                 </div>
                             </div>
-                            <div class="ref-statistics ml-10">
+                            <div class="ref-statistics  w-100 px-2 ">
                                 <h2 class="txt-green" style="font-weight: 800;font-family: poppins;">Team 2</h2>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ level_2 }} Members</h4>
+                                    <h4 class="mt-10 mb-5 ">Total Earning : {{ level2_comission }} UIC</h4>
                                     <small><nuxt-link to="/team/team-two-history" style="color:green">Check History</nuxt-link></small>
 
                                 </div>
                             </div>
                         </div>
                         <div class="resources-card-wrapper">
-                            <div class="ref-statistics mr-10">
+                            <div class="ref-statistics  w-100 px-2 ">
                                 <h2 class="txt-yellow" style="font-weight: 800;font-family: poppins;">Team 3</h2>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ level_3 }} Members</h4>
+                                    <h4 class="mt-10 mb-5 ">Total Earning : {{ level3_comission }} UIC</h4>
                                     <small><nuxt-link to="/team/team-three-history" style="color:green">Check History</nuxt-link></small>
 
                                 </div>
                             </div>
-                            <div class="ref-statistics ml-10">
-                                <i class="fa fa-calculator txt-red" style="font-size: 40px;padding: 13px;"></i>
+                            <div class="ref-statistics  w-100 px-2 ">
+                                <i class="fa fa-users txt-red" style="font-size: 40px;padding: 13px;"></i>
                                 <div class="d-flex flex-column ml-md-2">
                                     <h4 class="mt-10 mb-5 ">{{ total }} Members</h4>
+                                    <h4 class="mt-10 mb-5 ">Total Earning : {{ comission_sum }} UIC</h4>
                                     <p class="text-muted font-weight-medium">Total Members</p>
                                 </div>
                             </div>
@@ -182,6 +186,13 @@ const level_1 = ref('');
 const level_2 = ref('');
 const level_3 = ref('');
 const total = ref('');
+
+const level1_comission = ref(0);
+const level2_comission = ref(0);
+const level3_comission = ref(0);
+const comission_sum = ref(0);
+
+
 const total_referal_warnings = ref(0);
 const levelBonus = ref('');
 const levels = ref([]);
@@ -284,8 +295,12 @@ const fetchLevelData = async () => {
     level_2.value   = response.data.level_2;
     level_3.value   = response.data.level_3;
     total.value     = response.data.total;
-    levels.value     = response.data.levels;
-    levelBonus.value     = response.data.levelBonus;
+    levels.value    = response.data.levels;
+    level1_comission.value    = response.data.level_1_comission;
+    level2_comission.value    = response.data.level_2_comission;
+    level3_comission.value    = response.data.level_3_comission;
+    comission_sum.value    = response.data.comission_sum;
+    levelBonus.value = response.data.levelBonus;
     total_referal_warnings.value     = response.data.total_referal_warnings;
   } catch (error) {
     console.error("Error fetching data:", error);

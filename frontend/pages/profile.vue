@@ -79,13 +79,18 @@
                   errors.email[0]
                   }}</span>
                 <div class="form-row no-padding">
-                  <i class="fa fa-phone"></i>
+                  <i class="fab fa-whatsapp"></i>
                   <input type="tel" class="form-element" placeholder="Phone" v-model="phone_number" />
                 </div>
+                <div class="form-row">
+                <button type="submit" class="button circle block orange">
+                  Update
+                </button>
+              </div>
               </div>
             </section>
 
-            <section class="container">
+            <section class="container d-none">
               <h4 class="title-main">Social Media</h4>
 
               <div class="form-row-group with-icons">

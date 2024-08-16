@@ -35,10 +35,10 @@
                 <p>OTP</p>
                 <div class="d-flex">
                   <input type="text" class="form-control w-50" v-model="otp">
-                  <p class="ms-2" style="font-size: 12px;">Click 'Send Code,' check your email (inbox/spam) for the OTP.
-                  </p>
+                  <p class="ms-2" style="font-size: 12px;">Click 'Send Code,' check your email (inbox/spam) for the OTP.</p>
+                  <span class="text-danger" v-if="errors.otp">{{ errors.otp[0] }}</span>
                 </div>
-                <span class="text-danger" v-if="errors.otp">{{ errors.otp[0] }}</span>
+              
               </div>
               <div class="input_group">
                 <p>New Password</p>

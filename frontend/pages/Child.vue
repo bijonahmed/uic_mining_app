@@ -13,15 +13,17 @@
             <div class="mr-auto">
               <h1 class="b-val" v-if="isLoggedIn">${{ availablebalance }}</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
-                <p style="color: white">CURRENT PRICE</p>
+              <p style="color: white">CURRENT PRICE</p>
               </p>
             </div>
-            <div class="ml-auto align-self-end"  v-if="isLoggedIn">
-              <nuxt-link class="profile-av m-auto" to="/profile"><img src="/assets/img/content/avatar/user-4.png" class="img-fluid" /></nuxt-link>
-              <p class="text-white" >{{ userStore.email }}</p>
+            <div class="ml-auto align-self-end" v-if="isLoggedIn">
+              <nuxt-link class="profile-av m-auto" to="/profile"><img src="/assets/img/content/avatar/user-4.png"
+                  class="img-fluid" /></nuxt-link>
+              <p class="text-white">{{ userStore.email }}</p>
             </div>
             <div class="ml-auto align-self-end" v-else>
-              <nuxt-link class="profile-av m-auto" to="#"><img src="/assets/img/content/avatar/user-4.png" class="img-fluid" /></nuxt-link>
+              <nuxt-link class="profile-av m-auto" to="#"><img src="/assets/img/content/avatar/user-4.png"
+                  class="img-fluid" /></nuxt-link>
             </div>
           </div>
         </div>
@@ -59,7 +61,7 @@
               <p class="mb-0 font-weight-medium">
                 {{ circulatingSupply }} UIC
               </p>
-             
+
             </div>
           </div>
 
@@ -70,7 +72,7 @@
               <p class="mb-0 font-weight-medium">
                 ${{ marketCap }}
               </p>
-           
+
             </div>
           </div>
         </div>
@@ -87,31 +89,41 @@
             <nuxt-link to="/login" class="btn btn-link btn-lg button custom-btn">Buy Mining Machine</nuxt-link>
           </span>
         </center>
- 
+
 
         <div class="row">
+          <!-- <p class="text" style="margin-top: 20px; color: red;" v-if="isMiningDisabled">
+            Mining is currently disabled due to supply limits.
+          </p> -->
           <div class="col text-center">
-            <span v-if="category_1 === 1">
+            <!-- <span v-if="category_1 === 1">
               <Start />
+            </span> -->
+            <span class="text-center">
+
+              <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/mining.png"
+                  style="width: 40px" alt="" /></nuxt-link>
+
+
+              <p class="text" style="margin-top: 20px;" v-if="isLoggedIn && !isMiningDisabled">
+                <Start /> Mining
+              </p>
+
+              <p v-if="!isLoggedIn">Mining</p>
+
             </span>
-            <span v-else class="text-center">
-              <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
-                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
-              <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img
-                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
-              <p class="text mt-2">Start</p>
-            </span>
+
           </div>
 
-          <div class="col text-center" v-if="category_2 === 2">
+          <!-- <div class="col text-center"  >
             <Fast />
-          </div>
-          <div v-else class="text-center col">
-            <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
-                src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
-            <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/platinum.png"
+          </div> -->
+          <div class="text-center col">
+            <nuxt-link to="/spin" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/wheel.png"
                 style="width: 40px" alt="" /></nuxt-link>
-            <p class="text mt-2">Fast</p>
+            <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/wheel.png"
+                style="width: 40px" alt="" /></nuxt-link>
+            <p class="text mt-2">Spin</p>
           </div>
 
           <div class="col" v-if="category_3 === 3">
@@ -119,11 +131,11 @@
           </div>
 
           <div v-else class="text-center col serv-item">
-            <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
-                src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
-            <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/platinum.png"
+            <nuxt-link to="/taptap" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/taptap.png"
                 style="width: 40px" alt="" /></nuxt-link>
-            <p class="text mt-2">Super</p>
+            <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/taptap.png"
+                style="width: 40px" alt="" /></nuxt-link>
+            <p class="text mt-2">TapTap</p>
           </div>
 
           <div class="col" v-if="category_4 === 4">
@@ -133,12 +145,12 @@
 
           <div v-else class="text-center col">
             <div class="serv-item">
-              <nuxt-link to="/buy-mining-service" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img
-                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+              <nuxt-link to="#" v-if="isLoggedIn" class="m_icon serv-icon mt-3"><img src="/assets/img/question.png"
+                  style="width: 40px" alt="" /></nuxt-link>
               <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3"><img
-                  src="/assets/img/platinum.png" style="width: 40px" alt="" /></nuxt-link>
+                  src="/assets/img/question.png" style="width: 40px" alt="" /></nuxt-link>
 
-              <p class="text mt-2">Platinum</p>
+              <p class="text mt-2">Speacial</p>
             </div>
           </div>
 
@@ -146,14 +158,10 @@
       </div>
 
       <section class="bal-section supply_container container mt-30">
-    <!-- <h4 class="title-main mt-0">Circulating Supply</h4> -->
-    <div class="resources-card-wrapper">
-      <div class="resources-card mr-10 w-100">
-        <!-- <iframe src="https://api.uicmax.com/chart" frameborder="0" width="100%" height="400" style="min-height: 400px;"></iframe> -->
-        <canvas id="dailyChart" style="width: 100%; height: 400px;"></canvas>
-      </div>
-    </div>
-  </section>
+        <div class="resources-card-wrapper">
+         sdsdsd
+        </div>
+      </section>
       <br /><br /><br /><br />
     </main>
   </div>
@@ -179,70 +187,18 @@ const category_2 = ref(null);
 const category_3 = ref(null);
 const category_4 = ref(null);
 
+const activeComponent = ref(null)
+ 
 
-// start chart 
-Chart.register(...registerables);
+// Computed property to check if mining should be disabled
+const isMiningDisabled = computed(() => {
+  return total_supply.value >= circulatingSupply.value
+})
 
-const chartRef = ref(null);
-let dailyChart;
-
-const fetchChartData = async () => {
-  try {
-    const response = await axios.get('/chart-data');
-    const labels = Object.keys(response.data);
-    const dataValues = Object.values(response.data).map(value => parseFloat(value));
-
-    // Update chart data
-    dailyChart.data.labels = labels;
-    dailyChart.data.datasets[0].data = dataValues;
-    dailyChart.update();
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
+ 
 
 onMounted(() => {
-  const ctx = document.getElementById('dailyChart').getContext('2d');
-  dailyChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [], // Initially empty, will be populated by fetched data
-      datasets: [{
-        label: 'Circulating Supply',
-        data: [],
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-        fill: true,
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function(tooltipItem) {
-              if (tooltipItem.dataset) {
-                return tooltipItem.dataset.data[tooltipItem.dataIndex].toFixed(10);
-              }
-              return '';
-            }
-          }
-        }
-      }
-    }
-  });
-
-  // Fetch chart data initially
-  fetchChartData();
-
-  // Update chart data every 10 seconds
-  setInterval(fetchChartData, 10000); // 10 seconds interval (10000 milliseconds)
+  //fetchChartData();
 });
 //end chart 
 
@@ -295,7 +251,6 @@ watchEffect(async () => {
 </script>
 
 <style scoped>
-
 .countdown {
   font-size: 24px;
   margin-top: 20px;
@@ -323,8 +278,9 @@ button {
   background-color: #29529e;
   /* Custom hover color */
 }
-@media(max-width: 576px){
-  .resources-card canvas{
+
+@media(max-width: 576px) {
+  .resources-card canvas {
     height: 300px !important;
   }
 }

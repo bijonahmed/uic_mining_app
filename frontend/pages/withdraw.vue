@@ -43,10 +43,8 @@
                                             </div>
 
                                             <div class="col-6">
-                                                <br />
-                                                <div align="right">
-                                                    <nuxt-link to="/add-withdraw-method"> Add Method </nuxt-link>
-                                                </div>
+                                                    <nuxt-link class="title-main ms-auto d-block text-end" style="text-align: end;"  to="/add-withdraw-method">+Add Method </nuxt-link>
+                                                
                                             </div>
                                         </div>
                                         <div class="wallet-address">
@@ -242,7 +240,7 @@ const getBalance = async () => {
     console.log("Response: ", response.data);
     available_balance.value = response.data.available_balance;
     usdt_amount.value = response.data.usdt_amount;
-    mining_amount.value = response.data.mining_amount;
+    mining_amount.value = response.data.uic_amount;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -362,3 +360,10 @@ onMounted(async () => {
     fetchwithDrawlMethod();
 });
 </script>
+
+<style>
+.table-bordered thead td, .table-bordered thead th {
+  border-bottom-width: 2px;
+  font-size: 12px;
+}
+</style>

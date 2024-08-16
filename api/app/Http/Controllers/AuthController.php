@@ -98,27 +98,32 @@ class AuthController extends Controller
         $setting = Setting::find(1);
         $checkInviteUser  = User::where('inviteCode', $inviteCode)->first();
         $firstLeveluserId = $checkInviteUser->id;
+
         if ($checkInviteUser) {
             $firstLeveluserId = $checkInviteUser->id;
             //echo "==Level-1==ID: $firstLeveluserId---Email: $checkInviteUser->email, Ref ID: $checkInviteUser->ref_id <br/>"; 
-            $lev_1['available_balance'] = !empty($setting->level_1_bonus) ? $setting->level_1_bonus : 0;
-            $lev_1['level_commission']  =  $lev_1['available_balance'];
+            $chk                        = User::where('id', $firstLeveluserId)->first();
+            $levComm                    = !empty($chk->level_commission) ? $chk->level_commission : 0;
+            $level_1_bonus              = !empty($setting->level_1_bonus) ? $setting->level_1_bonus : 0;
+            $lev_1['level_commission']  = $levComm + $level_1_bonus;
             User::where('id', $firstLeveluserId)->update($lev_1);
- 
+
             $secondLeveluser = User::where('id', $checkInviteUser->ref_id)->first();
             if ($secondLeveluser) {
                 $secondLeveluserId = $secondLeveluser->id;
                // echo "==Level-2==ID: $secondLeveluserId---Email: $secondLeveluser->email, Ref ID: $secondLeveluser->ref_id <br/>"; 
-                $lev_2['available_balance'] = !empty($setting->level_2_bonus) ? $setting->level_2_bonus : 0;
-                $lev_2['level_commission']  =  $lev_2['available_balance'];
+                $levComm                    = !empty($chk->level_commission) ? $chk->level_commission : 0;
+                $level_2_bonus              = !empty($setting->level_2_bonus) ? $setting->level_2_bonus : 0;
+                $lev_2['level_commission']  = $levComm + $level_2_bonus;
                 User::where('id', $secondLeveluserId)->update($lev_2);
 
                 $thirdLeveluser = User::where('id', $secondLeveluser->ref_id)->first();
                 if ($thirdLeveluser) {
                     $thirdLeveluserId = $thirdLeveluser->id;
                   //  echo "==Level-3==ID: $thirdLeveluserId---Email: $thirdLeveluser->email, Ref ID: $thirdLeveluser->ref_id <br/>";
-                  $lev_3['available_balance'] = !empty($setting->level_3_bonus) ? $setting->level_3_bonus : 0;
-                  $lev_3['level_commission']  =  $lev_3['available_balance'];
+                $levComm                    = !empty($chk->level_commission) ? $chk->level_commission : 0;
+                $level_3_bonus              = !empty($setting->level_3_bonus) ? $setting->level_3_bonus : 0;
+                $lev_3['level_commission']  = $levComm + $level_3_bonus;
                   User::where('id', $thirdLeveluserId)->update($lev_3);
                 }
             }
@@ -349,15 +354,16 @@ class AuthController extends Controller
     }
     public function showProfileData(Request $request)
     {
-        $data   = auth('api')->user();
-        $id     = (int)$data->id;
-        $row    = User::where('id', $id)->first();
-        $res['email']       =  is_string($row->email) ? $row->email : json_encode($row->email);
-        $res['name']        =  is_string($row->name) ? $row->name : json_encode($row->name);
-        $res['phone_number'] =  is_string($row->phone_number) ? $row->phone_number : json_encode($row->phone_number);
-        $res['twitter']     =  is_string($row->twitter) ? $row->twitter : json_encode($row->twitter);
-        $res['facebook']    =  is_string($row->facebook) ? $row->facebook : json_encode($row->facebook);
-        $res['whtsapp']     =  is_string($row->whtsapp) ? $row->whtsapp : json_encode($row->whtsapp);
+        $data               = auth('api')->user();
+        $id                 = (int)$data->id;
+        $row                = User::where('id', $id)->first();
+        $res['email']       = is_string($row->email) ? $row->email : json_encode($row->email);
+        $res['taptap_coin'] = !empty($row->taptap_coin) ? $row->taptap_coin : 0;
+        $res['name']        = is_string($row->name) ? $row->name : json_encode($row->name);
+        $res['phone_number']= is_string($row->phone_number) ? $row->phone_number : json_encode($row->phone_number);
+        $res['twitter']     = is_string($row->twitter) ? $row->twitter : json_encode($row->twitter);
+        $res['facebook']    = is_string($row->facebook) ? $row->facebook : json_encode($row->facebook);
+        $res['whtsapp']     = is_string($row->whtsapp) ? $row->whtsapp : json_encode($row->whtsapp);
         $res['id']     =  $id;
 
         return response()->json($res);

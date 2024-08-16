@@ -43,16 +43,16 @@
   }
   
   const formattedStartTime = computed(() => {
-    return myStore.start_time ? new Date(myStore.start_time).toLocaleString() : 'N/A'
+    return myStore.start_time ? new Date(myStore.start_time).toLocaleString() : ''
   })
 
     
   const formattedEndTime = computed(() => {
-    return myStore.end_time ? new Date(myStore.end_time).toLocaleString() : 'N/A'
+    return myStore.end_time ? new Date(myStore.end_time).toLocaleString() : ''
   })
 
   const formattedServerTime = computed(() => {
-    return myStore.server_time ? new Date(myStore.server_time).toLocaleString() : 'N/A'
+    return myStore.server_time ? new Date(myStore.server_time).toLocaleString() : ''
   })
   
   const miningCategoryId = computed(() => {
@@ -60,7 +60,7 @@
   })
   
   const formattedRemainingTime = computed(() => {
-    if (remainingTime.value === null) return 'N/A'
+    if (remainingTime.value === null) return ''
     const hours = Math.floor((remainingTime.value / (1000 * 60 * 60)) % 24)
     const minutes = Math.floor((remainingTime.value / (1000 * 60)) % 60)
     const seconds = Math.floor((remainingTime.value / 1000) % 60)

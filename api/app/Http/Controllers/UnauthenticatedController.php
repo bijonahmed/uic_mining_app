@@ -36,7 +36,8 @@ class UnauthenticatedController extends Controller
 
         $setting                    = Setting::find(1);
         $response                   = app('App\Http\Controllers\User\UserController')->getBalance();
-        $circulatingSupply          = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+        $circulatingSupply          = $response instanceof JsonResponse ? $response->getData(true)['uic_amount'] : 0;
+        
         $cirSupply                  = floatval(str_replace(',', '', $circulatingSupply));
         $data['circulatingSupply']  = number_format($cirSupply,2);
         $beganing_price             = $setting->beganing_price;

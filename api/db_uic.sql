@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2024 at 12:16 AM
+-- Generation Time: Aug 16, 2024 at 08:09 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -474,7 +474,7 @@ CREATE TABLE `deposit` (
 --
 
 INSERT INTO `deposit` (`id`, `depositID`, `trxId`, `user_id`, `deposit_amount`, `receivable_amount`, `payment_method`, `depscription`, `wallet_address`, `status`, `approved_by`, `created_at`, `updated_at`) VALUES
-(3, 'D.0cbed40c0d920b94126eaf5e707be1f5', '6f21357f863ce24ce21c1a82f49a7d5d13', 3, 5000.00, 5000.00, 'USDT (TRC20)', 'D.0cbed40c0d920b94126eaf5e707be1f5', NULL, 1, NULL, '2024-06-20 21:14:39', '2024-06-20 21:14:39');
+(1, 'D.4a71e49f6bda0c9b7642f39f1aa1f567', 'TPpMvdKfhENfJqYZsDJQLgEopMRBy15jeU', 2, 500.00, 500.00, 'USDT (TRC20)', 'D.4a71e49f6bda0c9b7642f39f1aa1f567', NULL, 1, NULL, '2024-08-16 19:16:02', '2024-08-16 19:16:02');
 
 -- --------------------------------------------------------
 
@@ -494,6 +494,20 @@ CREATE TABLE `expense_history` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `expense_history`
+--
+
+INSERT INTO `expense_history` (`id`, `user_id`, `business_type`, `operation_type`, `amount_type`, `operation_amount`, `charge_description`, `operation_date`, `created_at`, `updated_at`) VALUES
+(1, 20, NULL, 'Debited', NULL, 2.00, 'ddd [ID: 1] ', '2024-06-22', '2024-06-22 06:59:05', '2024-06-22 06:59:05'),
+(2, 20, NULL, 'Debited', NULL, 5.00, 'sss [ID: 2] ', '2024-06-22', '2024-06-22 07:07:37', '2024-06-22 07:07:37'),
+(3, 20, NULL, 'Credited', NULL, 2.00, 'dd [ID: 3] ', '2024-06-22', '2024-06-22 07:15:18', '2024-06-22 07:15:18'),
+(4, 20, NULL, 'Credited', NULL, 2.00, 'ffff [ID: 4] ', '2024-06-22', '2024-06-22 07:18:42', '2024-06-22 07:18:42'),
+(5, 20, NULL, 'Credited', NULL, 2.00, 'fffffffffffffff [ID: 5] ', '2024-06-22', '2024-06-22 07:19:08', '2024-06-22 07:19:08'),
+(6, 20, NULL, 'Debited', NULL, 5.00, 'Test [ID: 1] ', '2024-06-22', '2024-06-22 07:24:36', '2024-06-22 07:24:36'),
+(7, 3, NULL, 'Debited', NULL, 5.00, 'ssss [ID: 2] ', '2024-06-22', '2024-06-22 07:25:46', '2024-06-22 07:25:46'),
+(8, 3, NULL, 'Credited', NULL, 1.00, 'fff [ID: 3] ', '2024-06-22', '2024-06-22 07:27:10', '2024-06-22 07:27:10');
 
 -- --------------------------------------------------------
 
@@ -626,10 +640,7 @@ CREATE TABLE `kyc` (
 --
 
 INSERT INTO `kyc` (`id`, `name`, `user_id`, `cnicFrontFile`, `cnicBackFile`, `passportFile`, `drivingFrontFile`, `drivingBackFile`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'cnic', 3, '/backend/files/z6ztsf2tMCcrtfMN3d03.jpg', '/backend/files/rrUDwGlky1d7gkDBhCkv.jpg', NULL, NULL, NULL, 0, '2024-06-13 01:02:00', '2024-06-13 01:02:00'),
-(2, 'passport', 3, NULL, NULL, '/backend/files/1NPKwpf0fRIk24gzRbO0.jpg', NULL, NULL, 0, '2024-06-13 01:11:15', '2024-06-13 01:11:15'),
-(3, 'driving', 3, NULL, NULL, NULL, '/backend/files/VAJzs8huSc6yZI3DzxjR.jpg', '/backend/files/tq14M26TBuS3WpjXBQXc.jpg', 0, '2024-06-13 01:19:03', '2024-06-13 01:19:03'),
-(4, 'cnic', 2, '/backend/files/WjxsRtkU7DL8ujFiCa4Y.png', '/backend/files/6gRvKcQMjuQncByxPg2O.png', NULL, NULL, NULL, 0, '2024-06-13 01:28:02', '2024-06-13 01:28:02');
+(1, 'passport', 2, NULL, NULL, '/backend/files/7tvtmZOymDmfcux6gJDL.png', NULL, NULL, 0, '2024-08-16 15:22:22', '2024-08-16 15:22:22');
 
 -- --------------------------------------------------------
 
@@ -659,7 +670,7 @@ CREATE TABLE `manual_adjustment` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `adjustment_type` int(11) DEFAULT NULL COMMENT '1=The effective amount is manually increased\r\n2=The effective amount is manually reduced',
-  `adjustment_amount` int(11) DEFAULT NULL,
+  `adjustment_amount` int(11) DEFAULT NULL COMMENT 'UIC Amount',
   `detailed_remarks` varchar(255) DEFAULT NULL,
   `entry_by` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -692,7 +703,8 @@ INSERT INTO `messages` (`id`, `user_id`, `username`, `community_slug`, `message`
 (3, 3, 'b@gmail.com', 'community-english', 'how are you', '2024-06-12 10:15:29', '2024-06-12 10:15:29'),
 (4, 2, 'r@gmail.com', 'community-english', 'yes sir good', '2024-06-12 10:16:09', '2024-06-12 10:16:09'),
 (5, 2, 'r@gmail.com', 'community-english', 'what about now', '2024-06-12 10:16:14', '2024-06-12 10:16:14'),
-(6, 3, 'b@gmail.com', 'community-chinese', 'HI', '2024-06-12 10:16:39', '2024-06-12 10:16:39');
+(6, 3, 'b@gmail.com', 'community-chinese', 'HI', '2024-06-12 10:16:39', '2024-06-12 10:16:39'),
+(7, 2, 'test1@gmail.com', 'community-english', 'hi', '2024-08-16 14:21:26', '2024-08-16 14:21:26');
 
 -- --------------------------------------------------------
 
@@ -715,6 +727,88 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2014_10_12_100000_create_password_reset_tokens_table', 2),
 (3, '2019_08_19_000000_create_failed_jobs_table', 3),
 (4, '2019_12_14_000001_create_personal_access_tokens_table', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mininghistory`
+--
+
+CREATE TABLE `mininghistory` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `mining_date` date DEFAULT NULL,
+  `mining_amount` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mininghistory`
+--
+
+INSERT INTO `mininghistory` (`id`, `user_id`, `mining_date`, `mining_amount`, `created_at`, `updated_at`) VALUES
+(1, 3, '2024-06-23', '0.00000870', '2024-06-23 16:35:28', '2024-06-23 16:35:28'),
+(2, 3, '2024-06-23', '0.00000900', '2024-06-23 16:35:29', '2024-06-23 16:35:29'),
+(3, 3, '2024-06-23', '0.00000930', '2024-06-23 16:35:30', '2024-06-23 16:35:30'),
+(4, 3, '2024-06-23', '0.00000960', '2024-06-23 16:35:31', '2024-06-23 16:35:31'),
+(5, 3, '2024-06-23', '0.00000990', '2024-06-23 16:35:32', '2024-06-23 16:35:32'),
+(6, 3, '2024-06-23', '0.00001020', '2024-06-23 16:35:33', '2024-06-23 16:35:33'),
+(7, 3, '2024-06-23', '0.00001050', '2024-06-23 16:35:34', '2024-06-23 16:35:34'),
+(8, 3, '2024-06-23', '0.00001080', '2024-06-23 16:35:35', '2024-06-23 16:35:35'),
+(9, 3, '2024-06-23', '0.00001110', '2024-06-23 16:35:36', '2024-06-23 16:35:36'),
+(10, 3, '2024-06-23', '0.00001170', '2024-06-23 16:35:38', '2024-06-23 16:35:38'),
+(11, 3, '2024-06-23', '0.00001200', '2024-06-23 16:35:39', '2024-06-23 16:35:39'),
+(12, 3, '2024-06-23', '0.00001230', '2024-06-23 16:35:40', '2024-06-23 16:35:40'),
+(13, 3, '2024-06-23', '0.00001260', '2024-06-23 16:35:41', '2024-06-23 16:35:41'),
+(14, 3, '2024-06-23', '0.00001290', '2024-06-23 16:35:42', '2024-06-23 16:35:42'),
+(15, 3, '2024-06-23', '0.00001320', '2024-06-23 16:35:43', '2024-06-23 16:35:43'),
+(16, 3, '2024-06-23', '0.00001350', '2024-06-23 16:35:44', '2024-06-23 16:35:44'),
+(17, 3, '2024-06-23', '0.00001380', '2024-06-23 16:35:45', '2024-06-23 16:35:45'),
+(18, 3, '2024-06-23', '0.00001410', '2024-06-23 16:35:46', '2024-06-23 16:35:46'),
+(19, 3, '2024-06-23', '0.00001440', '2024-06-23 16:35:47', '2024-06-23 16:35:47'),
+(20, 3, '2024-06-20', '0.00001470', '2024-06-23 16:35:48', '2024-06-23 16:35:48'),
+(21, 3, '2024-06-23', '0.00001500', '2024-06-23 16:35:49', '2024-06-23 16:35:49'),
+(22, 3, '2024-06-23', '0.00001530', '2024-06-23 16:35:50', '2024-06-23 16:35:50'),
+(23, 3, '2024-06-23', '0.00001560', '2024-06-23 16:35:51', '2024-06-23 16:35:51'),
+(24, 3, '2024-06-20', '0.00001590', '2024-06-23 16:35:52', '2024-06-23 16:35:52'),
+(25, 3, '2024-06-21', '0.00001620', '2024-06-23 16:35:54', '2024-06-23 16:35:54'),
+(26, 3, '2024-06-21', '0.00001680', '2024-06-23 16:35:55', '2024-06-23 16:35:55'),
+(27, 3, '2024-06-21', '0.00001710', '2024-06-23 16:35:56', '2024-06-23 16:35:56'),
+(28, 3, '2024-06-23', '0.00001740', '2024-06-23 16:35:57', '2024-06-23 16:35:57'),
+(29, 3, '2024-06-22', '0.00001770', '2024-06-23 16:35:58', '2024-06-23 16:35:58'),
+(30, 3, '2024-06-22', '0.00001800', '2024-06-23 16:35:59', '2024-06-23 16:35:59'),
+(31, 3, '2024-06-22', '0.00001830', '2024-06-23 16:36:00', '2024-06-23 16:36:00'),
+(32, 5, '2024-08-15', '0.00001890', '2024-08-15 04:43:33', '2024-08-15 04:43:33'),
+(33, 2, '2024-08-15', '0.00058740', '2024-08-15 04:43:33', '2024-08-15 04:43:33'),
+(34, 5, '2024-08-15', '0.00002280', '2024-08-15 04:43:46', '2024-08-15 04:43:46'),
+(35, 2, '2024-08-15', '0.00059520', '2024-08-15 04:43:46', '2024-08-15 04:43:46'),
+(36, 5, '2024-08-15', '0.00002310', '2024-08-15 04:43:47', '2024-08-15 04:43:47'),
+(37, 2, '2024-08-15', '0.00059580', '2024-08-15 04:43:47', '2024-08-15 04:43:47'),
+(38, 5, '2024-08-15', '0.00002340', '2024-08-15 04:43:48', '2024-08-15 04:43:48'),
+(39, 2, '2024-08-15', '0.00059640', '2024-08-15 04:43:48', '2024-08-15 04:43:48'),
+(40, 5, '2024-08-15', '0.00002370', '2024-08-15 04:43:49', '2024-08-15 04:43:49'),
+(41, 2, '2024-08-15', '0.00059700', '2024-08-15 04:43:49', '2024-08-15 04:43:49'),
+(42, 5, '2024-08-15', '0.00002400', '2024-08-15 04:43:50', '2024-08-15 04:43:50'),
+(43, 2, '2024-08-15', '0.00059760', '2024-08-15 04:43:50', '2024-08-15 04:43:50'),
+(44, 5, '2024-08-15', '0.00002430', '2024-08-15 04:43:51', '2024-08-15 04:43:51'),
+(45, 2, '2024-08-15', '0.00059820', '2024-08-15 04:43:51', '2024-08-15 04:43:51'),
+(46, 5, '2024-08-15', '0.00002460', '2024-08-15 04:43:52', '2024-08-15 04:43:52'),
+(47, 2, '2024-08-15', '0.00059880', '2024-08-15 04:43:52', '2024-08-15 04:43:52'),
+(48, 5, '2024-08-15', '0.00002490', '2024-08-15 04:43:53', '2024-08-15 04:43:53'),
+(49, 2, '2024-08-15', '0.00059940', '2024-08-15 04:43:53', '2024-08-15 04:43:53'),
+(50, 5, '2024-08-15', '0.00002520', '2024-08-15 04:43:54', '2024-08-15 04:43:54'),
+(51, 2, '2024-08-15', '0.00060000', '2024-08-15 04:43:54', '2024-08-15 04:43:54'),
+(52, 5, '2024-08-15', '0.00002550', '2024-08-15 04:43:55', '2024-08-15 04:43:55'),
+(53, 2, '2024-08-15', '0.00060060', '2024-08-15 04:43:55', '2024-08-15 04:43:55'),
+(54, 5, '2024-08-15', '0.00002580', '2024-08-15 04:43:56', '2024-08-15 04:43:56'),
+(55, 2, '2024-08-15', '0.00060120', '2024-08-15 04:43:56', '2024-08-15 04:43:56'),
+(56, 5, '2024-08-15', '0.00002640', '2024-08-15 04:43:58', '2024-08-15 04:43:58'),
+(57, 2, '2024-08-15', '0.00060240', '2024-08-15 04:43:58', '2024-08-15 04:43:58'),
+(58, 5, '2024-08-15', '0.00002670', '2024-08-15 04:43:59', '2024-08-15 04:43:59'),
+(59, 2, '2024-08-15', '0.00060300', '2024-08-15 04:43:59', '2024-08-15 04:43:59'),
+(60, 5, '2024-08-15', '0.00002700', '2024-08-15 04:44:00', '2024-08-15 04:44:00'),
+(61, 2, '2024-08-15', '0.00060360', '2024-08-15 04:44:00', '2024-08-15 04:44:00');
 
 -- --------------------------------------------------------
 
@@ -801,6 +895,25 @@ CREATE TABLE `mining_process_history` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `mining_process_history`
+--
+
+INSERT INTO `mining_process_history` (`id`, `user_id`, `start_time`, `end_time`, `duration`, `mining_category_id`, `ip`, `created_at`, `updated_at`) VALUES
+(1, 3, '2024-06-22 04:20:40', '2024-06-22 05:20:40', 1, 1, '127.0.0.1', '2024-06-22 04:20:40', '2024-06-22 04:20:40'),
+(2, 3, '2024-06-23 13:59:51', '2024-06-23 14:59:51', 1, 1, '127.0.0.1', '2024-06-23 13:59:51', '2024-06-23 13:59:51'),
+(3, 3, '2024-06-23 15:27:41', '2024-06-23 16:27:41', 1, 1, '127.0.0.1', '2024-06-23 15:27:41', '2024-06-23 15:27:41'),
+(4, 3, '2024-06-23 16:34:59', '2024-06-23 17:34:59', 1, 1, '127.0.0.1', '2024-06-23 16:34:59', '2024-06-23 16:34:59'),
+(5, 2, '2024-08-13 17:10:14', '2024-08-13 18:10:14', 1, 1, '127.0.0.1', '2024-08-13 17:10:14', '2024-08-13 17:10:14'),
+(6, 2, '2024-08-14 22:04:17', '2024-08-14 23:04:17', 1, 1, '127.0.0.1', '2024-08-14 22:04:17', '2024-08-14 22:04:17'),
+(7, 2, '2024-08-14 22:04:34', '2024-08-14 23:04:34', 1, 1, '127.0.0.1', '2024-08-14 22:04:34', '2024-08-14 22:04:34'),
+(8, 2, '2024-08-15 04:27:01', '2024-08-15 05:27:01', 1, 1, '127.0.0.1', '2024-08-15 04:27:01', '2024-08-15 04:27:01'),
+(9, 2, '2024-08-15 04:27:27', '2024-08-15 05:27:27', 1, 1, '127.0.0.1', '2024-08-15 04:27:27', '2024-08-15 04:27:27'),
+(10, 5, '2024-08-15 04:42:30', '2024-08-15 05:42:30', 1, 1, '127.0.0.1', '2024-08-15 04:42:30', '2024-08-15 04:42:30'),
+(11, 2, '2024-08-16 12:25:00', '2024-08-16 13:25:00', 1, 1, '127.0.0.1', '2024-08-16 12:25:00', '2024-08-16 12:25:00'),
+(12, 2, '2024-08-16 15:31:59', '2024-08-16 16:31:59', 1, 1, '127.0.0.1', '2024-08-16 15:31:59', '2024-08-16 15:31:59'),
+(13, 2, '2024-08-16 17:46:54', '2024-08-16 18:46:54', 1, 1, '127.0.0.1', '2024-08-16 17:46:54', '2024-08-16 17:46:54');
+
 -- --------------------------------------------------------
 
 --
@@ -820,6 +933,31 @@ CREATE TABLE `mining_service_buy_history` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `msg` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`id`, `user_id`, `msg`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Your changes have been saved successfully.', '2024-08-16 16:03:03', '2024-08-16 16:03:03'),
+(2, NULL, 'Something went wrong. Please try again.', '2024-08-16 16:03:32', '2024-08-16 16:03:32'),
+(3, NULL, 'New updates are available. Check them out!', '2024-08-16 16:03:32', '2024-08-16 16:03:32'),
+(4, NULL, 'Your session is about to expire. Please save your work.', '2024-08-16 16:03:32', '2024-08-16 16:03:32'),
+(5, NULL, 'Don\'t forget to complete your profile setup.', '2024-08-16 16:03:32', '2024-08-16 16:03:32');
 
 -- --------------------------------------------------------
 
@@ -939,6 +1077,7 @@ CREATE TABLE `posts` (
   `description_full` text DEFAULT NULL,
   `question` text DEFAULT NULL,
   `answer` text DEFAULT NULL,
+  `likeCount` int(11) DEFAULT NULL,
   `categoryId` int(11) DEFAULT NULL,
   `entry_by` int(11) DEFAULT NULL,
   `thumnail_img` varchar(255) DEFAULT NULL,
@@ -951,22 +1090,15 @@ CREATE TABLE `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `name`, `slug`, `description_short`, `description_full`, `question`, `answer`, `categoryId`, `entry_by`, `thumnail_img`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Announcement', 'announcement', '', '<h6 data-v-inspector=\"pages/partner/community/announcement.vue:34:37\">Online recharge:</h6><p data-v-inspector=\"pages/partner/community/announcement.vue:35:37\">Enter\n the amount - select the payment method - obtain the payment QR code and\n pay using the payment application - please pay within the specified \ntime (within 30 minutes) - payment is completed - wait for the system to\n automatically confirm. It is prohibited to reuse QR codes for payment, \nand a new payment code must be obtained for each recharge. </p><p></p>', '', '', 1, 1, '/backend/files/6sqrvTOFNMboJxByFYIS.png', 1, '2024-03-10 18:35:57', '2024-03-10 18:35:57'),
-(2, 'Announcement', 'announcement', '', '<h6 data-v-inspector=\"pages/partner/community/announcement.vue:44:37\">Online recharge:</h6><p data-v-inspector=\"pages/partner/community/announcement.vue:45:37\">Enter\r\n the amount - select the payment method - obtain the payment QR code and\r\n pay using the payment application - please pay within the specified \r\ntime (within 30 minutes) - payment is completed - wait for the system to\r\n automatically confirm. It is prohibited to reuse QR codes for payment, \r\nand a new payment code must be obtained for each recharge. </p><p></p>', '', '', 1, 1, '/backend/files/eJxV8SezpYqrVmkmaQhG.png', 1, '2024-03-10 18:36:55', '2024-03-10 18:36:55'),
-(3, 'Announcement', 'announcement', '', '<h6 data-v-inspector=\"pages/partner/community/announcement.vue:44:37\">Online recharge:</h6><p data-v-inspector=\"pages/partner/community/announcement.vue:45:37\">Enter\n the amount - select the payment method - obtain the payment QR code and\n pay using the payment application - please pay within the specified \ntime (within 30 minutes) - payment is completed - wait for the system to\n automatically confirm. It is prohibited to reuse QR codes for payment, \nand a new payment code must be obtained for each recharge. </p><p></p>', '', '', 1, 1, '/backend/files/2Tqp9iow8CQTavozWohf.png', 1, '2024-03-10 18:37:21', '2024-03-10 12:44:29'),
-(4, 'Invite subordinares for a share of sales revenue', 'invite-subordinares-for-a-share-of-sales-revenue', '', '<p>Enter the amount - select the payment method - obtain the payment QR \r\ncode and pay using the payment application - please pay within the \r\nspecified time (within 30 minutes) - payment is completed - wait for the\r\n system to automatically confirm. It is prohibited to reuse QR codes for\r\n payment, and a new payment code must be obtained for each recharge. </p>', '', '', 2, 1, '/backend/files/e6fWlYGeLnDUSTIslwUg.png', 1, '2024-03-10 18:47:39', '2024-04-26 17:11:41'),
-(6, 'What is internatinal dropshipping and how does it work?', 'what-is-internatinal-dropshipping-and-how-does-it-work-', '', '', 'What is internatinal dropshipping and how does it work?', 'internatinal dropshipping Products: This could refer to the top-selling products within a DS store. DS provides analytics and reporting tools that allow merchants to track their sales performance, including which products are selling the most. Merchants can use this information to optimize their product offerings, marketing strategies, and inventory management.', 3, 1, NULL, 1, '2024-03-10 18:58:05', '2024-03-10 18:58:05'),
-(7, 'How much does it cost to open a store on  internatinal dropshipping?', 'how-much-does-it-cost-to-open-a-store-on-internatinal-dropshipping-', '', '', 'How much does it cost to open a store on  Dropshipping international?', 'It seems there might be some confusion. \"internatinal dropshipping\" isn\'t a platform or service that I\'m aware of. However, I assume you\'re referring to internatinal dropshipping, which is a popular e-commerce platform that allows businesses to create and manage online stores.', 3, 1, NULL, 1, '2024-03-10 18:58:54', '2024-03-10 18:58:54'),
-(8, 'How much working capital does it take to open a store on internatinal dropshipping?', 'how-much-working-capital-does-it-take-to-open-a-store-on-internatinal-dropshipping-', '', '', 'How much working capital does it take to open a store on internatinal dropshipping?', 'Opening a store on internatinal dropshipping doesn\'t necessarily require a significant amount of working capital compared to starting a traditional brick-and-mortar store. However, the amount of working capital needed can vary depending on various factors such as:', 3, 1, NULL, 1, '2024-03-10 18:59:36', '2024-03-10 18:59:36'),
-(9, 'Do I need to advertise my store, or find products?', 'do-i-need-to-advertise-my-store-or-find-products-', '', '', 'Do I need to advertise my store, or find products?', 'Both advertising your store and finding products are essential components of running a successful e-commerce business, including a store on internatinal dropshipping.', 3, 1, NULL, 1, '2024-03-10 19:00:14', '2024-03-10 19:00:14'),
-(10, 'Team development bonus', 'team-development-bonus', '', '<p>Enter the amount - select the payment method - obtain the payment QR \r\ncode and pay using the payment application - please pay within the \r\nspecified time (within 30 minutes) - payment is completed - wait for the\r\n system to automatically confirm. It is prohibited to reuse QR codes for\r\n payment, and a new payment code must be obtained for each recharge. </p>', '', '', 2, 1, '/backend/files/sqJ38nLNcwhzuLkKRHR3.png', 1, '2024-03-10 18:47:39', '2024-04-26 17:14:22'),
-(11, 'New members invitaion reward', 'new-members-invitaion-reward', '', '<p>New members invitaion reward<br></p>', '', '', 2, 1, '/backend/files/0D7dEwlPSNYlFaXyko27.png', 1, '2024-04-26 19:15:20', '2024-04-26 19:15:20'),
-(12, 'New members invitaion reward', 'new-members-invitaion-reward', '', '<p>New members invitaion reward<br></p>', '', '', 2, 1, '/backend/files/zDeAQkIwiVSTr2jnnjZJ.png', 1, '2024-04-26 19:15:22', '2024-04-26 19:15:22'),
-(13, 'Agency Team Weekly Sallary', 'agency-team-weekly-sallary', '', '<p>Agency Team Weekly Sallary<br></p>', '', '', 2, 1, '/backend/files/ML5M4mMjfp4ebculdjnC.png', 1, '2024-04-26 19:18:37', '2024-04-26 19:18:37'),
-(14, 'Free store promotions', 'free-store-promotions', '', '<p>Free store promotions<br></p>', '', '', 2, 1, '/backend/files/NEW2LMZnKhMjCbaLi8rx.png', 1, '2024-04-26 19:21:56', '2024-04-26 19:21:56'),
-(15, 'Seasonal promotion', 'seasonal-promotion', '', '<p>Seasonal promotion<br></p>', '', '', 2, 1, '/backend/files/dr1bWEisdCKq4JdYq3Sq.png', 1, '2024-04-26 19:22:56', '2024-04-26 19:22:56'),
-(16, 'Reach team investment', 'reach-team-investment', '', 'Reach team investment', '', '', 2, 1, '/backend/files/6dgHRaylqoOJf3vhqOiH.png', 1, '2024-04-26 19:23:50', '2024-04-26 19:23:50');
+INSERT INTO `posts` (`id`, `name`, `slug`, `description_short`, `description_full`, `question`, `answer`, `likeCount`, `categoryId`, `entry_by`, `thumnail_img`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Automation Testing', 'automation-testing', '', '<p>Automation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation TestingAutomation Testing<br></p>', '', '', 5, 0, 1, '/backend/files/SaEQDSXlk5pEwqoScDnV.jpg', 1, '2024-06-24 12:12:27', '2024-08-15 07:16:56'),
+(2, 'Active Directory', 'active-directory', '', '<p>Active DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive DirectoryActive Directory<br></p>', '', '', 1, 0, 1, '/backend/files/ck7bBb8CRZcnPdbbiaaX.jpeg', 1, '2024-06-24 12:15:50', '2024-08-15 07:16:40'),
+(3, 'Adobe Photoshop', 'adobe-photoshop', '', '<p>Adobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe Photoshop<br></p>', '', '', 1, 0, 1, '/backend/files/m8S1QuWsgtCfI65tBhqV.jpeg', 1, '2024-06-24 12:19:02', '2024-08-15 07:15:01'),
+(4, 'sss', 'sss', '', '<p>Adobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe Photoshop<br></p>', '', '', 158, 0, 1, NULL, 1, '2024-06-27 02:11:36', '2024-08-15 07:14:54'),
+(5, 'xxx', 'xxx', '', '<p>Adobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe PhotoshopAdobe Photoshop<br></p>', '', '', NULL, 0, 3, NULL, 0, '2024-06-27 02:11:53', '2024-06-27 02:11:53'),
+(6, 'Gazi', 'gazi', NULL, 'I am Mohammad Hasan Ejaz and i was designed this movie cover poster, I have designed this poster on photoshop and if you want', NULL, NULL, NULL, NULL, 1, '/backend/files/o0iO1GQqBmIZzgqo3g7Y.png', 0, '2024-06-27 02:19:18', '2024-06-27 04:22:36'),
+(7, 'Gazi', 'gazi', NULL, 'I am Mohammad Hasan Ejaz and i was designed this movie cover poster, I have designed this poster on photoshop and if you want I am Mohammad Hasan Ejaz and i was designed this movie cover poster, I have designed this poster on photoshop and if you want I am Mohammad Hasan Ejaz and i was designed this movie cover poster, I have designed this poster on photoshop and if you want I am Mohammad Hasan Ejaz and i was designed this movie cover poster, I have designed this poster on photoshop and if you want', NULL, NULL, NULL, NULL, 3, '/backend/files/BBX7qnVcTjqwyuGhFFgL.png', 0, '2024-06-27 02:20:52', '2024-06-27 02:20:52'),
+(8, 'Gazi', 'gazi', NULL, 'Your post is pending. Your post will be published if the admin approves it', NULL, NULL, NULL, NULL, 1, NULL, 0, '2024-06-27 02:22:10', '2024-06-27 04:09:16');
 
 -- --------------------------------------------------------
 
@@ -988,6 +1120,30 @@ INSERT INTO `post_category` (`id`, `name`, `status`) VALUES
 (1, 'Announcement', 1),
 (2, 'Event', 1),
 (3, 'FAQs', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_like`
+--
+
+CREATE TABLE `post_like` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) DEFAULT NULL,
+  `postlikesCount` int(11) DEFAULT 0,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `post_like`
+--
+
+INSERT INTO `post_like` (`id`, `post_id`, `postlikesCount`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 4, 0, 2, '2024-08-15 07:29:34', '2024-08-15 07:29:34'),
+(2, 3, 0, 2, '2024-08-15 07:29:55', '2024-08-15 07:29:55'),
+(3, 2, 0, 2, '2024-08-15 07:29:59', '2024-08-15 07:29:59');
 
 -- --------------------------------------------------------
 
@@ -1114,6 +1270,13 @@ CREATE TABLE `send_received` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `send_received`
+--
+
+INSERT INTO `send_received` (`id`, `user_id`, `sender_user_id`, `receiver_user_id`, `receiver_uic_address`, `receiver_name`, `password`, `wallet_type`, `amount`, `created_at`, `updated_at`) VALUES
+(1, 2, 2, 6, 'c399147ccbf9aeeb93bfb710d60a61f3', 'test5', 'test1@gmail.com', '2', '10.00', '2024-08-16 14:19:53', '2024-08-16 14:19:53');
+
 -- --------------------------------------------------------
 
 --
@@ -1236,6 +1399,38 @@ CREATE TABLE `sliders` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `spin_setup`
+--
+
+CREATE TABLE `spin_setup` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `spin_setup`
+--
+
+INSERT INTO `spin_setup` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, '100', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(2, '300', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(3, '400', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(4, '600', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(5, '650', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(6, '660', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(7, '670', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(8, '680', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(9, '690', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(10, '700', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(11, '710', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42'),
+(12, '720', 1, '2024-08-16 17:39:42', '2024-08-16 17:39:42');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `states`
 --
 
@@ -1264,15 +1459,6 @@ CREATE TABLE `swaphistory` (
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `swaphistory`
---
-
-INSERT INTO `swaphistory` (`id`, `user_id`, `type`, `wallet_type_frm`, `wallet_type_to`, `frm_amount`, `to_amount`, `swape_date`, `created_at`, `updated_at`) VALUES
-(1, 3, '2', 'USDT', 'UIC', 100.00, '12,000,000.00', '2024-06-21', '2024-06-20 20:30:19', '2024-06-20 20:30:19'),
-(2, 3, '2', 'USDT', 'UIC', 100.00, '12,000,000.00', '2024-06-21', '2024-06-20 20:32:48', '2024-06-20 20:32:48'),
-(3, 3, '1', 'UIC', 'USDT', 20000000.00, '166.6666666', '2024-06-21', '2024-06-20 21:03:23', '2024-06-20 21:03:23');
-
 -- --------------------------------------------------------
 
 --
@@ -1295,7 +1481,8 @@ CREATE TABLE `transaction_history` (
 --
 
 INSERT INTO `transaction_history` (`id`, `user_id`, `type`, `last_Id`, `description`, `amount`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, 3, 'Deposit', '5000', '2024-06-20 15:14:39', '2024-06-20 15:14:39');
+(1, 2, 1, 1, 'Deposit', '500', '2024-08-16 13:16:02', '2024-08-16 13:16:02'),
+(2, 2, 4, 1, 'Send/Receive-USDT Amount', '10.00', '2024-08-16 14:19:53', '2024-08-16 14:19:53');
 
 -- --------------------------------------------------------
 
@@ -1328,7 +1515,9 @@ CREATE TABLE `users` (
   `role_id` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `available_balance` double(10,8) DEFAULT NULL,
-  `mining_amount` varchar(255) DEFAULT NULL,
+  `spincount` int(11) DEFAULT NULL,
+  `taptap_coin` int(11) DEFAULT NULL,
+  `mining_amount` varchar(255) DEFAULT NULL COMMENT 'UIC',
   `level_commission` int(11) DEFAULT NULL,
   `show_password` varchar(225) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
@@ -1347,6 +1536,7 @@ CREATE TABLE `users` (
   `instagram` varchar(225) DEFAULT NULL,
   `nationality_id` int(11) DEFAULT NULL,
   `state_id` int(11) DEFAULT NULL,
+  `register_bonus` int(11) DEFAULT NULL,
   `otp` int(11) DEFAULT NULL,
   `facebook` varchar(225) DEFAULT NULL,
   `wallet_balance` decimal(10,2) DEFAULT NULL,
@@ -1373,30 +1563,13 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `mining_amount`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
-(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, 1, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-06-16 02:50:40', '2023-06-22 03:20:43', '2024-06-15 20:50:40', 1, NULL),
-(2, NULL, '6f21357f86df3ce24ce21c1a82f49a7d5d13', '5726413', 1, NULL, 2, 'r@gmail.com', 0.00000010, NULL, 1, 'r@gmail.com', 'Rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$pvmqv7CHQ0Vn.oP8SNl0I.SOIxaI7eyuMTRuhb05bIsye7R35ZUwi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-13 07:27:28', '2024-05-25 12:16:12', '2024-06-13 01:27:28', 1, NULL),
-(3, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13', '9696955', 2, NULL, 2, 'b@gmail.com', 3.00000000, '100', 2, 'b@gmail.com', 'Bijon', NULL, '019157288', NULL, NULL, '', NULL, NULL, '', '', NULL, NULL, 'twitter', '', NULL, NULL, NULL, 'facebook', NULL, '$2y$10$kuQtVcqh0wcKIQSjxRsFguFiuFVQlZz54F4AG1.bcvkS08daJtXCe', NULL, NULL, NULL, NULL, '0198899999', NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-21 00:59:43', '2024-05-26 21:26:09', '2024-06-20 18:59:43', 1, NULL),
-(4, NULL, '6f21357f86df3ce24dfdfdfce21c1a82f49a7d5d13', '8454078', 3, NULL, 2, 'c@gmail.com', 3.00000000, NULL, NULL, 'c@gmail.com', 'test-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$fprDcwCveao7NImy8/p2JekUoTpZldCA7yGV4IgdnlNdtqqbbcVd6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:07:34', '2024-05-30 01:07:34', 1, NULL),
-(5, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13fff', '55493952', 3, NULL, 2, 'cc@gmail.com', 3.00000000, NULL, NULL, 'cc@gmail.com', 'test-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Km6RIjTkfRnTawxKuhswveA0d9HEivpgvXbnVwHrcadB2YcXtuD1S', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:09', '2024-05-30 01:09:09', 1, NULL),
-(6, NULL, '6f21ddd357f863ce24ce21c1a82f49a7d5d13', '65711692', 5, NULL, 2, 'dd@gmail.com', 3.00000000, NULL, NULL, 'dd@gmail.com', 'dd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$zrvWR2mgseg/CFgIAvx2G.nhGDA/2sjCU/KMhss9REYf23UFNBhFa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-05-30 01:09:31', '2024-06-01 01:34:42', 0, NULL),
-(7, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13dfdf', NULL, NULL, NULL, 1, 'dev2@mail.com', NULL, NULL, NULL, 'dev2@mail.com', 'Dev2', NULL, '0123456789', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$xBDoWf0Gn2pdlbKRVC10/Oqs6olgeJgxynlKrPIJgwMNs6C6cXhi.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
-(8, NULL, '6f21357f863ce24ce21c1a82f49a7d5d13dfdfdf', NULL, NULL, NULL, 1, 'admin001@mail.com', NULL, NULL, NULL, 'Azp3xU2a', 'Admin001', NULL, '0123456789', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$O90eHgvR08FK.hBVk1neTuZ9U2IWoagxsG8C2p/1UO5hrUQPFyFeG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
-(9, NULL, '6f213ffffff57f863ce24ce21c1a82f49a7d5d13', '97438377', 6, NULL, 2, 'abc@gmail.com', 5.00000000, NULL, NULL, 'abc@gmail.com', 'abc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$hFe7ERazIFNLtfcJQinO7eETIOFQEI00o489S8RzhKZXvP.CE8zJy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:29:03', '2024-06-04 08:29:03', 1, NULL),
-(10, 'UIC000000010', '1f8c311e54a4c440f488d99715421ad4', '108189888', 9, NULL, 2, 'a11@gmail.com', 5.00000000, NULL, NULL, 'a11@gmail.com', 'a11', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$6XK8PJYrE72s.Yts5uzFTuEpjY2pPewP2sYQgfX9dzODOOAKGz/Xy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:30:18', '2024-06-04 08:30:18', 1, NULL),
-(11, 'UIC000000011', 'e8455e425f290c5af7d56dee19a919fd', '118877868', 10, NULL, 2, 'k@gmail.com', 5.00000000, NULL, NULL, 'k@gmail.com', 'k', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$sxdOn18P9XMLzACPV3.yKuOLrk2BDBs48s9/yYKk9DoVgtrMvk0uC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 08:31:27', '2024-06-04 08:31:27', 1, NULL),
-(12, 'UIC000000012', 'd650a9e891be0bf75e1154c9bcdb907b', '127540561', 11, NULL, 2, 'cdd@gmail.com', 1.00000000, NULL, 1, 'cdd@gmail.com', 'cdd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$IdG5IqIqc4fODcziBk80/eN4e9Ekx/Rfy2TBJJFSKGBbzZgsvej02', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:39:14', '2024-06-05 19:49:58', 1, NULL),
-(13, 'UIC000000013', '480cedd0d996b9df05d2a99082b0d07f', '138322299', 12, NULL, 2, 'lakasdf@gmail.com', 5.00000000, NULL, NULL, '127540561', 'lakasdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$UhVQ716WMIJAxKqf7e6ScenQBpuMEYnIwDaJxH3kS/H3HZoqIqW5y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:40:32', '2024-06-04 12:40:32', 1, NULL),
-(14, 'UIC000000014', '871e97b1e71e0046ba008723b46b4642', '149450924', 12, NULL, 2, 'kamrulhas@gmail.com', 5.00000000, NULL, NULL, '127540561', 'kamrulhas', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Z/CVLhROKbza5zGWLbzrGelbVxC907oQCeo4Rb5S9EqLXLf3jDXoG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:42:25', '2024-06-04 12:42:25', 1, NULL),
-(15, 'UIC000000015', '6f21357f863ce24ce21c1a82f49a7d5d', '150939929', 9, NULL, 2, 'rana@gmail.com', 5.00000000, NULL, NULL, 'rana@gmail.com', 'rana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$Scds8xUIhaHfCgkfZDO0TuMZRW.scsxIFbOLXLVDzKikbk4QNDCxW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 12:44:53', '2024-06-04 12:44:53', 1, NULL),
-(16, 'UIC000000016', '6b29ecaf275b8ca943e3b88c16d32656', '160496114', 9, NULL, 2, 'jant@gmail.com', 5.00000000, NULL, NULL, '97438377', 'jant', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$ZWEzi59kf5H0SEqI24ronejITe5KSxtQ1AqYydPVYV.9N0z.p.Pom', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:00:49', '2024-06-04 13:00:49', 1, NULL),
-(17, 'UIC000000017', 'cefa5941b89f26355f93a8b788b1ede1', '171493823', 12, NULL, 2, 'jasns@gmail.com', 2.00000000, NULL, 2, '127540561', 'jasns', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$m0Z2IxZ8m7ZvslzTUFBlJ.jpVt73ZaC1FiH/CydPvtSDRI8jrlAdG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:19:09', '2024-06-05 19:49:58', 1, NULL),
-(20, 'UIC000000020', '308a33ceb3b8af86a052fcead0f00393', '204936183', 17, NULL, 2, 'mdbijon@gmail.com', 3.00000000, NULL, 3, 'mdbijon@gmail.com', 'mdbijon', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$lFZIJTMzo2l6WKe.luRtM.1DJBJPyQbo1IG9O0N/ebtRtifPlU89C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-04 13:41:33', '2024-06-05 19:49:58', 1, NULL),
-(21, 'UIC000000021', 'ecf7690e0d7d0a62ac7c4d8b87ed9656', '216998113', 20, NULL, 2, 'test@gmail.com', 5.00000000, NULL, NULL, 'test@gmail.com', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$17hPBRBT7Mk6SqX7v6p1S.y51UQhJHSwYsWiN6.q60GhKcZmpy9Ha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-05 19:49:58', '2024-06-05 19:49:58', 0, NULL),
-(22, 'UIC000000022', 'bbaa200546e0f709cc3057d658eea32b', '223742843', 3, NULL, 2, 'ahmed@gmail.com', 5.00000000, NULL, NULL, 'ahmed@gmail.com', 'ahmed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$4Y.L80A6L59jCSM74VrjnOq7RrGoYX5XU45JzVh7toeHIbUZabERm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:02:22', '2024-06-06 06:02:22', 1, NULL),
-(23, 'UIC000000023', '83ee59fa5c84fcb505c0f08a510554e3', '230020229', 3, NULL, 2, 'ayesha@gmail.com', 3.00000000, NULL, 3, 'ayesha@gmail.com', 'ayesha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$i2vvydDWzaPO0LxAHItfiO77GHplvucOEam1KLAlh3elLwlKHQQqC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-06-06 12:09:42', '2024-06-06 06:06:42', '2024-06-06 06:10:32', 1, NULL),
-(24, 'UIC000000024', 'd1facb1fea58c28f7791d486baee8085', '242115953', 23, NULL, 2, 'fahim@gmail.com', 5.00000000, NULL, NULL, 'fahim@gmail.com', 'fahim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$mvX7Hm3963zjpvzS8IV/8uFdQLOY38WhDMJK5hA2uKegr/WvKAM4i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:10:11', '2024-06-06 06:10:11', 0, NULL),
-(25, 'UIC000000025', '36d1bfa4f4bc2b3f6d786aa676a9476a', '252327294', 23, NULL, 2, 'anim@gmail.com', 5.00000000, NULL, NULL, 'anim@gmail.com', 'anim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$10$sJ/uM0kU4Bvq6eUFw3c3e.IH1an.qW0A1ZuklCN.hUeY9OJsACmkO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-06-06 06:10:32', '2024-06-06 06:10:32', 0, NULL);
+INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `spincount`, `taptap_coin`, `mining_amount`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `register_bonus`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
+(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, NULL, NULL, 3, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-08-15 14:04:21', '2023-06-22 03:20:43', '2024-08-16 13:57:23', 1, NULL),
+(2, 'UIC000000002', '3839cc87060e26b9e4111f63af1ab7f4', '23450058', 1, NULL, 2, 'test1@gmail.com', 2.00000000, 2680, 90, NULL, 4, 'test1@gmail.com', 'test1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$q7j/lOS0aduUUKOfbVHfbuc5CiQ95KRykUzIEhvmUHLz0dH8b0Rfu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 18:30:37', '2024-08-16 12:29:05', '2024-08-16 18:05:43', 1, NULL),
+(3, 'UIC000000003', 'b50c4e5581de4cc991a60c4b097309a4', '33706308', 2, NULL, 2, 'test2@gmail.com', 5.00000000, NULL, NULL, NULL, 2, 'test2@gmail.com', 'test2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$eiBY/wtRMblYq045R6vRpuRjTERccVYlLhCcKilv.MsEUh1e6fwuS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 19:20:08', '2024-08-16 13:19:30', '2024-08-16 13:26:44', 1, NULL),
+(4, 'UIC000000004', 'e6b4858ec462b75130582e986936d259', '44351421', 3, NULL, 2, 'test3@gmail.com', 5.00000000, NULL, NULL, NULL, 3, 'test3@gmail.com', 'test3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$aNacMa71COohjYj.uV8vCOAviSGRmAWhtOWT5z0gRnwWIG/7yv2B6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 19:26:11', '2024-08-16 13:20:35', '2024-08-16 13:26:44', 1, NULL),
+(5, 'UIC000000005', 'baf706206b7903142e1ad86806c7f45b', '58047905', 4, NULL, 2, 'test4@gmail.com', 5.00000000, NULL, NULL, NULL, NULL, 'test4@gmail.com', 'test4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$pYIi3CBBk4RuKfa8qo3kjuktk3UB/H5.NCSXFBr3uim2pGl5HUeka', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2024-08-16 13:26:44', '2024-08-16 13:26:44', 1, NULL),
+(6, 'UIC000000006', 'c399147ccbf9aeeb93bfb710d60a61f3', '66438775', 2, NULL, 2, 'test5@gmail.com', 5.00000000, NULL, NULL, NULL, NULL, 'test5@gmail.com', 'test5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$4jDggGkkFr70E5alyP5yTeWbhEtIYsKtDupor/m9Zf5TbR9DHRdty', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 20:20:39', '2024-08-16 13:57:23', '2024-08-16 14:20:39', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1413,24 +1586,6 @@ CREATE TABLE `verifyemail` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `verifyemail`
---
-
-INSERT INTO `verifyemail` (`id`, `email`, `code`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'mdbijon@gmail.com', '7348', 1, '2024-04-19 14:50:58', '2024-04-19 14:52:37'),
-(2, 'mdbijon@yahoo.com', '2626', 1, '2024-04-19 14:58:17', '2024-04-19 14:58:49'),
-(3, 'fawadshakir9696@gmail.com', '1068', 0, '2024-04-19 15:15:17', '2024-04-19 15:15:17'),
-(4, 'fawadshakir7873@gmail.com', '8639', 0, '2024-04-19 15:17:17', '2024-04-19 15:17:17'),
-(5, 'lainaearn@gmail.com', '9769', 0, '2024-04-19 15:32:01', '2024-04-19 15:32:01'),
-(6, 'kashiwasim121@gmail.com', '9755', 0, '2024-04-19 15:51:34', '2024-04-19 15:51:34'),
-(7, 'shahazzeemtanoli@gmail.com', '8867', 0, '2024-04-19 15:52:37', '2024-04-19 15:52:37'),
-(8, 'goharcustomerservices@gmail.com', '2334', 0, '2024-04-19 16:08:51', '2024-04-19 16:08:51'),
-(9, 'd6428021@gmail.com', '4102', 0, '2024-04-19 16:28:51', '2024-04-19 16:28:51'),
-(10, 'dsinternational982@gmail.com', '7544', 0, '2024-04-19 20:26:08', '2024-04-19 20:26:08'),
-(11, 'd48447625@gmail.com', '1951', 0, '2024-04-19 20:31:39', '2024-04-19 20:31:39'),
-(12, 'rkimrankhan65@gmail.com', '3057', 0, '2024-04-20 04:05:18', '2024-04-20 04:05:18');
-
 -- --------------------------------------------------------
 
 --
@@ -1441,10 +1596,10 @@ CREATE TABLE `withdraw` (
   `id` int(11) NOT NULL,
   `withdrawID` varchar(255) DEFAULT NULL,
   `depscription` text DEFAULT NULL,
+  `payment_method` varchar(255) DEFAULT NULL,
   `account_number` varchar(255) DEFAULT NULL,
   `usd_amount` varchar(255) DEFAULT NULL,
   `uic_amount` varchar(255) DEFAULT NULL,
-  `payment_method` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `receivable_amount` int(11) DEFAULT NULL COMMENT 'no need this column',
   `password` varchar(255) DEFAULT NULL,
@@ -1463,10 +1618,8 @@ CREATE TABLE `withdraw` (
 -- Dumping data for table `withdraw`
 --
 
-INSERT INTO `withdraw` (`id`, `withdrawID`, `depscription`, `account_number`, `usd_amount`, `uic_amount`, `payment_method`, `user_id`, `receivable_amount`, `password`, `remarks`, `approved_by`, `transection_fee`, `payable_amount`, `withdraw_amount`, `withdrawal_method_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'W.b17446af05919be6e83500be7f5df5c4', 'W.b17446af05919be6e83500be7f5df5c4', '8799', '6', '6', 'Easypaisa', 3, NULL, 'dfdf', NULL, NULL, 0, NULL, 6.00, NULL, 0, '2024-06-07 14:08:02', '2024-06-07 14:08:02'),
-(2, 'W.0e2db0cb2c4645904a054261104b7a14', 'W.0e2db0cb2c4645904a054261104b7a14', '34343434', '2', '5', 'Bank Account', 3, NULL, 'b@gmail.com', NULL, NULL, 0, NULL, 2222.00, NULL, 0, '2024-06-07 14:18:15', '2024-06-07 14:18:15'),
-(3, 'W.53edebc543333dfbf7c5933af792c9c4', 'W.53edebc543333dfbf7c5933af792c9c4', '6898999', '5', '55', 'Test-5', 3, NULL, 'b@gmail.com', NULL, NULL, 0, NULL, 55.00, NULL, 0, '2024-06-09 15:30:54', '2024-06-09 15:30:54');
+INSERT INTO `withdraw` (`id`, `withdrawID`, `depscription`, `payment_method`, `account_number`, `usd_amount`, `uic_amount`, `user_id`, `receivable_amount`, `password`, `remarks`, `approved_by`, `transection_fee`, `payable_amount`, `withdraw_amount`, `withdrawal_method_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'W.eb37b9bd6dbd6f66cd3fe110037e5974', 'W.eb37b9bd6dbd6f66cd3fe110037e5974', 'USDT TRC-20', 'vzxvxgfdgdgdgdgdfg', '490.00', '14.00', 2, NULL, 'test1@gmail.com', NULL, NULL, 0, NULL, 14.00, NULL, 0, '2024-08-16 15:36:27', '2024-08-16 15:36:27');
 
 -- --------------------------------------------------------
 
@@ -1492,7 +1645,10 @@ CREATE TABLE `withdrawal_method` (
 
 INSERT INTO `withdrawal_method` (`id`, `user_id`, `name`, `account_number`, `currency_type_id`, `wallet_address`, `remarks`, `created_at`, `updated_at`) VALUES
 (1, 3, 'JBL', '2255666', NULL, NULL, NULL, '2024-06-09 14:19:43', '2024-06-09 14:19:43'),
-(5, 3, 'Test-5', '6898999', NULL, NULL, NULL, '2024-06-09 14:22:25', '2024-06-09 14:22:25');
+(5, 3, 'Test-5', '6898999', NULL, NULL, NULL, '2024-06-09 14:22:25', '2024-06-09 14:22:25'),
+(6, 3, 'USDT TRC-20', '455566666666666', NULL, NULL, NULL, '2024-06-28 11:26:45', '2024-06-28 11:26:45'),
+(7, 3, 'USDT TRC-20', '89645665566666', NULL, NULL, NULL, '2024-06-28 11:27:20', '2024-06-28 11:27:20'),
+(8, 2, 'USDT TRC-20', 'vzxvxgfdgdgdgdgdfg', NULL, NULL, NULL, '2024-08-16 15:34:27', '2024-08-16 15:34:27');
 
 --
 -- Indexes for dumped tables
@@ -1603,6 +1759,12 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `mininghistory`
+--
+ALTER TABLE `mininghistory`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `mining_categogy`
 --
 ALTER TABLE `mining_categogy`
@@ -1624,6 +1786,12 @@ ALTER TABLE `mining_process_history`
 -- Indexes for table `mining_service_buy_history`
 --
 ALTER TABLE `mining_service_buy_history`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1663,6 +1831,12 @@ ALTER TABLE `posts`
 -- Indexes for table `post_category`
 --
 ALTER TABLE `post_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `post_like`
+--
+ALTER TABLE `post_like`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1711,6 +1885,12 @@ ALTER TABLE `setting`
 -- Indexes for table `sliders`
 --
 ALTER TABLE `sliders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `spin_setup`
+--
+ALTER TABLE `spin_setup`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1819,13 +1999,13 @@ ALTER TABLE `customer_history`
 -- AUTO_INCREMENT for table `deposit`
 --
 ALTER TABLE `deposit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `expense_history`
 --
 ALTER TABLE `expense_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -1843,7 +2023,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `kyc`
 --
 ALTER TABLE `kyc`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `logs`
@@ -1861,13 +2041,19 @@ ALTER TABLE `manual_adjustment`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `mininghistory`
+--
+ALTER TABLE `mininghistory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `mining_categogy`
@@ -1885,13 +2071,19 @@ ALTER TABLE `mining_categogy_duration`
 -- AUTO_INCREMENT for table `mining_process_history`
 --
 ALTER TABLE `mining_process_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `mining_service_buy_history`
 --
 ALTER TABLE `mining_service_buy_history`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1915,12 +2107,18 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `post_category`
 --
 ALTER TABLE `post_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `post_like`
+--
+ALTER TABLE `post_like`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -1951,7 +2149,7 @@ ALTER TABLE `rule`
 -- AUTO_INCREMENT for table `send_received`
 --
 ALTER TABLE `send_received`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `service`
@@ -1972,6 +2170,12 @@ ALTER TABLE `sliders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `spin_setup`
+--
+ALTER TABLE `spin_setup`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `states`
 --
 ALTER TABLE `states`
@@ -1981,13 +2185,13 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `swaphistory`
 --
 ALTER TABLE `swaphistory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `transfer`
@@ -1999,25 +2203,25 @@ ALTER TABLE `transfer`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `verifyemail`
 --
 ALTER TABLE `verifyemail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `withdraw`
 --
 ALTER TABLE `withdraw`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `withdrawal_method`
 --
 ALTER TABLE `withdrawal_method`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

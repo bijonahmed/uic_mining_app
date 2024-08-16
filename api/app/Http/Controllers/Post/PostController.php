@@ -19,6 +19,7 @@ use App\Models\ProductAdditionalImg;
 use App\Models\ProductVarrient;
 use App\Models\AttributeValues;
 use App\Models\Post;
+use App\Models\PostLikes;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
@@ -36,6 +37,41 @@ class PostController extends Controller
         $user = User::find($id->id);
         $this->userid = $user->id;
         $this->name = $user->name;
+    }
+
+
+
+    public function insertPostLikes(Request $request){
+
+
+        $existingLike   = PostLikes::where('post_id', $request->postId)
+                        ->where('user_id', $this->userid)->first();
+
+        $postlikesCount = !empty($existingLike->postlikesCount) ? $existingLike->postlikesCount : 0 ;
+
+        $data = array(
+            'post_id'           => !empty($request->postId) ? $request->postId : "",
+            'user_id'           => $this->userid,
+            'postlikesCount'    => $postlikesCount + 1,
+        );
+       
+    
+        if ($existingLike) {
+            // If the like exists, delete it
+            //$existingLike->delete();
+            return response()->json(['like_errors' => 'Sorry already liked.'], 422);
+            
+
+        } else {
+            // If the like doesn't exist, insert a new one
+            PostLikes::create($data);
+
+        }
+        //PostLikes::insert($data);
+        return response()->json("Successfully Likes total counts: ");
+
+
+
     }
 
     public function update(Request $request)
@@ -152,15 +188,27 @@ class PostController extends Controller
 
     public function allPosts(){
 
-        $query = Post::orderBy('id', 'desc')->where('status',1)->select('posts.*')->get();
+        $query =  Post::orderBy('posts.id', 'desc')
+                ->where('posts.status', 1)
+                ->leftJoin('post_like', 'posts.id', '=', 'post_like.post_id')
+                ->select('posts.*', 'post_like.user_id','post_like.postlikesCount')  // Select columns from both tables if needed
+                ->get();
+        //Post::orderBy('id', 'desc')->where('status',1)->select('posts.*')->get();
+        
+
         $arryData=[];
         foreach ($query as $v) {
+
+            $postlikesCount = PostLikes::where('post_id',$v->id)->count('postlikesCount');
+
             $arryData[] = [
                 'id'                         => $v->id,
                 'postByname'                 => $v->name,
+                'likeCount'                  => $postlikesCount,//$v->postlikesCount,
+                'likeBy'                     => !empty($v->user_id) ? $v->user_id : 0,
                 'description_full'           => strip_tags($v->description_full),
                 'thumnail_img'               => url($v->thumnail_img),
-                'createdAt'               => date("Y-m-d",strtotime($v->created_at)),
+                'createdAt'                  => date("Y-m-d",strtotime($v->created_at)),
             ];
         }
        

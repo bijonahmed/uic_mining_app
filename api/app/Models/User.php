@@ -16,6 +16,7 @@ class User extends Authenticatable implements JWTSubject
     'name',
     'email',
     'level_commission',
+    'taptap_coin',
     'inviteCode',
     'register_bonus',
     'role_id',
