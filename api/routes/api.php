@@ -386,8 +386,10 @@ Route::group([
     'prefix' => 'mining'
 ], function () {
     Route::get('minningDurationrow/{id}', [MiningController::class, 'minningDurationrow']);
+    Route::get('checkSpinRow/{id}', [MiningController::class, 'checkSpinRow']);
     Route::post('inserMiningDuration', [MiningController::class, 'inserMiningDuration']);
     Route::get('allMiningDuration', [MiningController::class, 'allMiningDuration']);
+    Route::get('spinsetupList', [MiningController::class, 'spinsetupList']);
     Route::get('checkMiningInfo', [MiningController::class, 'checkMiningInfo']);
     Route::get('getMiningDuration', [MiningController::class, 'getMiningDuration']);
     Route::get('getMiningCategory', [MiningController::class, 'getMiningCategory']);
@@ -397,7 +399,9 @@ Route::group([
     Route::get('miningProcessState', [MiningController::class, 'miningProcessState']);
     Route::get('insertaptap', [MiningController::class, 'insertaptap']);
     Route::get('inserspin', [MiningController::class, 'inserspin']);
+    Route::post('addSpin', [MiningController::class, 'addSpin']);
     Route::get('getSpinList', [MiningController::class, 'getSpinList']);
+
    
 });
 

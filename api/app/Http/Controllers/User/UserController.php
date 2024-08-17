@@ -1171,7 +1171,7 @@ class UserController extends Controller
 
         if ($searchQuery !== null) {
             //$query->where('users.email', 'like', '%' . $searchQuery . '%');
-            $query->where('notification.name', $searchQuery);
+            $query->where('notification.msg', $searchQuery);
         }
 
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
@@ -1179,7 +1179,7 @@ class UserController extends Controller
 
             return [
                 'id'            => $item->id,
-                'name'          => substr($item->name, 0, 250),
+                'msg'          => $item->msg,//substr($item->msg, 0, 250),
                 'created_at'  => date("Y-M-d H:i:s", strtotime($item->created_at)), //$item->created_at,
             ];
         });
@@ -2342,7 +2342,7 @@ class UserController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'name'                       => 'required',
+            'msg'                       => 'required',
 
         ]);
         if ($validator->fails()) {
@@ -2351,9 +2351,9 @@ class UserController extends Controller
 
         // Check if a category with the same name already exists
 
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->input('name'))));
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->input('msg'))));
         $data = array(
-            'name'                       => $request->name,
+            'msg'                       => $request->msg,
 
         );
         $resdata['id']                    = Notification::insertGetId($data);

@@ -1,12 +1,12 @@
 <template>
-    <title>Add Notification</title>
+    <title>Edit Spin</title>
     <div>
         <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <p>Notification</p>
+                            <p>Spin</p>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -14,7 +14,7 @@
                                     <LazyNuxtLink to="/admin/dashboard">Dashboard</LazyNuxtLink>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <LazyNuxtLink to="/setting/notificationlist">Back to List</LazyNuxtLink>
+                                    <LazyNuxtLink to="/setting/spin/spin-list">Back to List</LazyNuxtLink>
                                 </li>
                             </ol>
                         </div>
@@ -28,6 +28,8 @@
                     <!-- Start -->
                     <div class="card border-top border-0 border-4 border-info">
                         <div class="border p-4 rounded">
+
+                        
                             <form @submit.prevent="saveData()" id="formrest" class="forms-sample"
                                 enctype="multipart/form-data">
                                 <div class="card card-primary card-outline card-tabs">
@@ -60,13 +62,24 @@
                                                 <!-- <span class="text-danger" v-if="errors_name">{{errors_name}}</span> -->
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Notification</label>
+                                                        class="col-sm-3 col-form-label required-label">Name</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" name="msg" v-model="insertdata.msg"
-                                                            class="form-control" />
-                                                        <span class="text-danger" v-if="errors.msg">{{
-                                                            errors.msg[0]
-                                                            }}</span>
+                                                        <input type="text" v-model="insertdata.name" class="form-control" />
+                                                        <input type="hidden"  v-model="insertdata.id" class="form-control" />
+                                                        <span class="text-danger" v-if="errors.name">{{ errors.name[0] }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3 required">
+                                                    <label for="input-name-1"
+                                                        class="col-sm-3 col-form-label required-label">Status</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control ms-2 w-100" v-model="insertdata.status" >
+                                                            <option value="1">Active</option>
+                                                            <option value="0">Inactive</option>
+                                                        </select>
+                                                        <span class="text-danger" v-if="errors.status">{{ errors.status[0]}}</span>
+
                                                     </div>
                                                 </div>
  
@@ -94,25 +107,30 @@ definePageMeta({
 });
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 const router = useRouter();
-window.Swal = Swal;
+window.Swal = swal;
 const errors = ref([]);
+const categories = ref([]);
 const errorsName = ref("");
 
 const insertdata = reactive({
-    msg: "",
+    id:"",
+    name: "",
+    status: 1,
 });
+
  
 
 const saveData = () => {
     errors.value = [];
     errorsName.value = "";
     const formData = new FormData();
-    formData.append("msg", insertdata.msg);
+    formData.append("id", insertdata.id)
+    formData.append("name", insertdata.name)
+    formData.append("status", insertdata.status);
 
-    axios
-        .post("/user/sendNotification", formData, {
+    axios.post("/mining/addSpin", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -120,7 +138,7 @@ const saveData = () => {
         .then((res) => {
             $("#formrest")[0].reset();
             success_noti();
-            router.push({ path: "/setting/notificationlist" });
+            router.push({ path: "/setting/spin/spinlist" });
         })
         .catch((error) => {
             if (error.response && error.response.status === 422) {
@@ -141,7 +159,7 @@ const saveData = () => {
 
 const success_noti = () => {
     //alert("Your data has been successfully inserted.");
-    const Toast = Swal.mixin({
+    const Toast = swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -154,9 +172,28 @@ const success_noti = () => {
     });
     Toast.fire({
         icon: "success",
-        title: "Your notification has been successfully send.",
+        title: "Your data has been successfully inserted.",
     });
+
 };
+
+const checkRow = () => {
+        const id = router.currentRoute.value.query.parameter;
+        insertdata.id = id;
+        axios.get(`/mining/checkSpinRow/${id}`).then(response => {
+        insertdata.id = response.data.data.id;
+        insertdata.name = response.data.data.name;
+        insertdata.status = response.data.data.status;
+  });
+
+}
+
+onMounted(async () => {
+    checkRow();
+});
+
+
+
 </script>
 
 <style scoped>

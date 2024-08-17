@@ -281,15 +281,16 @@ const notifmsg = ref('');
 const checkRow = () => {
     const id = router.currentRoute.value.query.parameter;
     axios.get(`/auth/showProfileData`).then(response => {
-        insertdata.name = response.data.data.name;
-        insertdata.email = response.data.data.email;
-        insertdata.phone_number = response.data.data.phone_number;
-        insertdata.address = response.data.data.address;
-        insertdata.website = response.data.data.website;
-        insertdata.github = response.data.data.github;
-        insertdata.twitter = response.data.data.twitter;
-        insertdata.instagram = response.data.data.instagram;
-        insertdata.facebook = response.data.data.facebook;
+      
+        insertdata.name = response.data.name;
+        insertdata.email = response.data.email;
+        insertdata.phone_number = response.data.phone_number;
+        insertdata.address = response.data.address;
+        insertdata.website = response.data.website;
+        insertdata.github = response.data.github;
+        insertdata.twitter = response.data.twitter;
+        insertdata.instagram = response.data.instagram;
+        insertdata.facebook = response.data.facebook;
         previewUrl.value = response.data.dataImg;
         insertdata.rname = response.data.rname;
     });
@@ -313,7 +314,7 @@ const updateprofile = () => {
     axios.post('/auth/updateprofile', formData, { headers })
         .then((res) => {
             success_noti();
-            router.push('/user/user-list');
+            router.push('/user/my-profile');
         }).catch(error => {
             if (error.response && error.response.status === 422) {
                 errors.value = error.response.data.errors;

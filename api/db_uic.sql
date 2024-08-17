@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2024 at 08:09 PM
+-- Generation Time: Aug 17, 2024 at 05:53 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -1564,7 +1564,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `uic_id`, `uic_address`, `inviteCode`, `ref_id`, `employee_id`, `role_id`, `email`, `available_balance`, `spincount`, `taptap_coin`, `mining_amount`, `level_commission`, `show_password`, `name`, `real_name`, `phone_number`, `image`, `doc_file`, `address`, `address_1`, `address_2`, `website`, `github`, `gender`, `date_of_birth`, `twitter`, `instagram`, `nationality_id`, `state_id`, `register_bonus`, `otp`, `facebook`, `wallet_balance`, `password`, `with_show_password`, `with_password`, `email_verified_at`, `telegram`, `whtsapp`, `othersway_connect`, `remember_token`, `entry_by`, `register_ip`, `lastlogin_ip`, `lastlogin_country`, `lastlogin_datetime`, `created_at`, `updated_at`, `status`, `logged_out`) VALUES
-(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, NULL, NULL, 3, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'Dhaka', '', '', 'http://localhost:3000/profile', 'http://localhost:3000/profile', '', '1982-01-30', 'http://localhost:3000/profile', 'http://localhost:3000/profile', 0, 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-08-15 14:04:21', '2023-06-22 03:20:43', '2024-08-16 13:57:23', 1, NULL),
+(1, NULL, '6f21357fs863ce24ce21c1a82f49a7d5d13', '0000123', 0, 4, 1, 'dev1@mail.com', 1.00000000, NULL, NULL, NULL, 3, 'dev1@mail.com', 'Dev1', NULL, '0000123', '/backend/files/hZkagctUSINKsFU64UJr.png', NULL, 'DHK', '', '', 'bijopforile.com', 'github/bijonahmed', '', '1982-01-30', 'http://localhost:3000/profile', 'Instagram/bijonahmed', 0, 0, 0, NULL, 'http://localhost:3000/profile', NULL, '$2a$12$oT7dmrympiE1Y1tfnz8iIOYWGL1qLEtpB5LDmVAwVEhxZ6rPHLmJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '127.0.0.1', NULL, '2024-08-17 07:48:32', '2023-06-22 03:20:43', '2024-08-17 02:03:12', 1, NULL),
 (2, 'UIC000000002', '3839cc87060e26b9e4111f63af1ab7f4', '23450058', 1, NULL, 2, 'test1@gmail.com', 2.00000000, 2680, 90, NULL, 4, 'test1@gmail.com', 'test1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$q7j/lOS0aduUUKOfbVHfbuc5CiQ95KRykUzIEhvmUHLz0dH8b0Rfu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 18:30:37', '2024-08-16 12:29:05', '2024-08-16 18:05:43', 1, NULL),
 (3, 'UIC000000003', 'b50c4e5581de4cc991a60c4b097309a4', '33706308', 2, NULL, 2, 'test2@gmail.com', 5.00000000, NULL, NULL, NULL, 2, 'test2@gmail.com', 'test2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$eiBY/wtRMblYq045R6vRpuRjTERccVYlLhCcKilv.MsEUh1e6fwuS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 19:20:08', '2024-08-16 13:19:30', '2024-08-16 13:26:44', 1, NULL),
 (4, 'UIC000000004', 'e6b4858ec462b75130582e986936d259', '44351421', 3, NULL, 2, 'test3@gmail.com', 5.00000000, NULL, NULL, NULL, 3, 'test3@gmail.com', 'test3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, '$2y$10$aNacMa71COohjYj.uV8vCOAviSGRmAWhtOWT5z0gRnwWIG/7yv2B6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', '127.0.0.1', NULL, '2024-08-16 19:26:11', '2024-08-16 13:20:35', '2024-08-16 13:26:44', 1, NULL),
@@ -2083,7 +2083,7 @@ ALTER TABLE `mining_service_buy_history`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -2173,7 +2173,7 @@ ALTER TABLE `sliders`
 -- AUTO_INCREMENT for table `spin_setup`
 --
 ALTER TABLE `spin_setup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `states`

@@ -311,9 +311,9 @@ class AuthController extends Controller
 
     public function updateprofile(Request $request)
     {
-        $user               = auth('api')->user();
+        $id = auth('api')->user();
+        $user = User::find($id->id);
         $authId             = $user->id;
-
         $validator          = Validator::make($request->all(), [
             'name'          => 'required',
             'phone_number'  => 'required',
@@ -334,6 +334,7 @@ class AuthController extends Controller
             'instagram'         => !empty($request->instagram) ? $request->instagram : "",
             'facebook'          => !empty($request->facebook) ? $request->facebook : "",
         );
+        //dd($data);
         if (!empty($request->file('file'))) {
             $documents = $request->file('file');
             $fileName = Str::random(20);
@@ -345,7 +346,7 @@ class AuthController extends Controller
             $data['image'] = $upload_url;
         }
         //dd($data);
-        DB::table('users')->where('id', $authId)->update($data);
+        User::where('id', $authId)->update($data);
         $response = [
             'imagelink' => !empty($user) ? url($user->image) : "",
             'message' => 'User successfully update'
@@ -364,6 +365,10 @@ class AuthController extends Controller
         $res['twitter']     = is_string($row->twitter) ? $row->twitter : json_encode($row->twitter);
         $res['facebook']    = is_string($row->facebook) ? $row->facebook : json_encode($row->facebook);
         $res['whtsapp']     = is_string($row->whtsapp) ? $row->whtsapp : json_encode($row->whtsapp);
+        $res['address']     = is_string($row->address) ? $row->address : json_encode($row->address);
+        $res['website']     = is_string($row->website) ? $row->website : json_encode($row->website);
+        $res['github']      = is_string($row->github) ? $row->github : json_encode($row->github);
+        $res['instagram']   = is_string($row->instagram) ? $row->instagram : json_encode($row->instagram);
         $res['id']     =  $id;
 
         return response()->json($res);

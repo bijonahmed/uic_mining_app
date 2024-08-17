@@ -14,7 +14,7 @@
                                     <LazyNuxtLink to="/admin/dashboard">Dashboard</LazyNuxtLink>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <LazyNuxtLink to="/setting/notificationlist">Back to List</LazyNuxtLink>
+                                    <LazyNuxtLink to="/setting/spin/spinlist">Back to List</LazyNuxtLink>
                                 </li>
                             </ol>
                         </div>
@@ -60,13 +60,26 @@
                                                 <!-- <span class="text-danger" v-if="errors_name">{{errors_name}}</span> -->
                                                 <div class="row mb-3 required">
                                                     <label for="input-name-1"
-                                                        class="col-sm-3 col-form-label required-label">Notification</label>
+                                                        class="col-sm-3 col-form-label required-label">Name</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" name="msg" v-model="insertdata.msg"
+                                                        <input type="text" name="name" v-model="insertdata.name"
                                                             class="form-control" />
-                                                        <span class="text-danger" v-if="errors.msg">{{
-                                                            errors.msg[0]
+                                                        <span class="text-danger" v-if="errors.name">{{
+                                                            errors.name[0]
                                                             }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3 required">
+                                                    <label for="input-name-1"
+                                                        class="col-sm-3 col-form-label required-label">Status</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control ms-2 w-100" v-model="insertdata.status" >
+                                                            <option value="1">Active</option>
+                                                            <option value="0">Inactive</option>
+                                                        </select>
+                                                        <span class="text-danger" v-if="errors.status">{{ errors.status[0]}}</span>
+
                                                     </div>
                                                 </div>
  
@@ -101,7 +114,8 @@ const errors = ref([]);
 const errorsName = ref("");
 
 const insertdata = reactive({
-    msg: "",
+    name: "",
+    status:1,
 });
  
 
@@ -109,10 +123,11 @@ const saveData = () => {
     errors.value = [];
     errorsName.value = "";
     const formData = new FormData();
-    formData.append("msg", insertdata.msg);
+    formData.append("name", insertdata.name)
+    formData.append("status", insertdata.status);
 
     axios
-        .post("/user/sendNotification", formData, {
+        .post("/mining/addSpin", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -120,7 +135,7 @@ const saveData = () => {
         .then((res) => {
             $("#formrest")[0].reset();
             success_noti();
-            router.push({ path: "/setting/notificationlist" });
+            router.push({ path: "/setting/spin/spinlist" });
         })
         .catch((error) => {
             if (error.response && error.response.status === 422) {

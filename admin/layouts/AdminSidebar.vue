@@ -127,7 +127,8 @@ const menuItems = ref([
     open: false,
     route: null,
     children: [
-    { label: "Notification", icon: "fa-circle", route: "/setting/notificationlist" },
+      { label: "Spin", icon: "fa-circle", route: "/setting/spin/spinlist" },
+      { label: "Notification", icon: "fa-circle", route: "/setting/notificationlist" },
       { label: "Pre-Setting", icon: "fa-circle", route: "/setting/presetting" },
       {
         label: "Mining Category",

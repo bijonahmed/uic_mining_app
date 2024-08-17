@@ -53,21 +53,26 @@ class MiningController extends Controller
         return response()->json($responseData);
     }
 
-    public function getSpinList(){
-
-        $responseData = Spin::where('status',1)->get();
+    public function checkSpinRow($id)
+    {
+        $responseData['data']  = Spin::where('spin_setup.id', $id)->first();
         return response()->json($responseData);
-
     }
 
+    public function getSpinList()
+    {
+
+        $responseData = Spin::where('status', 1)->get();
+        return response()->json($responseData);
+    }
 
     public function inserspin(Request $request)
     {
 
         $spinAmount  = $request->input('spinAmount');
         $userow      = User::find($this->userid);
-        $userspinamt = !empty($userow->spincount) ? $userow->spincount: 0 ; 
-       // $data['spincount'] = $userspinamt + $spinAmount;
+        $userspinamt = !empty($userow->spincount) ? $userow->spincount : 0;
+        // $data['spincount'] = $userspinamt + $spinAmount;
         User::where('id', $this->userid)->update([
             'spincount'              => $userspinamt + $spinAmount,
         ]);
@@ -85,6 +90,41 @@ class MiningController extends Controller
         $user->save();
 
         return response()->json(['success' => true, 'newTaptapCoin' => (int)$user->taptap_coin]);
+    }
+
+    public function addSpin(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name'         => 'required',
+            'status'       => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Check if a category with the same name already exists
+        if (empty($request->id)) {
+            $existingName = Spin::where('name', $request->input('name'))->first();
+            if ($existingName) {
+                return response()->json(['errors_name' => 'Already exists'], 422);
+            }
+        }
+
+        $data = array(
+            'name'           => $request->name,
+            'status'         => $request->status,
+        );
+        if (empty($request->id)) {
+            $resdata['id']                  = Spin::insertGetId($data);
+        } else {
+            //update 
+            $post = Spin::find($request->id);
+            $post->update($data);
+            $resdata['id']                  = $request->id;
+        }
+
+        return response()->json($resdata);
     }
 
     public function inserMiningDuration(Request $request)
@@ -161,6 +201,47 @@ class MiningController extends Controller
                 'packages_name'             => $item->packages_name,
                 'duration'                  => $item->duration,
                 'prices'                    => $item->prices,
+                'status'                    => $item->status,
+            ];
+        });
+
+        // Return the modified collection along with pagination metadata
+        return response()->json([
+            'data' => $modifiedCollection,
+            'current_page' => $paginator->currentPage(),
+            'total_pages' => $paginator->lastPage(),
+            'total_records' => $paginator->total(),
+        ], 200);
+    }
+
+    public function spinsetupList(Request $request)
+    {
+
+        $page     = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 10);
+
+        // Get search query from the request
+        $searchQuery    = $request->searchQuery;
+        $status         = (int)$request->selectedFilter;
+        //dd($status);
+        $query = Spin::orderBy('id', 'desc');
+
+        if ($searchQuery !== null) {
+            $query->where('spin_setup.name', 'like', '%' . $searchQuery . '%');
+        }
+
+        if ($status !== null) {
+            $query->where('spin_setup.status', $status);
+        } else {
+            $query->whereIn('spin_setup.status', $status);
+        }
+
+        $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
+
+        $modifiedCollection = $paginator->getCollection()->map(function ($item) {
+            return [
+                'id'                        => $item->id,
+                'name'                      => $item->name,
                 'status'                    => $item->status,
             ];
         });

@@ -1,12 +1,12 @@
 <template>
-    <title>Notification List</title>
+    <title>Spin List</title>
     <div>
         <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <p>Notification List</p>
+                            <p>Spin List</p>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -14,7 +14,7 @@
                                     <LazyNuxtLink to="/admin/dashboard">Dashboard</LazyNuxtLink>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <LazyNuxtLink to="/setting/notificationAdd">New Notification</LazyNuxtLink>
+                                    <LazyNuxtLink to="/setting/spin/spin-add">New Spin</LazyNuxtLink>
                                 </li>
                             </ol>
                         </div>
@@ -27,12 +27,18 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="row">
-                                <div class="col-lg-10 col-md-10 col-sm-12 mb-2">
+                                <div class="col-lg-8 col-md-8 col-sm-12 mb-2">
                                     <input type="text" v-model="searchQuery" class="form-control"
-                                        placeholder="Search Name..." />
+                                        placeholder="Search ..." />
                                 </div>
 
-                              
+                                <div class="col-lg-2 col-md-2 col-sm-6 mb-2">
+                                    <select v-model="selectedFilter" class="form-control" @change="filterData">
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+                                </div>
+
                                 <div class="col-lg-2 col-md-2 col-sm-6 mb-2">
                                     <button @click="filterData()" class="btn btn-primary w-100">Filter</button>
                                 </div>
@@ -50,19 +56,21 @@
                                         <table class="table w-100 table-wrapper">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-left">Messages</th>
-                                                    <th class="text-center">Created At</th>
+                                                    <th class="text-left">Name</th>
+                                                    <th class="text-center">Status</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="item in productdata" :key="item.id">
-                                                    <td class="text-left">{{ item.msg }}</td>
-                                                    <td class="text-center">{{ item.created_at }}</td>
-                                                  
+                                                    <td class="text-left">{{ item.name }}</td>
+                                                    <td class="text-center">
+                                                        <span v-if="(item.status == 1)"> Active </span>
+                                                        <span v-else> Inactive </span>
+                                                    </td>
                                                     <td>
                                                         <center>
-                                                            <button type="button"><i class="fas fa-trash"
+                                                            <button type="button"><i class="fas fa-edit"
                                                                     @click="edit(item.id)"></i></button>
                                                                     
                                                         </center>
@@ -71,8 +79,8 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th class="text-left">Messages</th>
-                                                    <th class="text-center">Created At</th>
+                                                    <th class="text-left">Name</th>
+                                                    <th class="text-center">Status</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                             </tfoot>
@@ -125,7 +133,7 @@ const selectedFilter = ref(1); // Add a ref for the search query
 const fetchData = async (page) => {
     try {
         loading.value = true;
-        const response = await axios.get(`/user/getNotifications`, {
+        const response = await axios.get(`/mining/spinsetupList`, {
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -155,12 +163,14 @@ watch(currentPage, (newPage) => {
 
 // Define a method to handle editing
 const edit = (id) => {
-
- axios.get(`/user/deleteNotification/${id}`).then(response => {
-    fetchData(currentPage.value);
-  });   
-
-
+    router.push({
+        path: '/setting/spin/spin-edit',
+        query: {
+            parameter: id
+        }
+    });
+    // Your logic for editing goes here
+   // console.log('Editing item with id:', id);
 };
 
 // Compute the range of displayed pages
