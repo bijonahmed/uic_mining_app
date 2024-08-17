@@ -21,7 +21,7 @@ use App\Models\RuleModel;
 use App\Models\SendReceived;
 use App\Models\TransactionHistory;
 use App\Models\WalletAddress;
-use App\Models\kyc;
+use App\Models\Kyc;
 use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\SwapHistory;
@@ -394,11 +394,11 @@ class UserController extends Controller
 
 
         if (!empty($this->userid)) {
-            $data['uic_amount']          = number_format($uicAmount, 2);
-            $data['miningamount']           = $uicAmount;
+            $data['uic_amount']         = number_format($uicAmount, 2);
+            $data['miningamount']       = $uicAmount;
         } else {
-            $data['uic_amount']          = number_format($uicAmountBalance, 2);
-            $data['miningamount']           = $uicAmountBalance;
+            $data['uic_amount']         = number_format($uicAmountBalance, 2);
+            $data['miningamount']       = $uicAmountBalance;
         }
 
         $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
@@ -407,6 +407,85 @@ class UserController extends Controller
         $data['circulatingSupply']      = number_format($uicAmount, 2); //$circulatingSupply;
         $data['marketCap']              = $marketCap;
         $data['currentPrice']           = $beganing_price;
+        return response()->json($data);
+    }
+
+
+    public function getBalanceCheckAdmin($userId)
+    {
+        //$this->getComissionReport($this->userid);
+        $response                   = app('App\Http\Controllers\User\UserController')->getComissionReport($userId);
+        $levComissionsum               = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
+        //dd($levComissionsum);
+
+        $active_matching        = MiningServicesBuyHistory::where('user_id', $userId)->first();
+        $adj_type_sum           = ManualAdjustment::where('user_id', $userId)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
+        $adj_type_minus         = ManualAdjustment::where('user_id', $userId)->where('adjustment_type', 2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
+
+        $setting                = Setting::find(1)->first();
+
+        $today_date             = date("Y-m-d");
+        $service_price          = $active_matching && $active_matching->end_date >= $today_date ? (!empty($active_matching->service_price) ? $active_matching->service_price : 0) : 0;
+
+        //user wise
+        $swap_type_2_frm        = SwapHistory::where('user_id', $userId)->where('type', 2)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //USDT 
+        $swap_type_2_to         = SwapHistory::where('user_id', $userId)->where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
+
+        $swap_type_1_frm        = SwapHistory::where('user_id', $userId)->where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
+        $swap_type_1_to         = SwapHistory::where('user_id', $userId)->where('type', 1)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //USDT 
+        // without user
+        $swaptype2to            = SwapHistory::where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
+        $swaptype1frm           = SwapHistory::where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
+
+        //$row                    = User::find($this->userid);
+        $deposit                = Deposit::where('user_id', $userId)->where('status', 1)->sum('deposit_amount');
+        $withdraw_usdt          = Withdraw::where('user_id', $userId)->where('status', 1)->sum('usd_amount');
+        $withdraw_uic           = Withdraw::where('user_id', $userId)->where('status', 1)->sum('uic_amount');
+
+        $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $userId)->where('wallet_type', 2)->sum('amount');
+        $usdtAmount             = SendReceived::where('user_id', $userId)->where('wallet_type', 2)->sum('amount');
+
+        $usdt_amount            = $deposit - $service_price - $usdtAmount + $reciv_usdt_amount - $swap_type_2_frm + $swap_type_1_to;
+
+        $row                    = User::where('id', $userId)->first();
+        $mining_amount          = User::where('id', $userId)->where('status', 1)->sum('mining_amount');
+        $level_commission       = $levComissionsum;
+        $register_bonus         = User::where('id', $userId)->where('status', 1)->sum('register_bonus');
+        //echo "no to checkd.";
+        $allbonusesAmount       = $level_commission + $register_bonus;
+        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
+        $uicAmountBalance       = $swaptype2to - $swaptype1frm;
+       
+        $beganing_price         = $setting->beganing_price;
+        $marketCap              = $setting->liquidity_total_supply * $beganing_price;
+
+        $data['available_balance'] = !empty($row->available_balance) ? $row->available_balance : 0;
+
+        $spain_balance = $row->spincount ?? 0; // If $row->spincount is null or not set, default to 0
+        $data['taptap_balance'] = ($row->taptap_coin ?? 0) + $spain_balance; // If $row->taptap_coin is null or not set, default to 0
+
+
+
+        if (!empty($userId)) {
+            $data['uic_amount']         = number_format($uicAmount, 2);
+            $data['miningamount']       = $uicAmount;
+        } else {
+            $data['uic_amount']         = number_format($uicAmountBalance, 2);
+            $data['miningamount']       = $uicAmountBalance;
+        }
+
+        $data['usdt_amount']            = number_format($usdt_amount, 2); //USDT Amount
+        $data['usdtamount']             = $usdt_amount; //USDT Amount
+        $data['wallet_address']         = !empty($setting->crypto_wallet_address) ? $setting->crypto_wallet_address : "";
+        $data['circulatingSupply']      = number_format($uicAmount, 2); //$circulatingSupply;
+        $data['marketCap']              = $marketCap;
+        $data['currentPrice']           = $beganing_price;
+        $data['deposit_sum']            = $deposit;
+        $data['withdraw_usdt']          = $withdraw_usdt;
+        $data['withdraw_uic']           = $withdraw_uic;
+        $data['register_bonus']         = !empty($row->register_bonus) ? $row->register_bonus : 0;
+        $data['adj_type_sum']           = !empty($adj_type_sum) ? $adj_type_sum : 0;
+        $data['adj_type_minus']         = !empty($adj_type_minus) ? $adj_type_minus : 0;
         return response()->json($data);
     }
 
@@ -777,19 +856,30 @@ class UserController extends Controller
 
     public function findUserDetails(Request $request)
     {
+        //balanceAdmin
+        $userid               = $request->id;
+        $levres               = app('App\Http\Controllers\User\UserController')->getComissionReport($userid);
+        $L1comission          = $levres instanceof JsonResponse ? $levres->getData(true)['level_1_profit'] : 0;
+        $L2comission          = $levres instanceof JsonResponse ? $levres->getData(true)['level_2_profit'] : 0;
+        $L3comission          = $levres instanceof JsonResponse ? $levres->getData(true)['level_3_profit'] : 0;
+        $allcomission         = $levres instanceof JsonResponse ? $levres->getData(true)['commission_sum'] : 0;
+       
+        $response           = app('App\Http\Controllers\User\UserController')->getBalanceCheckAdmin($userid);
+        $usdt_amount        = $response instanceof JsonResponse ? $response->getData(true)['usdtamount'] : 0;
+        $uic_amount         = $response instanceof JsonResponse ? $response->getData(true)['uic_amount'] : 0;
 
-        $userid             = $request->id;
-        $response           = app('App\Http\Controllers\User\UserController')->getBalances($userid);
-        $usdt_amount        = $response instanceof JsonResponse ? $response->getData(true)['usdt_amount'] : 0;
-        $uic_amount         = $response instanceof JsonResponse ? $response->getData(true)['mining_amount'] : 0;
+      //  echo "usdt amount: $usdt_amount-----------------uic amount : $uic_amount";exit;
+
+
         $deposit_amount     = $response instanceof JsonResponse ? $response->getData(true)['deposit_sum'] : 0;
         $withdraw_usdt      = $response instanceof JsonResponse ? $response->getData(true)['withdraw_usdt'] : 0;
         $withdraw_uic       = $response instanceof JsonResponse ? $response->getData(true)['withdraw_uic'] : 0;
-        $airdrop            = $response instanceof JsonResponse ? $response->getData(true)['available_balance'] : 0;
+        $airdrop            = $response instanceof JsonResponse ? $response->getData(true)['taptap_balance'] : 0;
         $register_bonus     = $response instanceof JsonResponse ? $response->getData(true)['register_bonus'] : 0;
+        
         $adj_type_sum       = $response instanceof JsonResponse ? $response->getData(true)['adj_type_sum'] : 0;
         $adj_type_minus     = $response instanceof JsonResponse ? $response->getData(true)['adj_type_minus'] : 0;
-        $swap_tran          = $response instanceof JsonResponse ? $response->getData(true)['swap_tran'] : "";
+      //  $swap_tran          = $response instanceof JsonResponse ? $response->getData(true)['swap_tran'] : "";
 
         $global             = app('App\Http\Controllers\UnauthenticatedController')->settingrowClient();
         $circulatingSupply  = $global instanceof JsonResponse ? $global->getData(true)['circulatingSupply'] : 0;
@@ -832,31 +922,31 @@ class UserController extends Controller
             }
         }
 
-        $swaptran = [];
-        foreach ($swap_tran as $v) {
+        // $swaptran = [];
+        // foreach ($swap_tran as $v) {
 
-            $toamount = $v['to_amount'];
-            $extractSignificantDigits = function ($value) {
-                if (is_numeric($value) && stripos($value, 'e') !== false) {
-                    list($base, $exponent) = explode('e', strtolower($value));
-                    return $base;
-                }
-                return $value;
-            };
-            $convertedToAmount = $extractSignificantDigits($toamount);
-            //echo "Original: $toamount, Converted: $convertedAmount<br>";
+        //     $toamount = $v['to_amount'];
+        //     $extractSignificantDigits = function ($value) {
+        //         if (is_numeric($value) && stripos($value, 'e') !== false) {
+        //             list($base, $exponent) = explode('e', strtolower($value));
+        //             return $base;
+        //         }
+        //         return $value;
+        //     };
+        //     $convertedToAmount = $extractSignificantDigits($toamount);
+        //     //echo "Original: $toamount, Converted: $convertedAmount<br>";
 
-            $swaptran[] = [
-                'id'                           => $v['id'],
-                'user_id'                      => $v['user_id'],
-                'type'                         => $v['type'],
-                'wallet_type_frm'              => $v['wallet_type_frm'],
-                'wallet_type_to'               => $v['wallet_type_to'],
-                'frm_amount'                   => number_format($v['frm_amount'], 2),
-                'to_amount'                    => $convertedToAmount,
-                'created_at'                   => date("d-m-Y H:i:s", strtotime($v['created_at'])),
-            ];
-        }
+        //     $swaptran[] = [
+        //         'id'                           => $v['id'],
+        //         'user_id'                      => $v['user_id'],
+        //         'type'                         => $v['type'],
+        //         'wallet_type_frm'              => $v['wallet_type_frm'],
+        //         'wallet_type_to'               => $v['wallet_type_to'],
+        //         'frm_amount'                   => number_format($v['frm_amount'], 2),
+        //         'to_amount'                    => $convertedToAmount,
+        //         'created_at'                   => date("d-m-Y H:i:s", strtotime($v['created_at'])),
+        //     ];
+        // }
 
         $data = [
             'marketCap'         => $marketCap,
@@ -893,15 +983,15 @@ class UserController extends Controller
             'total_success_deposit'       => '$' . number_format($deposit_amount, 2),
             'total_success_withdraw'      =>  'UIC:' . number_format($withdraw_uic, 2) . ', USDT: ' . number_format($withdraw_usdt, 2),
 
-            'total_airdrop'               => '$' . number_format($airdrop, 2),
+            'total_airdrop'               => 'U' . number_format($airdrop, 2),
             'total_profit'                => '$' . number_format($profit_amount, 2),
-            'total_commission'            => '$' . number_format($commission_sum, 2),
+            'total_commission'            => '$' . number_format($allcomission, 2) . " [Level_1 : $L1comission]-[Level_2 : $L2comission]-[Level_3 : $L3comission] ",
 
             'total_expense'               => '$' . number_format($epense, 2),
             'register_bonus'              => '$' . number_format($register_bonus, 2),
             'adj_type_sum'                => 'UIC: ' . number_format($adj_type_sum, 2),
             'adj_type_minus'              => 'UIC: ' . number_format($adj_type_minus, 2),
-            'swap_tran'                   => $swaptran,
+           // 'swap_tran'                   => $swaptran,
         ];
 
         // dd($data);

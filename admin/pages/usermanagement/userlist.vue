@@ -239,13 +239,13 @@
             </button>
           </div>
           <div class="modal-body">
-            <center>
+            <!-- <center>
               <b>Maximum Supply:</b> {{ maximum_supply }} UIC |
               <b>Total Supply:</b> {{ total_supply }} UIC |
               <b>Circulating Supply:</b> {{ circulatingSupply }} UIC |
               <b>Market Cap:</b> {{ marketCap }} | Current Price
               {{ currentPrice_top }} USDT
-            </center>
+            </center> -->
 
             <table class="table">
               <tr>
@@ -297,11 +297,11 @@
                 <td class="text-left">{{ adj_type_sum }}</td>
               </tr>
 
-              <tr style="color: red; font-size: 15px">
+              <tr style="color: red; font-size: 15px;">
                 <td class="text-left">Total Reward UIC (-)</td>
                 <td class="text-left">{{ adj_type_minus }}</td>
               </tr>
-              <tr style="color: red; font-size: 15px">
+              <tr style="color: red; font-size: 15px; display: none;">
                 <td class="text-left">Total Buy Mining Machine Expense (-)</td>
                 <td class="text-left">{{ total_expense }}</td>
               </tr>
@@ -309,7 +309,7 @@
               <!-- <tr  style="color:darkorange; font-size: 15px;">
                                 <td class="text-left">Total Frozen amount (-)</td>
                                 <td class="text-left">{{ u_details_frozenAmount }}</td>
-                            </tr> -->
+              </tr> -->
 
               <tr>
                 <td class="text-left">User type</td>

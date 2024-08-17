@@ -13,7 +13,7 @@ use DB;
 class SwapHistory extends Authenticatable
 {
   use HasApiTokens, HasFactory, Notifiable;
-  public $table = "swapHistory";
+  public $table = "swaphistory";
   
   protected $fillable = [
     'type',

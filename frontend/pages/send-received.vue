@@ -205,7 +205,7 @@
                             </div>
                         </div>
                     </section>
-                    <SocialFooter />
+                    <Footer />
                 </main>
                 <!-- Page content end -->
             </div>
