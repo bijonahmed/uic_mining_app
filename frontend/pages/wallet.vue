@@ -19,14 +19,13 @@
           <Loader />
         </div>
         <!-- Page content start -->
-        
+
         <main class="margin mt-0">
           <div class="dash-balance">
             <div class="dash-content relative">
               <h3 class="w-text">My Wallet</h3>
             </div>
           </div>
-        
           <section class="bal-section container">
             <div class="resources-card-wrapper">
               <div class="wallet-card mr-10 round">
@@ -66,66 +65,68 @@
 
 
               <form @submit.prevent="submitFormSwap" id="formrestsweap">
-              <div class="wallet-card ml-10 d-none">
-                <div class="flex-column flex-md-row">
-                  <strong class="text-center d-flex justify-content-center"><u>SWAP</u></strong>
-                  <div class="d-flex align-items-end mb-2">
-                    <!-- <input type="number" v-model="amount1" class="amount-input" placeholder="USDT"> -->
-                    <div class="w-100">
-                      <label for="" class="w-100 text-left">From</label>
+                <div class="wallet-card ml-10 d-none">
+                  <div class="flex-column flex-md-row">
+                    <strong class="text-center d-flex justify-content-center"><u>SWAP</u></strong>
+                    <div class="d-flex align-items-end mb-2">
+                      <!-- <input type="number" v-model="amount1" class="amount-input" placeholder="USDT"> -->
+                      <div class="w-100">
+                        <label for="" class="w-100 text-left">From</label>
 
-                      <select class="form-control mb-2" v-model="wallet_type_frm"
-                        @change="checkWalletFrm($event.target.value)">
-                        <option class="option" value="2">USDT</option>
-                        <option selected class="option" value="1">UIC</option>
-                      </select>
+                        <select class="form-control mb-2" v-model="wallet_type_frm"
+                          @change="checkWalletFrm($event.target.value)">
+                          <option class="option" value="2">USDT</option>
+                          <option selected class="option" value="1">UIC</option>
+                        </select>
+                      </div>
+                      <div class="swipe-button">
+                        <button @click="swapAmounts" class="mb-3" style="background-color: transparent; border: none">
+                          <i class="fa-solid fa-right-left"></i>
+                        </button>
+                      </div>
+                      <div class="w-100">
+                        <label for="" class="w-100 text-right">To</label>
+                        <select class="form-control mb-2" v-model="wallet_type_to"
+                          @change="checkWalletTo($event.target.value)">
+                          <option class="option" value="2">USDT</option>
+                          <option class="option" value="1">UIC</option>
+                        </select>
+                      </div>
                     </div>
-                    <div class="swipe-button">
-                      <button @click="swapAmounts" class="mb-3" style="background-color: transparent; border: none">
-                        <i class="fa-solid fa-right-left"></i>
-                      </button>
+                    <div class="d-fle align-items-center mb-2">
+                      <input type="text" placeholder="0.00" v-model="swap_amount" class="form-control"
+                        @keyup="checkBalance" @keypress="isNumber($event)" />
+                      <span class="text-danger" v-if="errors.swap_amount">{{ errors.swap_amount[0] }}</span>
+                      <span class="text-danger" v-if="errors.error_usdt">{{ errors.error_usdt[0] }}</span>
+                      <span class="text-danger" v-if="errors.error_uic">{{ errors.error_uic[0] }}</span>
+
+                      <p style="font-size: 10px; text-align: start">
+
+                        <span v-if="wallet_type_to == 1">
+                          Available balance: {{ availablebalance }} USDT
+                        </span>
+                        <span v-else>
+                          Available balance: {{ availablebalance }} UIC
+                        </span>
+                      </p>
+                      <p style="font-size: 10px; text-align: start">
+                        Current Price UIC: {{ currentPrice }} USDT
+                      </p>
+                      <p style="font-size: 10px; text-align: start">
+                        Provider fee : 00.00 <br />
+                        <span style="font-size: 9px" class="text-danger">(Third party fee factored into every quote for
+                          facilitationg the transection between you and the swap
+                          provider. This fee is not paid to this platform.)</span>
+                      </p>
                     </div>
-                    <div class="w-100">
-                      <label for="" class="w-100 text-right">To</label>
-                      <select class="form-control mb-2" v-model="wallet_type_to"
-                        @change="checkWalletTo($event.target.value)">
-                        <option class="option" value="2">USDT</option>
-                        <option class="option" value="1">UIC</option>
-                      </select>
-                    </div>
+
+                    <button class="btn btn-primary ref-copy text-center m-auto mt-3 w-100" id="confirm_swap"
+                      type="submit" :disabled="buttonClicked">
+                      Confirm Swap
+                    </button>
                   </div>
-                  <div class="d-fle align-items-center mb-2">
-                    <input type="text" placeholder="0.00" v-model="swap_amount" class="form-control"  @keyup="checkBalance" @keypress="isNumber($event)" />
-                    <span class="text-danger" v-if="errors.swap_amount">{{ errors.swap_amount[0] }}</span>
-                    <span class="text-danger" v-if="errors.error_usdt">{{ errors.error_usdt[0] }}</span>
-                    <span class="text-danger" v-if="errors.error_uic">{{ errors.error_uic[0] }}</span>
-
-                    <p style="font-size: 10px; text-align: start">
-
-                      <span v-if="wallet_type_to==1">
-                        Available balance: {{ availablebalance }} USDT
-                      </span>
-                      <span v-else>
-                        Available balance: {{ availablebalance }} UIC
-                      </span>
-                    </p>
-                    <p style="font-size: 10px; text-align: start">
-                      Current Price UIC: {{ currentPrice }} USDT
-                    </p>
-                    <p style="font-size: 10px; text-align: start">
-                      Provider fee : 00.00 <br />
-                      <span style="font-size: 9px" class="text-danger">(Third party fee factored into every quote for
-                        facilitationg the transection between you and the swap
-                        provider. This fee is not paid to this platform.)</span>
-                    </p>
-                  </div>
-
-                  <button class="btn btn-primary ref-copy text-center m-auto mt-3 w-100" id="confirm_swap" type="submit" :disabled="buttonClicked">
-                    Confirm Swap
-                  </button>
                 </div>
-              </div>
-            </form>
+              </form>
 
               <!-- <div class="wallet-card ml-10">
                 <div class="flex-column flex-md-row">
@@ -151,10 +152,10 @@
                       @keypress="isNumber($event)" />
                     <span class="text-danger" v-if="errors.deposit_amount">{{
                       errors.deposit_amount[0]
-                    }}</span>
+                      }}</span>
                     <span class="text-danger" v-if="errors.errors_amount">{{
                       errors.errors_amount[0]
-                    }}</span>
+                      }}</span>
                   </div>
                   <div class="mb-3">
                     <label for="currency" class="form-label">Currency</label>
@@ -163,7 +164,7 @@
                     </select>
                     <span class="text-danger" v-if="errors.payment_method">{{
                       errors.payment_method[0]
-                    }}</span>
+                      }}</span>
                     <!-- <img src="/assets/qrcode.png" alt="QR Code" style="height: 100px; margin: 20px auto; display: flex;" />  -->
                     <img :src="qrCodeUrl" alt="QR Code" v-if="qrCodeUrl"
                       style="height: 100px; margin: 20px auto; display: flex" />
@@ -182,13 +183,19 @@
                     <input type="text" v-model="insertdata.trxId" class="form-control" />
                     <span class="text-danger" v-if="errors.trxId">{{
                       errors.trxId[0]
-                    }}</span>
+                      }}</span>
                   </div>
                   <button type="submit" class="btn btn-primary" :disabled="buttonClicked">
                     Submit
                   </button>
                 </form>
                 <br />
+                
+          <section class="bal-section supply_container container my-2">
+            <div class="resources-card-wrapper mb-5">
+              <BannerAds />
+            </div>
+          </section>
                 <br />
                 <br />
                 <br />
@@ -197,6 +204,7 @@
             </div>
           </div>
         </main>
+        
         <!-- Page content end -->
       </div>
     </div>
@@ -206,6 +214,7 @@
 <script setup>
 import Sidebar from "~/layouts/Sidebar.vue";
 import HeaderSecond from "~/layouts/HeaderSecond.vue";
+import BannerAds from '~/components/BannerAds.vue'; // Adjust import path as needed
 import Swal from "sweetalert2";
 import QRCode from "qrcode";
 import { ref, watchEffect } from "vue";
@@ -242,7 +251,7 @@ const swapAmounts = () => {
   amount1.value = amount2.value;
   amount2.value = temp;
 };
- 
+
 
 
 const insertdata = reactive({
@@ -293,7 +302,7 @@ const submitFormSwap = () => {
   };
   axios.post("/user/sweapCalculation", formData, { headers })
     .then((res) => {
-        fetchData()
+      fetchData()
       document.getElementById("formrestsweap").reset();
       success_noti();
       router.push('/success');
@@ -331,7 +340,7 @@ const checkWalletFrm = async (wallet_type) => {
   }
 
   if (wallettype === '2') {
-    wallet_type_to.value = '1'; 
+    wallet_type_to.value = '1';
   }
 
   loading.value = true;
@@ -427,10 +436,10 @@ const fetchData = async () => {
     const response = await axios.get("/user/getBalance");
     available_balance.value = response.data.available_balance;
     taptap_balance.value = response.data.taptap_balance;
-    usdt_amount.value       = response.data.usdt_amount;
-    uic_amount.value     = response.data.uic_amount;
-    wallet_address.value    = response.data.wallet_address;
-    currentPrice.value      = response.data.currentPrice;
+    usdt_amount.value = response.data.usdt_amount;
+    uic_amount.value = response.data.uic_amount;
+    wallet_address.value = response.data.wallet_address;
+    currentPrice.value = response.data.currentPrice;
 
     generateQrCode();
   } catch (error) {
@@ -467,7 +476,7 @@ const isNumber = (evt) => {
 };
 
 
- 
+
 
 const error_noti = () => {
   const Toast = Swal.mixin({
@@ -517,9 +526,10 @@ onMounted(async () => {
   background-color: grey;
   pointer-events: none;
 }
-@media(max-width: 425px){
-  #invite_link{
+
+@media(max-width: 425px) {
+  #invite_link {
     font-size: 12px;
-}
+  }
 }
 </style>

@@ -18,8 +18,7 @@ export default defineNuxtConfig({
     public: {
       baseURL:
         process.env.NODE_ENV === "production"
-          ? "https://api.uicmax.com/api/"
-          : "http://127.0.0.1:8000/api/",
+          ? "https://api.uicmax.com/api/" : "http://127.0.0.1:8000/api/",
     },
   },
   pages: true,

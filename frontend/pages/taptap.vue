@@ -53,6 +53,13 @@
                         <h2 class="text-center fw-bold">Tap to Earn</h2>
                     </section>
 
+                    <section class="bal-section supply_container container my-2">
+                        <div class="resources-card-wrapper mb-5">
+                            <!-- Insert BannerAds component here -->
+                            <NativeAds />
+                        </div>
+                    </section>
+
                 </main>
                 <!-- Page content end -->
             </div>
@@ -74,6 +81,7 @@ definePageMeta({
 import Sidebar from "~/layouts/Sidebar.vue";
 import HeaderSecond from "~/layouts/HeaderSecond.vue";
 import SocialFooter from "~/components/SocialFooter.vue";
+import NativeAds from "~/components/NativeAds.vue";
 
 
 const levelCoin = ref(10);  // Example: level of coins per click

@@ -51,17 +51,25 @@
                                     </div>
                                 </div>
                             </div>
-                        <svg id="svg-arrow" xmlns="http://www.w3.org/2000/svg">
-                            <path style="fill:#ff2e52; stroke:#012e52; stroke-width:4; stroke-linejoin:round"
-                                d="M 81.540414,49.378716 H 121.51935 L 101.4866,69.420346 Z" />
-                        </svg>
-                            <button @click="spin" :disabled="activeBtn" class="text-gold" style="color: #000;">SPIN</button>
+                            <svg id="svg-arrow" xmlns="http://www.w3.org/2000/svg">
+                                <path style="fill:#ff2e52; stroke:#012e52; stroke-width:4; stroke-linejoin:round"
+                                    d="M 81.540414,49.378716 H 121.51935 L 101.4866,69.420346 Z" />
+                            </svg>
+                            <button @click="spin" :disabled="activeBtn" class="text-gold"
+                                style="color: #000;">SPIN</button>
                         </div>
                         <h2 class="text-center">Spin to Earn</h2>
                     </section>
+                    <section class="bal-section supply_container container my-2">
+                        <div class="resources-card-wrapper mb-5">
+                            <NativeAds />
+
+                        </div>
+
+                    </section>
                 </main>
                 <!-- Page content end -->
-                <br/><br/><br/>
+                <br /><br /><br />
                 <!-- Footer menu -->
                 <Footer />
             </div>
@@ -74,6 +82,7 @@ import { ref, onMounted } from 'vue';
 import Sidebar from '~/layouts/Sidebar.vue';
 import HeaderSecond from '~/layouts/HeaderSecond.vue';
 import SocialFooter from '~/components/SocialFooter.vue';
+import NativeAds from '~/components/NativeAds.vue'; // Adjust import path as needed
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import Swal from "sweetalert2";
@@ -83,7 +92,7 @@ definePageMeta({
     middleware: 'is-logged-out',
 })
 
- 
+
 
 // Define your reactive state variables
 const userCoin = ref(30); // Initial user coins
@@ -94,100 +103,101 @@ const deg = ref(0);
 const prize = ref(null);
 // Fetch data and populate spinlist and prizes when the component is mounted
 onMounted(async () => {
-  try {
-    const response = await axios.get('/mining/getSpinList');
-    spinlist.value = response.data;
-    prizes.value = spinlist.value.map(item => Number(item.name));
-    console.log(prizes.value);
-  } catch (error) {
-    console.error("Error fetching spinlist data:", error);
-  }
+    try {
+        const response = await axios.get('/mining/getSpinList');
+        spinlist.value = response.data;
+        prizes.value = spinlist.value.map(item => Number(item.name));
+        console.log(prizes.value);
+    } catch (error) {
+        console.error("Error fetching spinlist data:", error);
+    }
 });
 // Define the spin function
 const spin = () => {
-  if (prizes.value.length === 0) {
-    console.error("Prizes array is not populated yet.");
-    return;
-  }
+    if (prizes.value.length === 0) {
+        console.error("Prizes array is not populated yet.");
+        return;
+    }
 
-  activeBtn.value = true;
-  setTimeout(() => (activeBtn.value = false), 5100);
+    activeBtn.value = true;
+    setTimeout(() => (activeBtn.value = false), 5100);
 
-  let spins = Math.floor(Math.random() * 7) + 9; 
-  console.log("spins: " + spins);
+    let spins = Math.floor(Math.random() * 7) + 9;
+    console.log("spins: " + spins);
 
-  let wheelAngle = Math.floor(Math.random() * 12) * 30; 
-  console.log("wheelAngle: " + wheelAngle);
+    let wheelAngle = Math.floor(Math.random() * 12) * 30;
+    console.log("wheelAngle: " + wheelAngle);
 
-  let sectorAngle = Math.floor(Math.random() * 14) + 1;  
-  sectorAngle *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;  
-  console.log("sectorAngle: " + sectorAngle);
+    let sectorAngle = Math.floor(Math.random() * 14) + 1;
+    sectorAngle *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
+    console.log("sectorAngle: " + sectorAngle);
 
-  deg.value += 360 * spins + wheelAngle + sectorAngle;
-  document.querySelector(".inner").style.transform = `rotate(${deg.value}deg)`;
+    deg.value += 360 * spins + wheelAngle + sectorAngle;
+    document.querySelector(".inner").style.transform = `rotate(${deg.value}deg)`;
 
-  setTimeout(() => (deg.value -= sectorAngle), 100);  
+    setTimeout(() => (deg.value -= sectorAngle), 100);
 
-  let index = Math.floor((deg.value - sectorAngle) / 30) % 12;  
-  prize.value = prizes.value[index];
+    let index = Math.floor((deg.value - sectorAngle) / 30) % 12;
+    prize.value = prizes.value[index];
 
-  console.log("prize index:" + index);
-  console.log("you will win: " + prize.value);
+    console.log("prize index:" + index);
+    console.log("you will win: " + prize.value);
 
-  // Select the corresponding span element
-  const prizeSpans = document.querySelectorAll(".slice .prize");
-  if (index >= 0 && index < prizeSpans.length) {
-    const selectedPrizeSpan = prizeSpans[index];
-    console.log("Selected prize amount from span:", selectedPrizeSpan.textContent);
+    // Select the corresponding span element
+    const prizeSpans = document.querySelectorAll(".slice .prize");
+    if (index >= 0 && index < prizeSpans.length) {
+        const selectedPrizeSpan = prizeSpans[index];
+        console.log("Selected prize amount from span:", selectedPrizeSpan.textContent);
 
-    // Insert API call
-    axios.get('/mining/inserspin', {
-      params: {
-        spinAmount: selectedPrizeSpan.textContent,
-      }
-    })
-    .then(response => {
-     // console.log("API response:", response.data);
-    })
-    .catch(error => {
-      console.error("Error updating coins:", error);
-    });
+        // Insert API call
+        axios.get('/mining/inserspin', {
+            params: {
+                spinAmount: selectedPrizeSpan.textContent,
+            }
+        })
+            .then(response => {
+                // console.log("API response:", response.data);
+            })
+            .catch(error => {
+                console.error("Error updating coins:", error);
+            });
 
-  } else {
-    console.error("Could not find the corresponding prize span element.");
-  }
+    } else {
+        console.error("Could not find the corresponding prize span element.");
+    }
 };
- 
+
 
 
 const fetchData = async () => {
     loading.value = true;
-  try {
-    const response = await axios.get("/mining/getSpinList");
-    console.log("Response data:", response.data); // Log the response data
-    spinlist.value = response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }finally{
-    loading.value = false;
-  }
+    try {
+        const response = await axios.get("/mining/getSpinList");
+        console.log("Response data:", response.data); // Log the response data
+        spinlist.value = response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } finally {
+        loading.value = false;
+    }
 };
 
 
 onMounted(async () => {
-  await fetchData();
+    await fetchData();
 });
 
 </script>
 
 
 <style scoped>
-.Wheel_posi{
+.Wheel_posi {
     position: relative;
     width: fit-content;
     margin: auto;
     min-height: 400px;
 }
+
 .wheel {
     position: absolute;
     width: 350px;

@@ -34,40 +34,52 @@
 						</center>
 
 						<section class="post-sections">
-							<div class="post-card" v-for="vinfo in data" :key="vinfo.id">
-								<div class="d-flex align-items-normal">
-									<span class="member-img"><img src="/assets/img/content/avatar/user-4.png"
-											alt=""></span>
-									<div class="ml-10">
-										<h4 class="coin-name">{{ vinfo.postByname }}<i class="fa fa-bronze"></i></h4>
-										<small class="text-muted"><i class="fa-regular fa-calendar"
-												style="margin-right: 6px;"></i>{{ vinfo.createdAt }}</small><br>
+							<div v-for="(vinfo, index) in data" :key="vinfo.id" class="w-100">
+								<!-- Your post card content -->
+								<div class="post-card w-100 mx-auto">
+									<div class="d-flex align-items-normal w-100">
+										<span class="member-img">
+											<img src="/assets/img/content/avatar/user-4.png" alt="" />
+										</span>
+										<div class="ml-10">
+											<h4 class="coin-name">{{ vinfo.postByname }}<i class="fa fa-bronze"></i>
+											</h4>
+											<small class="text-muted">
+												<i class="fa-regular fa-calendar" style="margin-right: 6px;"></i>{{
+													vinfo.createdAt }}
+											</small>
+											<br />
+										</div>
+									</div>
+									<div class="description" id="description" onclick="toggleOverflow()"
+										style="text-align: justify">
+										{{ vinfo.description_full }}
+									</div>
+									<div v-if="vinfo.thumnail_img">
+										<img :src="vinfo.thumnail_img" alt="Post Image" class="img-fluid" />
+									</div>
+									<div class="d-flex align-items-end pt-2 justify-content-between lComment"
+										@click="insertLike(vinfo)">
+										<p v-if="vinfo.likeCount">{{ vinfo.likeCount }} Like</p>
+										<p v-else>0 Like</p>
+									</div>
+									<div class="post-buttons">
+										<button @click="likePost(vinfo)">
+											<i class="fa-solid fa-thumbs-up active" v-if="vinfo.likeBy"></i>
+											<i class="fa-regular fa-thumbs-up" v-else></i>
+										</button>
+										<button @click="shareModal(vinfo.id)">
+											<i class="fa-regular fa-share"></i>Share
+										</button>
 									</div>
 								</div>
-								<div class="description" id="description" onclick="toggleOverflow()"
-									style="text-align: justify">
-									{{ vinfo.description_full }}
-								</div>
-								<div v-if="vinfo.thumnail_img">
-									<img :src="vinfo.thumnail_img" alt="Post Image" class="img-fluid" />
-								</div>
-								<div class="d-flex align-items-end pt-2 justify-content-between lComment" @click="insertLike(vinfo)">
-									<p v-if="vinfo.likeCount">{{ vinfo.likeCount }} Like</p>
-									<p v-else>0 Like</p>
-								</div>
-								<div class="post-buttons">
-									<button @click="likePost(vinfo)">
-										<!-- Toggle class based on the liked state -->
-										<i class="fa-solid fa-thumbs-up active" v-if="vinfo.likeBy"></i>
-  <!-- Show this icon when the post is not liked -->
-  <i class="fa-regular fa-thumbs-up" v-else></i>
 
-
-									</button>
-									<button @click="shareModal(vinfo.id)">
-										<i class="fa-regular fa-share"></i>Share
-									</button>
-								</div>
+								<section class="bal-section supply_container container my-2">
+									<div class="resources-card-wrapper mb-5">
+										<!-- Conditionally render BannerAds after every 2 items -->
+										<NativeAds v-if="(index + 1) % 5 === 0" class="mt-3 mx-auto d-flex" />
+									</div>
+								</section>
 							</div>
 						</section>
 
@@ -89,6 +101,8 @@ import { ref, watchEffect } from "vue";
 import { useUserStore } from "~~/stores/user";
 import { storeToRefs } from "pinia";
 import axios from "axios";
+import NativeAds from '~/components/NativeAds.vue'; // Adjust import path as needed
+
 const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
@@ -153,18 +167,18 @@ const likePost = async (post) => {
 	const postId = `${post.id}`
 
 	const response = await axios.get("/post/insertPostLikes", {
-      params: {
-        postId: postId,
-      },
-    });
-	 
+		params: {
+			postId: postId,
+		},
+	});
+
 	if (response.status === 200) {
-      // Assuming the response status is 200 for success
-      console.log("Like action successful:", response.data);
-      fetchData(); // Call fetchData() after a successful response
-    } else {
-      console.error("Unexpected response status:", response.status);
-    }
+		// Assuming the response status is 200 for success
+		console.log("Like action successful:", response.data);
+		fetchData(); // Call fetchData() after a successful response
+	} else {
+		console.error("Unexpected response status:", response.status);
+	}
 
 
 
@@ -175,7 +189,7 @@ const likePost = async (post) => {
 // Ensure that like counts and liked states are initialized correctly from local storage
 onMounted(() => {
 	fetchData();
-	 
+
 })
 // Call the function to show loader initially
 </script>
@@ -346,15 +360,18 @@ input[type="file"] {
 .post-buttons {
 	margin-top: 5px !important;
 }
+
 /* Default styling for the thumbs-up icon */
 .fa-solid.fa-thumbs-up {
-    color: #6c757d; /* Gray color for non-active state */
-    transition: color 0.3s ease; /* Smooth transition for color change */
+	color: #6c757d;
+	/* Gray color for non-active state */
+	transition: color 0.3s ease;
+	/* Smooth transition for color change */
 }
 
 /* Styling when the active class is applied */
 .fa-solid.fa-thumbs-up.active {
-    color: #007bff; /* Blue color for the active (liked) state */
+	color: #007bff;
+	/* Blue color for the active (liked) state */
 }
-
 </style>

@@ -187,6 +187,12 @@
           </form>
         </section>
         <section v-else><h3><center>Your KYC Submit</center></h3></section>
+        <section class="bal-section supply_container container my-2">
+        <div class="resources-card-wrapper mb-5">
+          <!-- Insert BannerAds component here -->
+          <NativeAds />          
+        </div>        
+      </section>
         <!-- <SocialFooter /> -->
       </main>
     </div>
@@ -197,6 +203,7 @@
 import Sidebar from "~/layouts/Sidebar.vue";
 import HeaderThird from "~/layouts/HeaderThird.vue";
 import SocialFooter from "~/components/SocialFooter.vue";
+import NativeAds from "~/components/NativeAds.vue";
 import Swal from "sweetalert2";
 import { ref, watchEffect } from "vue";
 import { useUserStore } from "~~/stores/user";
