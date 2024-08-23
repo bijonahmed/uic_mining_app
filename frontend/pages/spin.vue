@@ -1,6 +1,6 @@
 <template>
     <div>
-        <title>Tap Tap</title>
+        <title>Spin Wheel</title>
 
         <div class="wrapper">
             <div class="nav-menu">
@@ -13,6 +13,8 @@
             <div class="wrapper-inline">
                 <!-- Header area start -->
                 <HeaderSecond />
+
+                <!-- <button @click="fetchData">Test</button> -->
                 <!-- Page content start -->
                 <main class="margin coin_pagebg mt-0 " style="min-height: 90vh;">
                     <div class="dash-balance">
@@ -24,12 +26,14 @@
                         </div>
                     </div>
 
+                   
+
 
                     <div class="loading-indicator" v-if="loading" style="text-align: center">
                         <Loader />
                     </div>
 
-                    <!-- <section class="bal-section container">
+                  <section class="bal-section container">
                         <div class="ref-card c1">
                             <div class="d-flex align-items-center">
                                 <div class="d-flex flex-grow">
@@ -39,7 +43,7 @@
                                 </div>
                             </div>
                         </div>
-                    </section> -->
+                    </section>  
 
                     <section class="container">
                         <div class="Wheel_posi">
@@ -95,7 +99,7 @@ definePageMeta({
 
 
 // Define your reactive state variables
-const userCoin = ref(30); // Initial user coins
+const userCoin = ref(0); // Initial user coins
 const spinlist = ref([]);
 const prizes = ref([]);
 const activeBtn = ref(false);
@@ -105,7 +109,7 @@ const prize = ref(null);
 onMounted(async () => {
     try {
         const response = await axios.get('/mining/getSpinList');
-        spinlist.value = response.data;
+        spinlist.value = response.data.responseData;
         prizes.value = spinlist.value.map(item => Number(item.name));
         console.log(prizes.value);
     } catch (error) {
@@ -146,8 +150,14 @@ const spin = () => {
     // Select the corresponding span element
     const prizeSpans = document.querySelectorAll(".slice .prize");
     if (index >= 0 && index < prizeSpans.length) {
+        setTimeout(() => {
+            fetchData();
+        }, 4000); // 15000 milliseconds = 15 seconds
+        
+        
         const selectedPrizeSpan = prizeSpans[index];
         console.log("Selected prize amount from span:", selectedPrizeSpan.textContent);
+       // userCoin.value = selectedPrizeSpan.textContent;
 
         // Insert API call
         axios.get('/mining/inserspin', {
@@ -173,8 +183,10 @@ const fetchData = async () => {
     loading.value = true;
     try {
         const response = await axios.get("/mining/getSpinList");
-        console.log("Response data:", response.data); // Log the response data
-        spinlist.value = response.data;
+        console.log("Response data:", response.data.spincount); // Log the response data
+        spinlist.value = response.data.responseData;
+        userCoin.value = response.data.spincount;
+        //userCoin.value = 
     } catch (error) {
         console.error("Error fetching data:", error);
     } finally {

@@ -255,29 +255,52 @@ class UserController extends Controller
 
         try {
             $users = User::select('id', 'uic_address', 'mining_amount')
-                ->orderBy('mining_amount', 'desc')
+                //->orderBy('mining_amount', 'desc')
                 ->get();
 
             $userrows = [];
             foreach ($users as $v) {
-                $userrows[] = [
+
+        $response               = app('App\Http\Controllers\User\UserController')->getComissionReport($v->id);
+        $levComissionsum        = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
+        
+        $level_commission       = $levComissionsum;
+
+        $adj_type_sum           = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
+        $adj_type_minus         = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
+     
+        $swap_type_1_frm        = SwapHistory::where('user_id', $v->id)->where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
+        $swap_type_2_to         = SwapHistory::where('user_id', $v->id)->where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
+           
+        $mining_amount          = User::where('id', $v->id)->where('status', 1)->sum('mining_amount');
+
+
+        $level_commission       = $levComissionsum;
+        $register_bonus         = User::where('id',  $v->id)->where('status', 1)->sum('register_bonus');
+        $allbonusesAmount       = $level_commission + $register_bonus;
+        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
+        $uic_amount              = number_format($uicAmount, 2);
+
+        $userrows[] = [
                     'id'             => $v->id,
                     'uic_address'    => $v->uic_address,
-                    'mining_amount'    => !empty($v->mining_amount) ? number_format($v->mining_amount, 7) : '0.000000',
+                    'mining_amount'    => $uic_amount//!empty($v->mining_amount) ? number_format($v->mining_amount, 7) : '0.000000',
                 ];
             }
+
+            usort($userrows, function($a, $b) {
+                return $b['mining_amount'] <=> $a['mining_amount'];
+            });
 
             $data['totalHolders'] = count($users);
             $data['users']        = $userrows;
 
             return response()->json($data);
-            // Do something with the $users collection if needed
         } catch (\Exception $e) {
-            // Log the exception message
             Log::error('Failed to fetch users: ' . $e->getMessage());
-
-            // Optionally, you can handle the exception further, like returning a response or rethrowing it
         }
+
+
     }
 
     public function getComissionReport($userId)
@@ -326,6 +349,9 @@ class UserController extends Controller
         //dd($data);
     }
 
+    
+
+
     public function getBalance()
     {
         //$this->getComissionReport($this->userid);
@@ -366,7 +392,6 @@ class UserController extends Controller
         $register_bonus         = User::where('id', $this->userid)->where('status', 1)->sum('register_bonus');
         //echo "no to checkd.";
         $allbonusesAmount      = $level_commission + $register_bonus;
-
         // echo "mining_amount:  $mining_amount <br/>
         //     swap_type_2_to: $swap_type_2_to  <br/>
         //     swap_type_1_frm: $swap_type_1_frm <br/>

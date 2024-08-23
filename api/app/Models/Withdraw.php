@@ -21,7 +21,7 @@ class Withdraw extends Authenticatable
     'transection_fee',
     'account_number',
     'usd_amount',
-    'uic_amount',
+   // 'uic_amount',
     'withdrawal_method_id',
     'user_id',
     'withdraw_amount',

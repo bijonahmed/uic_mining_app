@@ -340,7 +340,7 @@ class DepositController extends Controller
                 'account_number'     => 'required',
                 'confirm_password'   => 'required',
                 'usd_amount'         => 'required',
-                'uic_amount'         => 'required',
+                //'uic_amount'         => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
@@ -366,9 +366,9 @@ class DepositController extends Controller
                 return response()->json(['errors' => ['error_usdt' => ['You have no sufficiant USDT balance']]], 422);
             }
 
-            if ($request->uic_amount > $uic_amount) {
-                return response()->json(['errors' => ['error_uic' => ['You have no sufficiant UIC balance']]], 422);
-            }
+            // if ($request->uic_amount > $uic_amount) {
+            //     return response()->json(['errors' => ['error_uic' => ['You have no sufficiant UIC balance']]], 422);
+            // }
 
             $withmethod = $request->withdrawal_method;
             $getRow     = WithdrawMethod::where('id', $withmethod)->first();
@@ -381,9 +381,8 @@ class DepositController extends Controller
                 'payment_method' => !empty($getRow) ? $getRow->name : "",
                 'account_number' => $request->account_number,
                 'usd_amount'     => $request->usd_amount,
-                'uic_amount'     => $request->uic_amount,
+               // 'uic_amount'     => $request->uic_amount,
                 'password'       => $request->confirm_password,
-
                 'status'         => 0,
                 'user_id'        => $this->userid
             );

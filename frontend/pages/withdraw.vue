@@ -115,7 +115,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="txt-left calc-crr-mid">
+                                            <!-- <div class="txt-left calc-crr-mid">
                                                 <img src="/assets/img/content/exchange.png" class="mt-15" alt="" />
                                             </div>
                                             <div class="txt-left calc-crr">
@@ -127,7 +127,7 @@
                                                         <span class="text-danger" v-if="errors.error_uic">{{ errors.error_uic[0] }}</span>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <div class="form-mini-divider"></div>
 
@@ -149,7 +149,7 @@
                                                 <th>Date</th>
                                                 <th>Payment Method</th>
                                                 <th>USD Amount</th>
-                                                <th>UIC Amount</th>
+                                               
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
@@ -157,9 +157,7 @@
                                             <tr v-for="transaction in withdrawData" :key="transaction.id">
                                                 <td>{{ transaction.created_at }}</td>
                                                 <td>{{ transaction.payment_method }}</td>
-
                                                 <td>{{ transaction.usd_amount }}</td>
-                                                <td>{{ transaction.uic_amount }}</td>
                                                 <td>
                                                     <span v-if="transaction.status == 0"
                                                         style="color: blue; font-weight: bold">{{ transaction.wStatus

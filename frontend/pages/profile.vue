@@ -22,7 +22,7 @@
           <main class="margin mt-0">
             <div class="dash-balance">
               <div class="dash-content relative">
-                <h3 class="w-text">Trader Porfile</h3>
+                <!-- <h3 class="w-text">Trader Porfile</h3> -->
                 <div class="notification">
                   <!-- <a href="#"><i class="fa fa-plus"></i></a> -->
                 </div>
@@ -40,23 +40,7 @@
               <div class="trader-info">
                 <h3>{{ name }}</h3>
                 <p>{{ email }}</p>
-                <ul class="trader-info-list list-unstyled">
-                  <li>
-                    <div class="profile1"></div>
-                    <h2>0</h2>
-                    <small class="txt-muted">Transaction</small>
-                  </li>
-                  <li>
-                    <div class="profile2"></div>
-                    <h2>$0</h2>
-                    <small class="txt-muted">Receieved</small>
-                  </li>
-                  <li>
-                    <div class="profile3"></div>
-                    <h2>$0</h2>
-                    <small class="txt-muted">Exchanged</small>
-                  </li>
-                </ul>
+                
               </div>
             </section>
 

@@ -6,6 +6,10 @@
       </div>
     </center>
 
+    
+
+
+
     <main class="margin mt-0">
       <div class="dash-balance">
         <div class="d-flex align-items-center mt-30">
@@ -80,7 +84,8 @@
               <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3">
                 <img src="/assets/img/mining.png" style="width: 40px" alt="" />
               </nuxt-link>
-              <p class="text" style="margin-top: 20px;" v-if="isLoggedIn && !isMiningDisabled">
+              <!-- <p class="text" style="margin-top: 20px;" v-if="isLoggedIn && !isMiningDisabled"> -->
+                <p class="text" style="margin-top: 20px;" v-if="isLoggedIn">
                 <Start /> Mining
               </p>
               <p v-if="!isLoggedIn">Mining</p>

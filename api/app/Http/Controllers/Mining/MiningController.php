@@ -63,8 +63,13 @@ class MiningController extends Controller
     {
 
         $responseData = Spin::where('status', 1)->get();
-        return response()->json($responseData);
+        $row          = User::where('id',$this->userid)->first();
+        $data['spincount'] = !empty($row->spincount) ? $row->spincount : 0 ; 
+        $data['responseData'] = $responseData ; 
+        return response()->json($data);
     }
+
+    //spincount
 
     public function inserspin(Request $request)
     {
