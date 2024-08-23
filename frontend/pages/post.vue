@@ -17,7 +17,7 @@
 				<Footer />
 				<!-- Page content start -->
 				<main>
-					<div class="dash-balance mb-3 sticky-top" style="z-index: 1;">
+					<div class="dash-balance mb-3 sticky-top" style="z-index: 2;">
 						<div class="dash-content relative">
 							<h3 class="w-text">Post</h3>
 							<div class="notification">
@@ -73,16 +73,18 @@
 										</button>
 									</div>
 								</div>
-
-								<section class="bal-section supply_container container my-2">
-									<div class="resources-card-wrapper mb-5">
-										<!-- Conditionally render BannerAds after every 2 items -->
-										<NativeAds v-if="(index + 1) % 5 === 0" class="mt-3 mx-auto d-flex" />
-									</div>
-								</section>
+								<div class="post-card w-100 mx-auto"  v-if="(index + 1) % 5 === 0">
+									<NativeAds  class="mt-3 w-100 h-100 mx-auto d-flex" />
+								</div>								
 							</div>
 						</section>
 
+
+						<section class="bal-section supply_container container my-2">
+						<div class="resources-card-wrapper mb-5">
+							<!-- Conditionally render BannerAds after every 2 items  -->
+						</div>
+					</section>
 						<br /><br /><br />
 					</div>
 				</main>

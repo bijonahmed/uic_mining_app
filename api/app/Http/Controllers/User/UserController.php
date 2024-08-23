@@ -255,42 +255,49 @@ class UserController extends Controller
 
         try {
             $users = User::select('id', 'uic_address', 'mining_amount')
-                //->orderBy('mining_amount', 'desc')
                 ->get();
 
             $userrows = [];
             foreach ($users as $v) {
 
-        $response               = app('App\Http\Controllers\User\UserController')->getComissionReport($v->id);
-        $levComissionsum        = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
-        
-        $level_commission       = $levComissionsum;
+                $response               = app('App\Http\Controllers\User\UserController')->getComissionReport($v->id);
+                $levComissionsum        = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
 
-        $adj_type_sum           = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
-        $adj_type_minus         = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
-     
-        $swap_type_1_frm        = SwapHistory::where('user_id', $v->id)->where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
-        $swap_type_2_to         = SwapHistory::where('user_id', $v->id)->where('type',2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
-           
-        $mining_amount          = User::where('id', $v->id)->where('status', 1)->sum('mining_amount');
+                $level_commission       = $levComissionsum;
+
+                $adj_type_sum           = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
+                $adj_type_minus         = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
+
+                $swap_type_1_frm        = SwapHistory::where('user_id', $v->id)->where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
+                $swap_type_2_to         = SwapHistory::where('user_id', $v->id)->where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
+
+                $mining_amount          = User::where('id', $v->id)->where('status', 1)->sum('mining_amount');
 
 
-        $level_commission       = $levComissionsum;
-        $register_bonus         = User::where('id',  $v->id)->where('status', 1)->sum('register_bonus');
-        $allbonusesAmount       = $level_commission + $register_bonus;
-        $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
-        $uic_amount              = number_format($uicAmount, 2);
+                $level_commission       = $levComissionsum;
+                $register_bonus         = User::where('id',  $v->id)->where('status', 1)->sum('register_bonus');
+                $allbonusesAmount       = $level_commission + $register_bonus;
+                $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
+                $uic_amount              = number_format($uicAmount, 2);
 
-        $userrows[] = [
+                $userrows[] = [
                     'id'             => $v->id,
                     'uic_address'    => $v->uic_address,
-                    'mining_amount'    => $uic_amount//!empty($v->mining_amount) ? number_format($v->mining_amount, 7) : '0.000000',
+                    'mining_amount'    => $uic_amount //!empty($v->mining_amount) ? number_format($v->mining_amount, 7) : '0.000000',
                 ];
             }
 
-            usort($userrows, function($a, $b) {
+            usort($userrows, function ($a, $b) {
                 return $b['mining_amount'] <=> $a['mining_amount'];
             });
+
+            // Calculate the total sum of mining_amount
+            $totalMiningAmount = array_reduce($userrows, function ($carry, $item) {
+                return $carry + $item['mining_amount'];
+            }, 0);
+
+            // Add the total sum to the data array
+            $data['totalMiningAmount'] = $totalMiningAmount;
 
             $data['totalHolders'] = count($users);
             $data['users']        = $userrows;
@@ -299,8 +306,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to fetch users: ' . $e->getMessage());
         }
-
-
     }
 
     public function getComissionReport($userId)
@@ -349,7 +354,7 @@ class UserController extends Controller
         //dd($data);
     }
 
-    
+
 
 
     public function getBalance()
@@ -480,7 +485,7 @@ class UserController extends Controller
         $allbonusesAmount       = $level_commission + $register_bonus;
         $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
         $uicAmountBalance       = $swaptype2to - $swaptype1frm;
-       
+
         $beganing_price         = $setting->beganing_price;
         $marketCap              = $setting->liquidity_total_supply * $beganing_price;
 
@@ -888,12 +893,12 @@ class UserController extends Controller
         $L2comission          = $levres instanceof JsonResponse ? $levres->getData(true)['level_2_profit'] : 0;
         $L3comission          = $levres instanceof JsonResponse ? $levres->getData(true)['level_3_profit'] : 0;
         $allcomission         = $levres instanceof JsonResponse ? $levres->getData(true)['commission_sum'] : 0;
-       
+
         $response           = app('App\Http\Controllers\User\UserController')->getBalanceCheckAdmin($userid);
         $usdt_amount        = $response instanceof JsonResponse ? $response->getData(true)['usdtamount'] : 0;
         $uic_amount         = $response instanceof JsonResponse ? $response->getData(true)['uic_amount'] : 0;
 
-      //  echo "usdt amount: $usdt_amount-----------------uic amount : $uic_amount";exit;
+        //  echo "usdt amount: $usdt_amount-----------------uic amount : $uic_amount";exit;
 
 
         $deposit_amount     = $response instanceof JsonResponse ? $response->getData(true)['deposit_sum'] : 0;
@@ -901,10 +906,10 @@ class UserController extends Controller
         $withdraw_uic       = $response instanceof JsonResponse ? $response->getData(true)['withdraw_uic'] : 0;
         $airdrop            = $response instanceof JsonResponse ? $response->getData(true)['taptap_balance'] : 0;
         $register_bonus     = $response instanceof JsonResponse ? $response->getData(true)['register_bonus'] : 0;
-        
+
         $adj_type_sum       = $response instanceof JsonResponse ? $response->getData(true)['adj_type_sum'] : 0;
         $adj_type_minus     = $response instanceof JsonResponse ? $response->getData(true)['adj_type_minus'] : 0;
-      //  $swap_tran          = $response instanceof JsonResponse ? $response->getData(true)['swap_tran'] : "";
+        //  $swap_tran          = $response instanceof JsonResponse ? $response->getData(true)['swap_tran'] : "";
 
         $global             = app('App\Http\Controllers\UnauthenticatedController')->settingrowClient();
         $circulatingSupply  = $global instanceof JsonResponse ? $global->getData(true)['circulatingSupply'] : 0;
@@ -1016,7 +1021,7 @@ class UserController extends Controller
             'register_bonus'              => '$' . number_format($register_bonus, 2),
             'adj_type_sum'                => 'UIC: ' . number_format($adj_type_sum, 2),
             'adj_type_minus'              => 'UIC: ' . number_format($adj_type_minus, 2),
-           // 'swap_tran'                   => $swaptran,
+            // 'swap_tran'                   => $swaptran,
         ];
 
         // dd($data);
@@ -1294,7 +1299,7 @@ class UserController extends Controller
 
             return [
                 'id'            => $item->id,
-                'msg'          => $item->msg,//substr($item->msg, 0, 250),
+                'msg'          => $item->msg, //substr($item->msg, 0, 250),
                 'created_at'  => date("Y-M-d H:i:s", strtotime($item->created_at)), //$item->created_at,
             ];
         });

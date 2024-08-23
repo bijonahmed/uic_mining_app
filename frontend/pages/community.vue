@@ -34,7 +34,7 @@
                             <div class="list-box" v-for="comm in communitys" :key="comm.id">
                                 <div class="list-item">
                                     <span class="list-item-title">
-                                        <small style="margin-right: 15px;">1.</small>
+                                        <small style="margin-right: 15px;"></small>
                                         <nuxt-link to="#" @click="checkSlug(comm.slug)"><small>{{ comm.name }} </small></nuxt-link>
                                         
                                     </span>
@@ -53,7 +53,7 @@
                             <div class="form-row mb-70">
                                 <a href="#" class="button circle block orange" id="getCheckedButton">
                                     <i class="fa fa-crown" style="color: rgb(255, 217, 0);margin-right: 10px;"></i>
-                                    Premium Community
+                                    The community will open soon.
                                 </a>
                             </div>
                             <div class="form-divider"></div>
@@ -67,6 +67,12 @@
                 <!-- Page content end -->
             </div>
         </div>
+
+        <!-- Modal Start -->
+
+<!-- Button to trigger the modal -->
+
+ 
     </div>
 </template>
 
@@ -82,6 +88,13 @@ const username = ref();
 const onlyName = ref();
 const loading = ref(true);
 const checkSlug = (slug) => {
+
+    router.push({
+        path: '/chatbox/communitymessages',
+       
+    });
+
+    return false; 
     router.push({
         path: '/chatbox/messages',
         query: { 

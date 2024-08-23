@@ -43,7 +43,7 @@
                                 <div class="flex-column flex-md-row">
                                     <h3 class="">Total Circulating Coins</h3>
                                     <p class="mb-0 font-weight-medium"><i class="txt-red fa fa-arrow-down mr-10"></i>{{
-                                        circulatingSupply }}&nbsp; UIC </p>
+                                        miningAmountSum }}&nbsp; UIC</p>
                                 </div>
                             </div>
                         </div>
@@ -71,13 +71,8 @@
                                     <div>
                                         <small class="d-block mb-0 txt-green">{{ v.mining_amount }} <span
                                                 class="text-muted">UIC</span></small>
-
-                                        <!--<small class="text-white border-radius" style="background-color: rgb(119, 0, 255);">Level 1</small>
-              </div>-->
                                     </div>
                                 </div>
-                                <!-- v-if="(index + 1) % 5 === 0"  -->
-
                                 <BannerAds v-if="(index + 1) % 5 === 0" />
                             </li>
 
@@ -102,6 +97,7 @@ const router = useRouter();
 const loading = ref(false);
 const data = ref([]);
 const totalHolders = ref(0);
+const miningAmountSum = ref(0);
 const circulatingSupply = ref(0);
 
 const fetchData = async () => {
@@ -110,6 +106,22 @@ const fetchData = async () => {
         const response = await axios.get("/user/allTopUicHolders");
         data.value = response.data.users;
         totalHolders.value = response.data.totalHolders;
+
+        // const totalMiningAmount = response.data.users
+        //     .map(user => user.mining_amount)
+        //     .reduce((acc, curr) => acc + curr, 0);
+
+        // // Set the total holders and total mining amount
+        // totalHolders.value = response.data.totalHolders;
+        // console.log('Total Mining Amount:', totalMiningAmount);
+        // miningAmountSum.value = totalMiningAmount;
+        // Sum the mining_amount values
+        miningAmountSum.value = response.data.users
+    .map(user => parseFloat(user.mining_amount))
+    .reduce((acc, curr) => acc + curr, 0);
+ 
+
+
     } catch (error) {
         console.error("Error fetching data:", error);
     } finally {

@@ -45,7 +45,7 @@
                   <h3 class="">Airdrop</h3>
                   <p class="mb-0 font-weight-medium">
                     <!-- <i class="txt-red fa fa-arrow-down mr-10"></i> -->
-                    {{ taptap_balance }} U
+                    {{ taptap_balance }} Units
                   </p>
                 </div>
               </div>
