@@ -309,7 +309,8 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'deposit'
 ], function () {
-    Route::get('getSendReceived', [DepositController::class, 'getSendReceived']);
+    Route::get('getReceives', [DepositController::class, 'getReceived']);
+    Route::get('getSenders', [DepositController::class, 'getSenders']);
     Route::get('getWithMethodList', [DepositController::class, 'getWithMethodList']);
     Route::get('getWithdrawRequest', [DepositController::class, 'getWithdrawRequest']);
     Route::post('depositRequest', [DepositController::class, 'depositRequest']);

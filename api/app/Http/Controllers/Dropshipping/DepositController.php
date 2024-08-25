@@ -463,11 +463,10 @@ class DepositController extends Controller
 
         return md5($uniqueNumber);
     }
-
-    public function getSendReceived()
+ 
+ public function getReceived()
     {
-
-        $getrows     = SendReceived::where('user_id', $this->userid)->get();
+        $getrows     = SendReceived::where('receiver_user_id', $this->userid)->get();
         $history = [];
         foreach ($getrows as $v) {
             $history[] = [
@@ -481,16 +480,40 @@ class DepositController extends Controller
         }
 
         $thirtyDaysAgo          = Carbon::now()->subDays(30);
-        $get_amounts            = SendReceived::where('user_id', $this->userid)
+        $get_amounts            = SendReceived::where('receiver_user_id', $this->userid)
             ->where('created_at', '>=', $thirtyDaysAgo)
             ->sum('amount');
         $data['history']        = $history;
         $data['total_send']     = number_format($get_amounts, 8);
         $data['total_received'] = number_format($get_amounts, 8);
-
         return response()->json($data);
     }
 
+    public function getSenders()
+    {
+        $getrows     = SendReceived::where('sender_user_id', $this->userid)->get();
+        $history = [];
+        foreach ($getrows as $v) {
+            $history[] = [
+                'id'                           => $v->id,
+                'receiver_uic_address'         => $v->receiver_uic_address,
+                'sender_name'                  => $v->receiver_name,
+                'wallet_type'                  => $v->wallet_type,
+                'amount'                       => $v->amount,
+                'created_at'                   => date("d-m-Y H:i:s", strtotime($v->created_at)),
+            ];
+        }
+
+        $thirtyDaysAgo          = Carbon::now()->subDays(30);
+        $get_amounts            = SendReceived::where('sender_user_id', $this->userid)
+            ->where('created_at', '>=', $thirtyDaysAgo)
+            ->sum('amount');
+        $data['history']        = $history;
+        $data['total_send']     = number_format($get_amounts, 8);
+     //   $data['total_received'] = number_format($get_amounts, 8);
+        return response()->json($data);
+    }
+	
     public function getWithMethodList()
     {
         $data     = WithdrawMethod::where('user_id', $this->userid)->get();
