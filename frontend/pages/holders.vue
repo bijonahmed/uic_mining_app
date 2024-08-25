@@ -41,7 +41,7 @@
 
                             <div class="wallet-card ml-10">
                                 <div class="flex-column flex-md-row">
-                                    <h3 class="">Total Circulating Coins</h3>
+                                    <h3 class="">Circulating Supply</h3>
                                     <p class="mb-0 font-weight-medium"><i class="txt-red fa fa-arrow-down mr-10"></i>{{
                                         miningAmountSum }}&nbsp; UIC</p>
                                 </div>
@@ -107,18 +107,9 @@ const fetchData = async () => {
         data.value = response.data.users;
         totalHolders.value = response.data.totalHolders;
 
-        // const totalMiningAmount = response.data.users
-        //     .map(user => user.mining_amount)
-        //     .reduce((acc, curr) => acc + curr, 0);
-
-        // // Set the total holders and total mining amount
-        // totalHolders.value = response.data.totalHolders;
-        // console.log('Total Mining Amount:', totalMiningAmount);
-        // miningAmountSum.value = totalMiningAmount;
-        // Sum the mining_amount values
         miningAmountSum.value = response.data.users
-    .map(user => parseFloat(user.mining_amount))
-    .reduce((acc, curr) => acc + curr, 0);
+        .map(user => parseFloat(user.mining_amount))
+        .reduce((acc, curr) => acc + curr, 0);
  
 
 

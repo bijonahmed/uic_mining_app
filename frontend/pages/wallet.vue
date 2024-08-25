@@ -42,10 +42,10 @@
 
               <div class="wallet-card ml-10">
                 <div class="flex-column flex-md-row">
-                  <h3 class="">Airdrop</h3>
+                  <h3 class="">Units</h3>
                   <p class="mb-0 font-weight-medium">
                     <!-- <i class="txt-red fa fa-arrow-down mr-10"></i> -->
-                    {{ taptap_balance }} Units
+                    {{ taptap_balance }} U
                   </p>
                 </div>
               </div>

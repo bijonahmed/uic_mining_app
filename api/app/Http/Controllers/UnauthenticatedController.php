@@ -13,10 +13,12 @@ use App\Models\Sliders;
 use App\Models\Post;
 use App\Models\ProductCategory;
 use App\Models\Categorys;
+use App\Models\ManualAdjustment;
 use App\Models\VerifyEmail;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\ProductAdditionalImg;
+use App\Models\SwapHistory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
@@ -721,5 +723,63 @@ class UnauthenticatedController extends Controller
         }
 
         return response()->json($result);
+    }
+
+    public function allholders()
+    {
+
+        try {
+            $users = User::select('id', 'uic_address', 'mining_amount')
+                ->get();
+
+            $userrows = [];
+            foreach ($users as $v) {
+
+                $response               = app('App\Http\Controllers\User\UserController')->getComissionReport($v->id);
+                $levComissionsum        = $response instanceof JsonResponse ? $response->getData(true)['commission_sum'] : 0;
+
+                $level_commission       = $levComissionsum;
+
+                $adj_type_sum           = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 1)->sum('adjustment_amount'); // adjustment_type==1 (Sum)
+                $adj_type_minus         = ManualAdjustment::where('user_id', $v->id)->where('adjustment_type', 2)->sum('adjustment_amount'); // adjustment_type==1 (Minus)
+
+                $swap_type_1_frm        = SwapHistory::where('user_id', $v->id)->where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
+                $swap_type_2_to         = SwapHistory::where('user_id', $v->id)->where('type', 2)->sum(\DB::raw("REPLACE(to_amount, ',', '')")); //UIC 
+
+                $mining_amount          = User::where('id', $v->id)->where('status', 1)->sum('mining_amount');
+
+
+                $level_commission       = $levComissionsum;
+                $register_bonus         = User::where('id',  $v->id)->where('status', 1)->sum('register_bonus');
+                $allbonusesAmount       = $level_commission + $register_bonus;
+                $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
+                $uic_amount              = number_format($uicAmount, 2);
+
+                $userrows[] = [
+                    'id'             => $v->id,
+                    'uic_address'    => $v->uic_address,
+                    'mining_amount'    => $uic_amount //!empty($v->mining_amount) ? number_format($v->mining_amount, 7) : '0.000000',
+                ];
+            }
+
+            usort($userrows, function ($a, $b) {
+                return $b['mining_amount'] <=> $a['mining_amount'];
+            });
+
+            // Calculate the total sum of mining_amount
+            $totalMiningAmount = array_reduce($userrows, function ($carry, $item) {
+                return $carry + $item['mining_amount'];
+            }, 0);
+
+            // Add the total sum to the data array
+            $data['totalMiningAmount'] = $totalMiningAmount;
+
+            $data['totalHolders'] = count($users);
+            $data['users']        = $userrows;
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch users: ' . $e->getMessage());
+        }
     }
 }

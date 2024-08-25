@@ -6,7 +6,7 @@
       </div>
     </center>
 
-    
+
 
 
 
@@ -17,7 +17,7 @@
             <div class="mr-auto">
               <h1 class="b-val" v-if="isLoggedIn">${{ availablebalance }}</h1>
               <p class="g-text mb-0" v-if="isLoggedIn">
-                <p style="color: white">CURRENT PRICE</p>
+              <p style="color: white">CURRENT PRICE</p>
               </p>
             </div>
             <div class="ml-auto align-self-end" v-if="isLoggedIn">
@@ -55,7 +55,7 @@
           <div class="wallet-card mr-10">
             <div class="flex-column flex-md-row">
               <h3 class="">Circulating Supply</h3>
-              <p class="mb-0 font-weight-medium">{{ circulatingSupply }} UIC</p>
+              <p class="mb-0 font-weight-medium">{{ miningAmountSum }} UIC</p>
             </div>
           </div>
 
@@ -71,7 +71,8 @@
       <div class="container">
         <center class="d-none">
           <span v-if="isLoggedIn">
-            <nuxt-link to="/buy-mining-service" class="btn btn-link btn-lg button custom-btn">Buy Mining Machine</nuxt-link>
+            <nuxt-link to="/buy-mining-service" class="btn btn-link btn-lg button custom-btn">Buy Mining
+              Machine</nuxt-link>
           </span>
           <span v-else>
             <nuxt-link to="/login" class="btn btn-link btn-lg button custom-btn">Buy Mining Machine</nuxt-link>
@@ -85,7 +86,7 @@
                 <img src="/assets/img/mining.png" style="width: 40px" alt="" />
               </nuxt-link>
               <!-- <p class="text" style="margin-top: 20px;" v-if="isLoggedIn && !isMiningDisabled"> -->
-                <p class="text" style="margin-top: 20px;" v-if="isLoggedIn">
+              <p class="text" style="margin-top: 20px;" v-if="isLoggedIn">
                 <Start /> Mining
               </p>
               <p v-if="!isLoggedIn">Mining</p>
@@ -137,8 +138,8 @@
       <section class="bal-section supply_container container my-2">
         <div class="resources-card-wrapper mb-5">
           <!-- Insert BannerAds component here -->
-          <BannerAds />          
-        </div>        
+          <BannerAds />
+        </div>
         <div ref="adContainer" class="ad-container"></div>
       </section>
       <br>
@@ -165,6 +166,7 @@ const circulatingSupply = ref(0);
 const marketCap = ref(0);
 const currentPrice = ref(0);
 const availablebalance = ref(0);
+const miningAmountSum = ref(0);
 const total_supply = ref(0);
 const category_1 = ref(null);
 const category_2 = ref(null);
@@ -182,6 +184,7 @@ const fetchData = async () => {
     marketCap.value = response.data.marketCap;
     currentPrice.value = response.data.currentPrice;
     availablebalance.value = response.data.currentPrice_top;
+   
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -199,10 +202,21 @@ const checkMiningMatching = async () => {
   }
 };
 
+const circulatingSupplyAmt = async () => {
+   
+  
+    const response = await axios.get("/allholders");
+    miningAmountSum.value = response.data.users
+      .map(user => parseFloat(user.mining_amount))
+      .reduce((acc, curr) => acc + curr, 0);
+ 
+};
+
 fetchData();
 checkMiningMatching();
 
 onMounted(() => {
+  circulatingSupplyAmt();
   // Create the script element
   const script = document.createElement('script');
   script.type = 'text/javascript';
@@ -267,7 +281,7 @@ button {
 
 @media(max-width: 576px) {
   .resources-card canvas {
-      height: 300px !important;
+    height: 300px !important;
   }
 }
 </style>
