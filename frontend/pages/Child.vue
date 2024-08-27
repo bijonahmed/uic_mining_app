@@ -203,12 +203,11 @@ const checkMiningMatching = async () => {
 };
 
 const circulatingSupplyAmt = async () => {
-   
-  
     const response = await axios.get("/allholders");
-    miningAmountSum.value = response.data.users
-      .map(user => parseFloat(user.mining_amount))
-      .reduce((acc, curr) => acc + curr, 0);
+    const total = response.data.users
+  .map(user => parseFloat(user.mining_amount))
+  .reduce((acc, curr) => acc + curr, 0);
+miningAmountSum.value = parseFloat(total.toFixed(2));
  
 };
 

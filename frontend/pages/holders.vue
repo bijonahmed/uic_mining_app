@@ -107,10 +107,13 @@ const fetchData = async () => {
         data.value = response.data.users;
         totalHolders.value = response.data.totalHolders;
 
-        miningAmountSum.value = response.data.users
-        .map(user => parseFloat(user.mining_amount))
-        .reduce((acc, curr) => acc + curr, 0);
- 
+        // miningAmountSum.value = response.data.users
+        // .map(user => parseFloat(user.mining_amount))
+        // .reduce((acc, curr) => acc + curr, 0);
+        const total = response.data.users
+  .map(user => parseFloat(user.mining_amount))
+  .reduce((acc, curr) => acc + curr, 0);
+miningAmountSum.value = parseFloat(total.toFixed(2)); 
 
 
     } catch (error) {

@@ -119,7 +119,7 @@
                               @change="checkWallet($event.target.value)"
                             >
                               <option value="">Select</option>
-                              <!-- <option value="1">UIC</option> -->
+                                <option value="1">UIC</option>  
                               <option value="2">USDT</option>
                             </select>
                             <span class="text-danger" v-if="errors.wallet_type">{{
