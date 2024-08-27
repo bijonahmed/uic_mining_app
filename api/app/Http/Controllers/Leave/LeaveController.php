@@ -26,11 +26,8 @@ class LeaveController extends Controller
         $user = User::find($id->id);
         $this->userid = $user->id;
     }
-
-
-
     public function createEditLeaveRequest(Request $request){
-
+        //Leave controller
         $validator = Validator::make($request->all(), [
             'leave_type_id'      => 'required',
             'frm_date'           => 'required',
