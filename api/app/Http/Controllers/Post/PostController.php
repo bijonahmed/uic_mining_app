@@ -134,8 +134,8 @@ class PostController extends Controller
             'entry_by'                   => $this->userid
         );
         // dd($data);
-        if (!empty($request->file('files'))) {
-            $files = $request->file('files');
+        if (!empty($request->file('file'))) {
+            $files = $request->file('file');
             $fileName = Str::random(20);
             $ext = strtolower($files->getClientOriginalExtension());
             $path = $fileName . '.' . $ext;

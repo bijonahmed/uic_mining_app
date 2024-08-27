@@ -254,8 +254,7 @@ class UserController extends Controller
     {
 
         try {
-            $users = User::select('id', 'uic_address', 'mining_amount')
-                ->get();
+            $users = User::select('id', 'uic_address', 'mining_amount')->where('id', '!=', 1)->get();
 
             $userrows = [];
             foreach ($users as $v) {
@@ -407,12 +406,12 @@ class UserController extends Controller
         //     ";
         // exit; 
 
-        //$uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus; //--
+        //$uicAmount            = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus; //--
         $uicAmount              = $mining_amount + $swap_type_2_to - $swap_type_1_frm + $adj_type_sum - $adj_type_minus + $allbonusesAmount;
 
         $uicAmountBalance       = $swaptype2to - $swaptype1frm;
 
-        $circulatingSupply      = User::where('status', 1)->sum('mining_amount');
+        $circulatingSupply      = User::where('status', 1)->where('id', '!=', 1)->sum('mining_amount');
         $beganing_price         = $setting->beganing_price;
         $marketCap              = $setting->liquidity_total_supply * $beganing_price;
 

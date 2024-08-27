@@ -49,8 +49,6 @@ Route::get('/long-poll/{communitySlug}', [ChatController::class, 'longPoll']);
 Route::get('settingrowClient', [UnauthenticatedController::class, 'settingrowClient']);
 Route::get('allholders', [UnauthenticatedController::class, 'allholders']);
 
-
-
 Route::group([
    'middleware' => 'api',
    'prefix'     => 'auth'
@@ -107,6 +105,7 @@ Route::group([
     Route::get('allleadList', [CustomerController::class, 'allleadList']);
     Route::get('getCustomerRow/{id}', [CustomerController::class, 'checkCustomer']);
     Route::get('getLeadRow/{id}', [CustomerController::class, 'checkLead']);
+    
 });
 Route::group([
     'middleware' => 'api',
@@ -475,8 +474,6 @@ Route::group([
     Route::get('autocomplete', [UnauthenticatedController::class, 'autocomplete']);
     Route::get('sliders', [UnauthenticatedController::class, 'slidersImages']);
     Route::post('getCategoryViewStore', [UnauthenticatedController::class, 'getCategoryViewStore']);
-   
-  
    
 });
 
