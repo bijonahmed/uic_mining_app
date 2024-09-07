@@ -80,6 +80,7 @@
         </center>
 
         <div class="row">
+
           <div class="col text-center">
             <span class="text-center">
               <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3">
@@ -87,7 +88,7 @@
               </nuxt-link>
               <!-- <p class="text" style="margin-top: 20px;" v-if="isLoggedIn && !isMiningDisabled"> -->
               <p class="text" style="margin-top: 20px;" v-if="isLoggedIn">
-                <Start /> Mining
+                <Start />
               </p>
               <p v-if="!isLoggedIn">Mining</p>
             </span>
@@ -106,7 +107,6 @@
           <div class="col" v-if="category_3 === 3">
             <Super />
           </div>
-
           <div v-else class="text-center col serv-item">
             <nuxt-link to="/taptap" v-if="isLoggedIn" class="m_icon serv-icon mt-3">
               <img src="/assets/img/taptap.png" style="width: 40px" alt="" />
@@ -116,7 +116,6 @@
             </nuxt-link>
             <p class="text mt-2">TapTap</p>
           </div>
-
           <div class="col" v-if="category_4 === 4">
             <Platinum />
           </div>
@@ -131,6 +130,11 @@
               </nuxt-link>
               <p class="text mt-2">Special</p>
             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <CountdownTimerStart class="timerCountdown" />
           </div>
         </div>
       </div>
@@ -184,7 +188,7 @@ const fetchData = async () => {
     marketCap.value = response.data.marketCap;
     currentPrice.value = response.data.currentPrice;
     availablebalance.value = response.data.currentPrice_top;
-   
+
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -203,12 +207,12 @@ const checkMiningMatching = async () => {
 };
 
 const circulatingSupplyAmt = async () => {
-    const response = await axios.get("/allholders");
-    const total = response.data.users
-  .map(user => parseFloat(user.mining_amount))
-  .reduce((acc, curr) => acc + curr, 0);
-miningAmountSum.value = parseFloat(total.toFixed(2));
- 
+  const response = await axios.get("/allholders");
+  const total = response.data.users
+    .map(user => parseFloat(user.mining_amount))
+    .reduce((acc, curr) => acc + curr, 0);
+  miningAmountSum.value = parseFloat(total.toFixed(2));
+
 };
 
 fetchData();
@@ -253,6 +257,9 @@ watchEffect(async () => {
 .countdown {
   font-size: 24px;
   margin-top: 20px;
+}
+.timerCountdown p{
+
 }
 
 button {

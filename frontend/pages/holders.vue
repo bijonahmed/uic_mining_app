@@ -58,22 +58,24 @@
 
                     <section class="container">
                         <h4 class="title-main mt-5">Top Members</h4>
-                        <ul class="transaction-list list-unstyled">
-
-                            <li v-for="(v, index) in data" :key="v.id">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="ml-10">
-                                        <small class="text-muted">
-                                            <span style="padding-right: 0px;border: none;margin-right: 5px;">{{ index +
-                                                1 }}.
-                                            </span>{{ v.uic_address }}</small>
-                                    </div>
-                                    <div>
-                                        <small class="d-block mb-0 txt-green">{{ v.mining_amount }} <span
-                                                class="text-muted">UIC</span></small>
+                        <ul class="transaction-list list-unstyled pb-4">
+                            <li v-for="(v, index) in data" :key="v.id" class="rm_bg">
+                                <div class="item_bg">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="ml-10">
+                                            <small class="text-muted">
+                                                <span style="padding-right: 0px;border: none;margin-right: 5px;">{{
+                                                    index +
+                                                    1 }}.
+                                                </span>{{ v.uic_address }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="d-block mb-0 txt-green">{{ v.mining_amount }} <span
+                                                    class="text-muted">UIC</span></small>
+                                        </div>
                                     </div>
                                 </div>
-                                <BannerAds v-if="(index + 1) % 5 === 0" />
+                                <BannerAds style="width: 100%;text-align: center;"  v-if="(index + 1) % 5 === 0" />
                             </li>
 
                         </ul>
@@ -111,9 +113,9 @@ const fetchData = async () => {
         // .map(user => parseFloat(user.mining_amount))
         // .reduce((acc, curr) => acc + curr, 0);
         const total = response.data.users
-  .map(user => parseFloat(user.mining_amount))
-  .reduce((acc, curr) => acc + curr, 0);
-miningAmountSum.value = parseFloat(total.toFixed(2)); 
+            .map(user => parseFloat(user.mining_amount))
+            .reduce((acc, curr) => acc + curr, 0);
+        miningAmountSum.value = parseFloat(total.toFixed(2));
 
 
     } catch (error) {
@@ -139,3 +141,4 @@ onMounted(async () => {
 });
 
 </script>
+

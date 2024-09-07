@@ -49,4 +49,7 @@
     display: inline-block;
     text-align: center;
 }
+.loader-container img{
+    max-width: 80px;
+}
 </style>

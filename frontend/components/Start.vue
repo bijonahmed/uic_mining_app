@@ -3,21 +3,21 @@
       <div class="serv-item">
         <center>
           <div class="loading-indicator" v-if="loading" style="text-align: center">
-            <BulkLoader />
+            <Loader />
           </div>
-        </center>
-  
-        <!-- Countdown Timer Component -->
-        <center>
-          <CountdownTimerStart/>
-        </center>
+        </center>  
   
         <!-- Submit Button -->
         <button type="submit" class="serv-icon btnsize" :disabled="isCountdownActive">
           <img src="/assets/img/mining.png" style="width: 40px" alt="Mining Icon" />
         </button>
   
-        <span class="text d-none">Start</span>
+        <span class="text ">Minning</span>
+        
+        <!-- Countdown Timer Component -->
+        <!-- <center>
+          <CountdownTimerStart/>
+        </center> -->
       </div>
     </form>
   </template>

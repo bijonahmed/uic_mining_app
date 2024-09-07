@@ -66,7 +66,9 @@
                     </section>
                     <section class="bal-section supply_container container my-2">
                         <div class="resources-card-wrapper mb-5">
-                            <NativeAds />
+
+
+                            <div ref="adContainer" class="ad-container"></div>
 
                         </div>
 
@@ -86,11 +88,13 @@ import { ref, onMounted } from 'vue';
 import Sidebar from '~/layouts/Sidebar.vue';
 import HeaderSecond from '~/layouts/HeaderSecond.vue';
 import SocialFooter from '~/components/SocialFooter.vue';
-import NativeAds from '~/components/NativeAds.vue'; // Adjust import path as needed
+//import NativeAds from '~/components/NativeAds.vue'; // Adjust import path as needed
+const NativeAds = defineAsyncComponent(() => import('~/components/NativeAds.vue'));
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import Swal from "sweetalert2";
 const router = useRouter();
+const adContainer = ref(null);
 const loading = ref(false);
 definePageMeta({
     middleware: 'is-logged-out',
@@ -105,8 +109,27 @@ const prizes = ref([]);
 const activeBtn = ref(false);
 const deg = ref(0);
 const prize = ref(null);
+
+
+
+const ads = () => {
+  console.log("Loading ads.....");
+// setTimeout(() => {
+     // Create the container div element
+     const containerDiv = document.createElement('div');
+     containerDiv.id = 'container-53518525b4cb5cce3c056d5c4815aa16';
+
+     // Append the container div to the adContainer ref
+     if (adContainer.value) {
+         adContainer.value.appendChild(containerDiv);
+     }
+ //}, 3000);
+}
+
+
 // Fetch data and populate spinlist and prizes when the component is mounted
 onMounted(async () => {
+    ads();
     try {
         const response = await axios.get('/mining/getSpinList');
         spinlist.value = response.data.responseData;
@@ -374,4 +397,12 @@ button {
 button:active {
     transform: scale(0.9);
 }
+
+.ad-container {
+    width: 468px;
+    /* Set the width based on your ad's requirements */
+    height: 60px;
+    /* Set the height based on your ad's requirements */
+}
 </style>
+ 

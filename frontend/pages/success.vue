@@ -16,7 +16,7 @@
                 <!-- Footer menu -->
                 <Footer />
                 <!-- Page content start -->
-                <main >
+                <main>
                     <div class="dash-balance mb-3">
                         <div class="dash-content relative">
                             <h3 class="w-text">Success</h3>
@@ -29,12 +29,17 @@
                     <div class="container">
 
                         <div class="loading-indicator" v-if="loading" style="text-align: center">
-                    <BulkLoader />
-                </div>
-                                <center><h3 class="text-center">Your request has been successfull.</h3></center>
+                            <Loader />
+                        </div>
+                        <center>
+                            <h3 class="text-center ">Your request has been successfull.</h3>
+                        </center>
+                        <div class="text-center">
+                            <nuxtLink to="/" class="text-primary">Back to home</nuxtLink>
+                        </div>
 
                     </div>
-                   
+
                 </main>
                 <!-- Page content end -->
             </div>

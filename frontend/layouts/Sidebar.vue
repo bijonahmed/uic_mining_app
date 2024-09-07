@@ -33,8 +33,8 @@
 
 				
 				<li v-if="isLoggedIn">
-					<nuxt-link to='/send-received'><img src="/assets/img/content/icons/6.png" alt=""><strong
-							class="special">Send/Receive</strong> </nuxt-link>
+					<nuxt-link to='/p2p'><img src="/assets/img/content/icons/6.png" alt=""><strong
+							class="special">P2P</strong> </nuxt-link>
 				</li>
 
 				<li v-else>

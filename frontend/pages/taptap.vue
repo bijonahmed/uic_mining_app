@@ -48,7 +48,7 @@
                                 <li v-for="coin in plusCoins" :key="coin.id" class="plus_coin">+{{ levelCoin }}
                                 </li>
                             </transition-group>
-                            <img src="/assets/img/goldCoin.png" alt="" class="img-fluid btn_tap_coin_img">
+                            <img src="/assets/img/uic.png" alt="" class="img-fluid btn_tap_coin_img">
                         </button>
                         <h2 class="text-center fw-bold">Tap to Earn</h2>
                     </section>
