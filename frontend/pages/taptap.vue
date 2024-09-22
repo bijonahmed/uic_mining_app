@@ -84,7 +84,7 @@ import SocialFooter from "~/components/SocialFooter.vue";
 import NativeAds from "~/components/NativeAds.vue";
 
 
-const levelCoin = ref(10);  // Example: level of coins per click
+const levelCoin = ref(5);  // Example: level of coins per click
 const userCoin = ref(0);    // Initial user coins
 const plusCoins = ref([]);  // To handle the animation effect
 
@@ -149,7 +149,7 @@ const miningCoin = async () => {
 <style>
 .coin_pagebg {
     background-image: linear-gradient(140deg, #c6a8ff8f 18%, #f5d36da1 60%, #ceb4ff6e 82%);
-    min-height: 90vh;
+    min-height: 80vh;
 
 }
 
@@ -163,7 +163,7 @@ const miningCoin = async () => {
 }
 
 .btn_tap_coin img {
-    height: 100%;
+    height: 90%;
     /* filter: drop-shadow(2px 4px 6px #adadad); */
 }
 
@@ -181,9 +181,9 @@ const miningCoin = async () => {
     position: absolute;
     left: 50%;
     top: 50%;
-    font-size: 20px;
+    font-size: 30px;
     transform: translate(-50%, 50%);
-    color: #1e4c9b;
+    color: #f2f3f5;
     animation: floatUp .8s ease-out forwards;
 }
 

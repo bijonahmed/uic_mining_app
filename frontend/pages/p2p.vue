@@ -47,7 +47,7 @@
                               errors.receiver_uic_address[0] }}</span>
                             <span class="text-danger" v-if="errors.invlaid_uic_address">{{
                               errors.invlaid_uic_address[0]
-                            }}</span>
+                              }}</span>
                           </div>
                         </div>
                       </div>
@@ -62,7 +62,7 @@
                             <input type="text" class="form-element" v-model="insertdata.receiver_name" readonly />
                             <span class="text-danger" v-if="errors.receiver_name">{{
                               errors.receiver_name[0]
-                            }}</span>
+                              }}</span>
                           </div>
                         </div>
                       </div>
@@ -77,10 +77,10 @@
                             <input type="password" class="form-element" v-model="insertdata.password" />
                             <span class="text-danger" v-if="errors.password">{{
                               errors.password[0]
-                            }}</span>
+                              }}</span>
                             <span class="text-danger" v-if="errors.password_wrong">{{
                               errors.password_wrong[0]
-                            }}</span>
+                              }}</span>
                           </div>
                         </div>
                       </div>
@@ -102,7 +102,7 @@
                             </select>
                             <span class="text-danger" v-if="errors.wallet_type">{{
                               errors.wallet_type[0]
-                            }}</span>
+                              }}</span>
                           </div>
                         </div>
                       </div>
@@ -115,13 +115,12 @@
                           <div class="form-row no-padding">
                             <!-- <img src="/assets/img/content/2.png" class="icon" alt="" /> -->
                             <input type="text" class="form-element" placeholder="0.0001" v-model="insertdata.amount"
-                              @keypress="isNumber($event)" />
+                              @keypress="isNumber($event)" @keyup="getWalletValue($event.target.value)" />
                             <span class="text-danger" v-if="errors.amount">{{
                               errors.amount[0]
-                            }}</span>
-                            <span class="text-danger" v-if="errors.error_amount">{{
-                              errors.error_amount[0]
-                            }}</span>
+                              }}</span>
+                            <span class="text-danger" v-if="errors.error_amount">{{ errors.error_amount[0] }}</span>
+                            <span class="text-danger" v-if="errMsg">{{ errMsg }}</span>
                           </div>
                         </div>
                         <p class="text-white">Available balance: {{ avlbAmt }}
@@ -135,8 +134,8 @@
                       <div class="form-mini-divider"></div>
 
                       <div>
-                        <button type="submit" class="btn button w-100 yellow" style="cursor: pointer; font-weight: 600"
-                          :disabled="buttonClicked">
+                        <button type="submit" class="btn button w-100 yellow"
+                        id="submitbtn" style="font-weight: 600">
                           Send
                         </button>
                       </div>
@@ -290,6 +289,9 @@ const listRecivers = ref([]);
 const listSenders = ref([]);
 const avlbAmt = ref('00.00');
 const errors = ref({});
+const errMsg = ref('');
+const isButtonDisabled = ref(true); 
+
 
 definePageMeta({
   middleware: 'is-logged-out',
@@ -311,6 +313,20 @@ const checkWallet = async (wallet_type) => {
     },
   });
   avlbAmt.value = response.data.amount;
+};
+
+const getWalletValue = (inputAmount) => {
+  const availableAmount = Number(avlbAmt.value);  // Ensure it's a number
+  const enteredAmount = Number(inputAmount);      // Convert inputAmount to a number
+
+  if (enteredAmount >= availableAmount) {
+    console.log("Input amount is greater than or equal to available amount: " + availableAmount);
+    errMsg.value = 'Input amount is greater than available amount.';
+    $('#submitbtn').prop('disabled', true);  // Disable the button using jQuery
+  } else {
+    errMsg.value = '';  // Clear the error message
+    $('#submitbtn').prop('disabled', false); // Enable the button using jQuery
+  }
 };
 
 const isNumber = (evt) => {
@@ -462,7 +478,9 @@ const error_noti = () => {
 onMounted(async () => {
   fetchDataSenders();
   fetchDataReceives();
+  $('#submitbtn').prop('disabled', true); // Disable the button initially
 });
+ 
 </script>
 <style>
 @media (max-width: 768px) {

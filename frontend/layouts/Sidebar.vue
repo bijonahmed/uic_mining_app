@@ -21,10 +21,10 @@
 							Wallet</strong> </nuxt-link>
 				</li>
 
-				<li v-if="isLoggedIn">
+				<!-- <li v-if="isLoggedIn">
 					<nuxt-link to='/kyc'><img src="/assets/img/16.png" alt=""><strong class="special">KYC</strong>
 					</nuxt-link>
-				</li>
+				</li> -->
 
 				<li v-else>
 					<nuxt-link to='/login'><img src="/assets/img/16.png" alt=""><strong class="special">KYC</strong>

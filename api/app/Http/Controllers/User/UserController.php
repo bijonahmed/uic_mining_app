@@ -602,7 +602,7 @@ class UserController extends Controller
     {
 
         $wallet_type         =  $request->wallet_type;
-        $response       = app('App\Http\Controllers\User\UserController')->getBalance();
+        $response            = app('App\Http\Controllers\User\UserController')->getBalance();
         if ($wallet_type == 1) {
             $uic_amount        = $response instanceof JsonResponse ? $response->getData(true)['uic_amount'] : 0;
             $data['amount']    = $uic_amount;
