@@ -30,7 +30,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="/dist/img/avatar5.png"
+                                    <img class="profile-user-img img-fluid img-circle" src="#"
                                         alt="User profile picture">
                                 </div>
                                 <h3 class="profile-username text-center">{{ insertdata.name }}</h3>

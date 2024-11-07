@@ -55,8 +55,9 @@
 										style="text-align: justify">
 										{{ vinfo.description_full }}
 									</div>
-									<div v-if="vinfo.thumnail_img">
-										<img :src="vinfo.thumnail_img" alt="Post Image" class="img-fluid" />
+
+									<div v-if="vinfo.thumbnail_img !== ''">
+										<img :src="vinfo.thumnail_img" alt="" class="img-fluid" />
 									</div>
 									<div class="d-flex align-items-end pt-2 justify-content-between lComment"
 										@click="insertLike(vinfo)">

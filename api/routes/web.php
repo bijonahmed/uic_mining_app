@@ -21,7 +21,7 @@ Route::get('/clear-cache', function () {
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('activate-account', [PublicController::class, 'activationAccount']);
 Route::get('/chart-data', [ChartController::class, 'getData']);
  
 Route::get('/chart', function () {

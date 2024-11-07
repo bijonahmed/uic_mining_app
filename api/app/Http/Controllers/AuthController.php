@@ -137,13 +137,21 @@ class AuthController extends Controller
         //dd($request->all());
         $this->validate($request, [
             // 'otp'        => 'required',
-            'inviteCode' => 'required',
+           // 'inviteCode' => 'required',
             'email'      => 'required|unique:users,email',
             'password'   => 'required|min:6'
         ]);
         $email            = $request->email;
         $trimmedEmail     = substr($email, 0, strpos($email, '@'));
-        $inviteCode       = $request->input('inviteCode');
+        $invCode       = $request->input('inviteCode');
+
+        if(empty($invCode)){
+            $inviteCode = '0000123';
+        }else{
+            $inviteCode = $invCode;
+        }
+
+
         $user             = User::where('inviteCode', $inviteCode)->first();
         if (!$user) {
             return response()->json(['errors' => ['inviteCode' => ['Invalid invite code.']]], 422);

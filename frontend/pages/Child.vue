@@ -6,10 +6,6 @@
       </div>
     </center>
 
-
-
-
-
     <main class="margin mt-0">
       <div class="dash-balance">
         <div class="d-flex align-items-center mt-30">
@@ -242,10 +238,11 @@ onMounted(() => {
 watchEffect(async () => {
   const delay = new Promise(resolve => setTimeout(resolve, 3000));
   try {
-    await delay;
-    await userStore.getUser();
+    loading.value = true;
+    //await delay;
+    //await userStore.getUser();
   } catch (error) {
-    console.error(error);
+    //console.error(error);
   } finally {
     loading.value = false;
   }

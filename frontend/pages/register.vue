@@ -59,7 +59,7 @@
                     <i class="fa fa-link"></i>
                     <input type="text" name="Invite-Code" class="form-element" placeholder="Invitation Code"
                       v-model="inviteCode">
-                    <span class="text-danger" v-if="errors.inviteCode">{{ errors.inviteCode[0] }}</span>
+                    <!-- <span class="text-danger" v-if="errors.inviteCode">{{ errors.inviteCode[0] }}</span> -->
                   </div>
                 </div>
 

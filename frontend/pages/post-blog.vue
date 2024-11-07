@@ -39,8 +39,8 @@
                                        <label for="file" class="file-label">
                                             <!-- <i class="fa-thin fa-upload"></i> -->
                                             <small>&nbsp;Please Upload Image/Video or Any Docs.</small>
-                                        </label>
-                                        <input type="file" id="fileInput" class="form-control" ref="files" @change="onFileSelected" />
+                                        </label><br/>
+                                        <input type="file" id="fileInput"  ref="files" @change="onFileSelected" />
                                         <span class="text-danger" v-if="errors.files">{{errors.files[0]}}</span>
                                     </div>
                                     <br/>

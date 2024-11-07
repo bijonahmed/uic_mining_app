@@ -31,7 +31,7 @@
                         <div class="loading-indicator" v-if="loading" style="text-align: center">
                     <BulkLoader />
                 </div>
-                                <center><h3 class="text-center">Your post is pending. Your post will be published if the admin approves it</h3></center>
+                                <center><h3 class="text-center">Submitted</h3></center>
 
                     </div>
                    
