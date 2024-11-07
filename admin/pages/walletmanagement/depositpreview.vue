@@ -72,6 +72,11 @@
                                                         <td><strong>:</strong></td>
                                                         <td>{{ getStatus(request.status) }}</td>
                                                     </tr>
+                                                    <tr>
+                                                        <td>transaction ID</td>
+                                                        <td><strong>:</strong></td>
+                                                        <td>{{ request.trxId }}</td>
+                                                    </tr>
 
                                                 </table>
                                             </div>
@@ -188,6 +193,7 @@ const request = ref({
     approved_by: '',
     created_at: '',
     status: '',
+    trxId: '',
 
 });
 
@@ -260,6 +266,7 @@ const productDetails = () => {
         request.value.approved_by = data.approved_by;
         request.value.created_at = data.created_at;
         request.value.status = data.status;
+        request.value.trxId = data.trxId;
 
     });
 };

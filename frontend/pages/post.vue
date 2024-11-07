@@ -21,7 +21,8 @@
 						<div class="dash-content relative">
 							<h3 class="w-text">Post</h3>
 							<div class="notification">
-								<i class="fa fa-plus" @click="postPopup()"></i>
+								 
+								<a href="/post-blog"><i class="fa fa-plus" @click="postPopup()"></i></a>
 							</div>
 						</div>
 					</div>
@@ -110,6 +111,8 @@ const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
 const data = ref([]);
+
+
 
 const shareModal = (id) => {
 

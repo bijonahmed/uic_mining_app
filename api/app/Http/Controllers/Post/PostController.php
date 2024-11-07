@@ -117,7 +117,7 @@ class PostController extends Controller
 
     public function userRequestPost(Request $request)
     {
-        //dd($request->all());
+        
         $validator = Validator::make($request->all(), [
             'description_full'     => 'required',
          //  'files.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Example mime types and max size
@@ -134,8 +134,8 @@ class PostController extends Controller
             'entry_by'                   => $this->userid
         );
         // dd($data);
-        if (!empty($request->file('file'))) {
-            $files = $request->file('file');
+        if (!empty($request->file('files'))) {
+            $files = $request->file('files');
             $fileName = Str::random(20);
             $ext = strtolower($files->getClientOriginalExtension());
             $path = $fileName . '.' . $ext;
