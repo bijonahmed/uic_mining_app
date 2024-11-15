@@ -230,7 +230,7 @@ class UserController extends Controller
     {
 
         try {
-            $notification = Notification::get();
+            $notification = Notification::orderBy('id', 'desc')->get();
             $msg = [];
             foreach ($notification as $v) {
                 $msg[] = [
@@ -383,7 +383,7 @@ class UserController extends Controller
         $swaptype1frm           = SwapHistory::where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
 
         //$row                    = User::find($this->userid);
-        $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('deposit_amount');
+        $deposit                = Deposit::where('user_id', $this->userid)->where('status', 1)->sum('receivable_amount');
 
         $reciv_usdt_amount      = SendReceived::where('receiver_user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
         $usdtAmount             = SendReceived::where('user_id', $this->userid)->where('wallet_type', 2)->sum('amount');
@@ -467,7 +467,7 @@ class UserController extends Controller
         $swaptype1frm           = SwapHistory::where('type', 1)->sum(\DB::raw("REPLACE(frm_amount, ',', '')")); //UIC 
 
         //$row                    = User::find($this->userid);
-        $deposit                = Deposit::where('user_id', $userId)->where('status', 1)->sum('deposit_amount');
+        $deposit                = Deposit::where('user_id', $userId)->where('status', 1)->sum('receivable_amount');
         $withdraw_usdt          = Withdraw::where('user_id', $userId)->where('status', 1)->sum('usd_amount');
         $withdraw_uic           = Withdraw::where('user_id', $userId)->where('status', 1)->sum('uic_amount');
 
