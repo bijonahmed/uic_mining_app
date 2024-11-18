@@ -190,7 +190,7 @@ class AuthController extends Controller
     public function sendMail($email)
     {
 
-        $uniqueNumber = $email;//rand(100000, 999999); // Or any other unique identifier
+        $uniqueNumber   = $email;//rand(100000, 999999); // Or any other unique identifier
         $encryptedToken = Crypt::encryptString($uniqueNumber);
         $activationLink = url('/activate-account?token=' . urlencode($encryptedToken));
 
@@ -198,19 +198,17 @@ class AuthController extends Controller
         // Email content
         $subject = 'Activate Your UIC Account';
         $htmlMessage = "Please click the link below to activate your UIC account: <a href=\"$activationLink\">$activationLink</a>";
-
         // Remove HTML tags
         $message = trim(strip_tags($htmlMessage));
         //echo $message;exit; 
-        
         // Set content-type header for HTML email
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From: uic@gmail.com' . "\r\n" .
-            'Reply-To: uic@gmail.com' . "\r\n";
+        $headers .= 'From: uicmax@uicmax.com' . "\r\n" .
+            'Reply-To: uicmax@uicmax.com' . "\r\n";
         //dd($request->all());
-        $headers = 'From: uic@gmail.com'       . "\r\n" .
-            'Reply-To: uic@gmail.com' . "\r\n";
+        $headers = 'From: uicmax@uicmax.com'       . "\r\n" .
+            'Reply-To: uicmax@uicmax.com' . "\r\n";
         mail($to, $subject, $message, $headers);
 
         $response = [
