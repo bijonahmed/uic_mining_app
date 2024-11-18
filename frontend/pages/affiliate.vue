@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
                                 <div class="ref-content">
-                                    <h4 class="mt-0">Your Referal Link</h4>
+                                    <h4 class="mt-0">Your Referal Code</h4>
                                     <div class="form-row-group relative">
                                         <div class="form-row no-padding">
                                             <!-- <input type="text" readonly class="form-element" id="invite_link" v-model="intielink"> -->
@@ -214,7 +214,8 @@ const formatDate = (dateString) => {
 const getInviteCode = async () => {
     try {
         const response = await axios.get(`/user/getInviteCode`);
-        const setIntielink = window.location.origin + '/invite-code/?code=' + response.data.inviteCode;
+       // const setIntielink = window.location.origin + '/invite-code/?code=' + response.data.inviteCode;
+       const setIntielink = response.data.inviteCode;
         console.log("link : " + setIntielink);
         console.log("code : " + response.data.inviteCode);
         inviteCode.value = response.data.inviteCode;

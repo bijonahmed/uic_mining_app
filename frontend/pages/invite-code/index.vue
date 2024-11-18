@@ -35,7 +35,27 @@
 
                 <div class="alert alert-success" v-if="showmessages" style="text-align: center; font-size: 12px;">{{ showmessages }}</div>
 
+
+
                 <div class="form-row-group with-icons">
+
+                  
+
+                <div class="form-row no-padding">
+                    <i class="fa fa-user"></i>
+                    <input type="text" name="name" class="form-element" placeholder="User name" v-model="name">
+                    <span class="text-danger" v-if="errors.name">{{ errors.name[0] }}</span>
+                  </div>
+
+
+                  <div class="form-row no-padding">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <input type="text" name="phone" class="form-element" placeholder="Whatsapp" v-model="phone_number" @input="filterNumericInput">
+                    <span class="text-danger" v-if="errors.phone_number">{{ errors.phone_number[0] }}</span>
+                  </div>
+
+
+
                   <div class="form-row no-padding">
                     <i class="fa fa-envelope"></i>
                     <input type="email" name="Email" class="form-element" placeholder="Email" v-model="email">
@@ -100,6 +120,7 @@ const errors = ref({});
 
 let email = ref('');
 let name = ref('');
+let phone_number = ref('');
 let password = ref(null);
 let inviteCode = ref(null);
 let confirmPassword = ref(null);
@@ -136,6 +157,11 @@ const checkEmail = async () => {
   }
 };
 
+const filterNumericInput = (event) => {
+  const value = event.target.value;
+  // Keep only numeric characters
+  phone_number.value = value.replace(/\D/g, '');
+}
 const buttonDisabled = ref(false); // Initially, button is enabled
 async function sendCode() {
   if (!buttonDisabled.value) { // Check if button is not disabled
@@ -156,6 +182,7 @@ const register = async () => {
   try {
     await userStore.register(
       name.value,
+      phone_number.value,
       email.value,
       otp.value,
       inviteCode.value,
@@ -163,12 +190,10 @@ const register = async () => {
       confirmPassword.value
     )
 
-    const messages = "Registration successful! A confirmation email has been sent to your email address. Please check your inbox or spam folder.";
+    const messages = "Registration successful";
         console.log("messages:" + messages); // You can handle the messages here
         showmessages.value = messages;
-
-
-    //router.push('/signin/email-login')
+    router.push('/login')
   } catch (error) {
     //console.log(error)
     errors.value = error.response.data.errors

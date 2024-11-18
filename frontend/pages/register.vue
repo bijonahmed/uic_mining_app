@@ -33,9 +33,25 @@
 
               <form class="mt-12" @submit.prevent="register()">
 
-                <div class="alert alert-success" v-if="showmessages" style="text-align: center; font-size: 12px;">{{ showmessages }}</div>
+                <div class="alert alert-success" v-if="showmessages" style="text-align: center; font-size: 12px;">{{
+                  showmessages }}</div>
 
                 <div class="form-row-group with-icons">
+
+                  <div class="form-row no-padding">
+                    <i class="fa fa-user"></i>
+                    <input type="text" name="name" class="form-element" placeholder="User name" v-model="name">
+                    <span class="text-danger" v-if="errors.name">{{ errors.name[0] }}</span>
+                  </div>
+
+
+                  <div class="form-row no-padding">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <input type="text" name="phone" class="form-element" placeholder="Whatsapp" v-model="phone_number"
+                      @input="filterNumericInput">
+                    <span class="text-danger" v-if="errors.phone_number">{{ errors.phone_number[0] }}</span>
+                  </div>
+
                   <div class="form-row no-padding">
                     <i class="fa fa-envelope"></i>
                     <input type="email" name="Email" class="form-element" placeholder="Email" v-model="email">
@@ -50,7 +66,7 @@
                   <div class="form-row no-padding">
                     <i class="fa fa-lock"></i>
                     <input type="password" name="rePassword" class="form-element" placeholder="Confirm Password"
-                       v-model="confirmPassword">
+                      v-model="confirmPassword">
 
                     <span class="text-danger" v-if="errors.confirmPassword">{{ errors.confirmPassword[0]
                       }}</span>
@@ -68,8 +84,8 @@
                 <div class="form-row">
                   <!-- <a href="#" class="button circle block orange">Sign Up</a> :disabled="loading"-->
                   <button class="button circle block orange" type="submit">Sign up
-                                <span v-if="loading">Loading...</span>
-                            </button>
+                    <span v-if="loading">Loading...</span>
+                  </button>
                 </div>
 
                 <div class="form-row txt-center mt-15">
@@ -95,98 +111,105 @@ import Sidebar from "~/layouts/Sidebar.vue";
 import Header from "~/layouts/Header.vue";
 
 import { ref, watch, onMounted } from "vue";
-    import { useUserStore } from '~~/stores/user';
-    import axios from "axios";
-    
-    const router = useRouter();
-    const userStore = useUserStore()
-    const errors = ref({});
-    
-    const loading = ref(false)
-    let email = ref('');
-    let name = ref('');
-    let password = ref(null);
-    let inviteCode = ref(null);
-    let confirmPassword = ref(null);
-    let otp = ref(null)
-    let messages = ref('');
-    
+import { useUserStore } from '~~/stores/user';
+import axios from "axios";
 
-    const passwordFieldType = ref('password');
-    const confirmPasswordFieldType = ref('password');
-  
-    
-    const togglePassword = (id) => {
-      const inputField = document.querySelector(id);
-      if (inputField.type === 'password') {
-        inputField.type = 'text';
-      } else {
-        inputField.type = 'password';
-      }
-    };
-    
-    const checkEmail = async () => {
-      try {
-        loading.value = true;
-        const response = await axios.post('/unauthenticate/checkEmail', {
-          email: email.value // Send the email value in the request body
-        });
-        console.log("Send Code: " + response.data);
-        //productdata.value = response.data.data;
-    
-      } catch (error) {
-        if (error.response && error.response.status === 422) {
-          errors.value = error.response.data.errors;
-        } else {
-          // Handle other types of errors here
-          console.error('An error occurred:', error);
-        }
-      }
-    };
-    
-    const buttonDisabled = ref(false); // Initially, button is enabled
-    
-    async function sendCode() {
-      if (!buttonDisabled.value) { // Check if button is not disabled
-        try {
-          loading.value = true; // Show loader
-          buttonDisabled.value = true; // Disable the button to prevent double-clicking
-          // Your asynchronous operation (e.g., axios request)
-          await checkEmail(); // Assuming checkEmail is an asynchronous function
-        } finally {
-          loading.value = false; // Hide loader
-          buttonDisabled.value = false; // Re-enable the button after operation completes or fails
-        }
-      }
+const router = useRouter();
+const userStore = useUserStore()
+const errors = ref({});
+
+const loading = ref(false)
+let email = ref('');
+let name = ref('');
+let phone_number = ref('');
+let password = ref(null);
+let inviteCode = ref(null);
+let confirmPassword = ref(null);
+let otp = ref(null)
+let messages = ref('');
+
+
+const passwordFieldType = ref('password');
+const confirmPasswordFieldType = ref('password');
+
+const filterNumericInput = (event) => {
+  const value = event.target.value;
+  // Keep only numeric characters
+  phone_number.value = value.replace(/\D/g, '');
+}
+
+const togglePassword = (id) => {
+  const inputField = document.querySelector(id);
+  if (inputField.type === 'password') {
+    inputField.type = 'text';
+  } else {
+    inputField.type = 'password';
+  }
+};
+
+const checkEmail = async () => {
+  try {
+    loading.value = true;
+    const response = await axios.post('/unauthenticate/checkEmail', {
+      email: email.value // Send the email value in the request body
+    });
+    console.log("Send Code: " + response.data);
+    //productdata.value = response.data.data;
+
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      errors.value = error.response.data.errors;
+    } else {
+      // Handle other types of errors here
+      console.error('An error occurred:', error);
     }
-      let showmessages = ref('');
-    const register = async () => {
-      loading.value = true; 
-      try {
-        await userStore.register(
-          name.value,
-          email.value,
-          otp.value,
-          inviteCode.value,
-          password.value,
-          confirmPassword.value
-        )
-              // Access the response data
-        const messages = "Registration successful! A confirmation email has been sent to your email address. Please check your inbox or spam folder.";
-        console.log("messages:" + messages); // You can handle the messages here
-        showmessages.value = messages;
+  }
+};
 
-       // router.push('/register')
+const buttonDisabled = ref(false); // Initially, button is enabled
+
+async function sendCode() {
+  if (!buttonDisabled.value) { // Check if button is not disabled
+    try {
+      loading.value = true; // Show loader
+      buttonDisabled.value = true; // Disable the button to prevent double-clicking
+      // Your asynchronous operation (e.g., axios request)
+      await checkEmail(); // Assuming checkEmail is an asynchronous function
+    } finally {
+      loading.value = false; // Hide loader
+      buttonDisabled.value = false; // Re-enable the button after operation completes or fails
+    }
+  }
+}
+let showmessages = ref('');
+const register = async () => {
+  loading.value = true;
+  try {
+    await userStore.register(
+      name.value,
+      phone_number.value,
+      email.value,
+      otp.value,
+      inviteCode.value,
+      password.value,
+      confirmPassword.value
+    )
+    // Access the response data
+    const messages = "Registration successful!.";
+    console.log("messages:" + messages); // You can handle the messages here
+    showmessages.value = messages;
+
+    router.push('/login')
 
 
-      } catch (error) {
-        //console.log(error)
-        errors.value = error.response.data.errors
-      } finally {
-          loading.value = false; // Hide loader
-         
-        }
-      
-      }
+  } catch (error) {
+    //console.log(error)
+    errors.value = error.response.data.errors
+  } finally {
+    loading.value = false; // Hide loader
+
+  }
+
+}
 
 </script>

@@ -31,9 +31,10 @@ export const useUserStore = defineStore("user", {
         });
     },
 
-    async register(full_name,email,otp,inviteCode,password,confirmPassword) {
+    async register(name,phone_number,email,otp,inviteCode,password,confirmPassword) {
       await $axios.post("/auth/register", {
-        full_name: '',
+        name: name,
+        phone_number: phone_number,
         email: email,
         otp: otp,
         inviteCode: inviteCode,
@@ -45,7 +46,7 @@ export const useUserStore = defineStore("user", {
     async getUser() {
       let res = await $axios.post("/auth/me");
       this.$state.id = res.data.data.id;
-      this.$state.full_name = res.data.data.full_name;
+      this.$state.name = res.data.data.name;
       this.$state.email = res.data.data.email;
       this.$state.isLoggedIn = true;
     },
