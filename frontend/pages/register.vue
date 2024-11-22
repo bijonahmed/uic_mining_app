@@ -50,8 +50,12 @@
                       <div class="d-flex justify-content-center align-items-center w-100">
 
                         <select v-model="selectedCountryCode" @change="whatsAppCode()" class="country-code-dropdown">
-                          <option v-for="(country, index) in countryCodes" :key="index" :value="country.code"> {{ country.name }} ({{country.code }})</option>
+                          <option v-for="(country, index) in countryCodes" :key="index.code" :value="country.code"> {{ country.name }} ({{country.code }})</option>
                         </select>
+
+
+
+                        
                         <input type="text" name="phone" class="form-element" placeholder="Whatsapp Number"
                           v-model="phone_number" @input="filterNumericInput">
 
@@ -325,8 +329,12 @@ const countryCodes = ref([
 ]);
 
 const whatsAppCode = () => {
-  phone_number = selectedCountryCode;
-  console.log(phone_number);
+  if (!phone_number.value) {
+        phone_number.value = selectedCountryCode.value;
+      }else{
+        phone_number.value = selectedCountryCode.value;
+
+      }
 }
 
 const loading = ref(false)
@@ -345,7 +353,6 @@ const confirmPasswordFieldType = ref('password');
 
 const filterNumericInput = (event) => {
   const value = event.target.value;
-  // Keep only numeric characters
   phone_number.value = value.replace(/\D/g, '');
 }
 
