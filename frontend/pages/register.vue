@@ -43,19 +43,20 @@
                     <input type="text" name="name" class="form-element" placeholder="User name" v-model="name">
                     <span class="text-danger" v-if="errors.name">{{ errors.name[0] }}</span>
                   </div>
-                  
+
                   <div class="form-row no-padding">
                     <i class="fa-brands fa-whatsapp"></i>
                     <div class="whatsapp-input w-100">
                       <div class="d-flex justify-content-center align-items-center w-100">
 
                         <select v-model="selectedCountryCode" @change="whatsAppCode()" class="country-code-dropdown">
-                          <option v-for="(country, index) in countryCodes" :key="index.code" :value="country.code"> {{ country.name }} ({{country.code }})</option>
+                          <option v-for="(country, index) in countryCodes" :key="index.code" :value="country.code"> {{
+                            country.name }} ({{ country.code }})</option>
                         </select>
 
 
 
-                        
+
                         <input type="text" name="phone" class="form-element" placeholder="Whatsapp Number"
                           v-model="phone_number" @input="filterNumericInput">
 
@@ -130,7 +131,7 @@ const router = useRouter();
 const userStore = useUserStore()
 const errors = ref({});
 
-const selectedCountryCode = ref('+92'); 
+const selectedCountryCode = ref('+92');
 const countryCodes = ref([
   { name: 'Afghanistan', code: '+93', dialCode: '93' },
   { name: 'Albania', code: '+355', dialCode: '355' },
@@ -330,11 +331,11 @@ const countryCodes = ref([
 
 const whatsAppCode = () => {
   if (!phone_number.value) {
-        phone_number.value = selectedCountryCode.value;
-      }else{
-        phone_number.value = selectedCountryCode.value;
+    phone_number.value = selectedCountryCode.value;
+  } else {
+    phone_number.value = selectedCountryCode.value;
 
-      }
+  }
 }
 
 const loading = ref(false)
@@ -440,7 +441,7 @@ const register = async () => {
   border-bottom: solid 1px #EEE;
   height: 40px;
   outline: 0 !important;
-  max-width: 100px;  
+  max-width: 100px;
   background: #fff;
 }
 </style>
