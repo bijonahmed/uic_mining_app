@@ -2120,7 +2120,7 @@ class UserController extends Controller
         $checkL3          = User::whereIn('ref_id', $level2_ids)->select('id', 'name', 'email', 'created_at', 'ref_id')->get();
         $checkL3->transform(function ($item) {
             $gloabl_setting   = Setting::find(1);
-            $item['level_commision'] = $gloabl_setting->level_2_bonus; // Adding the extra key with value 6
+            $item['level_commision'] = $gloabl_setting->level_3_bonus; // Adding the extra key with value 6
             return $item;
         });
         $level3_ids = $checkL3->pluck('id')->toArray();

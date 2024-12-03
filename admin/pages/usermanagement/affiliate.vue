@@ -173,7 +173,7 @@ const filterData = async () => {
     });
         resonseDataOne.value = response.data.level_1;
         resonseDataTwo.value = response.data.level_2;
-        resonseDataThree.value = response.data.level_2;
+        resonseDataThree.value = response.data.level_3;
         level_1_count.value = response.data.level_1_count;
         level_2_count.value = response.data.level_2_count;
         level_3_count.value = response.data.level_3_count;

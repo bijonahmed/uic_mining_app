@@ -420,10 +420,16 @@ class DepositController extends Controller
             }
 
             $setting = Setting::find(1);
-            $checkSetting = $setting->minimum_deposit_amount;
+            $checkMinimumAmt = $setting->minimum_deposit_amount;
+            $checkMaximAmt   = $setting->maximum_deposit_amount;
 
-            if ($request->deposit_amount <= $checkSetting) {
+            if ($request->deposit_amount <= $checkMinimumAmt) {
                 return response()->json(['errors' => ['deposit_amount' => ['Your deposit amount is low']]], 422);
+            }
+
+
+            if ($request->deposit_amount >= $checkMaximAmt) {
+                return response()->json(['errors' => ['deposit_amount' => ['Your maximum deposit limit has been reached.']]], 422);
             }
 
             $uniqueID = 'D.' . $this->generateUnique4DigitNumber();

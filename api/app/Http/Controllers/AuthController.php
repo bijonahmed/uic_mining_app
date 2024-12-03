@@ -143,10 +143,10 @@ class AuthController extends Controller
         ]);
         $email            = $request->email;
         $trimmedEmail     = substr($email, 0, strpos($email, '@'));
-        $invCode       = $request->input('inviteCode');
+        $invCode          = $request->input('inviteCode');
 
         if(empty($invCode)){
-            $inviteCode = '0000123';
+            $inviteCode = '58527403';
         }else{
             $inviteCode = $invCode;
         }
