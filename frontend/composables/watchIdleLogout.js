@@ -3,7 +3,8 @@ import { onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '~/stores/user';
 
-export function useIdleLogout(idleTime = 120000) {
+//5 minite  =300000
+export function useIdleLogout(idleTime = 300000) {
   const router = useRouter();
   const userStore = useUserStore();
   let idleTimeout;

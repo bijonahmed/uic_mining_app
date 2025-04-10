@@ -103,14 +103,14 @@
           <div class="col" v-if="category_3 === 3">
             <Super />
           </div>
-          <div v-else class="text-center col serv-item">
-            <nuxt-link to="/taptap" v-if="isLoggedIn" class="m_icon serv-icon mt-3">
-              <img src="/assets/img/taptap.png" style="width: 40px" alt="" />
+          <div v-else class="text-center col serv-item ">
+            <nuxt-link to="/post-blog" v-if="isLoggedIn" class="m_icon serv-icon mt-3">
+              <img src="/assets/img/post.png" style="width: 40px" alt="" />
             </nuxt-link>
             <nuxt-link to="/login" v-if="!isLoggedIn" class="m_icon serv-icon mt-3">
-              <img src="/assets/img/taptap.png" style="width: 40px" alt="" />
+              <img src="/assets/img/post.png" style="width: 40px" alt="" />
             </nuxt-link>
-            <p class="text mt-2">TapTap</p>
+            <p class="text mt-2">Post</p>
           </div>
           <div class="col" v-if="category_4 === 4">
             <Platinum />
